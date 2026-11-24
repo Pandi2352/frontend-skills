@@ -1,0 +1,77 @@
+---
+name: frontend-review
+description: Reviews a React + TypeScript + Tailwind frontend against the user's FrontendCore standards and lists what to fix - native select or date inputs, uneven field heights, duplicated components, hardcoded colors, shadows, missing labels or error messages, accessibility, loading/empty/error states, types, API misuse, security. Use whenever the user asks to check, review, audit, verify or clean up frontend code, a page, a component or a whole project, or asks "is this following my standards" or "what is missing".
+---
+
+# Frontend review
+
+Report first. Change code only when the user asks to fix.
+
+## Steps
+
+1. Scope: the files the user named, otherwise changed files (`git diff`),
+   otherwise the project.
+2. Scan. It finds the mechanical problems, so do not read files to look for them:
+
+   ```
+   node <skill>/scripts/scan.mjs <project> [file-or-folder ...]
+   ```
+
+   Each result is a lead, not a verdict. Open the line before reporting it.
+3. Run the project's own `lint`, `typecheck`, `test` and `build`. Report real
+   results.
+4. Read only the files in scope for what a scan cannot see (below).
+5. Confirm each finding in the code. Drop what you cannot show.
+
+Project decisions in `AGENTS.md` win over these standards. If
+`docs/standards/` exists, use it when a rule is unclear.
+
+## What a scan cannot see
+
+**Reuse** - same markup or logic twice; a local version of a shared component,
+hook, util, toast, loader or dialog; a shared component full of one-page props.
+
+**Fields** - same height and look in one row; label always present; error
+directly below; server errors reach their fields; first invalid field gets focus;
+submit cannot run twice; values kept after failure; correct `autocomplete`.
+
+**States** - loading, empty, no results, error with retry, disabled, read-only,
+long text, many items, slow network, no permission.
+
+**Accessibility** - keyboard path, visible focus, focus return after closing,
+names on icon buttons, heading order, contrast, status not by color alone,
+announcements, reduced motion, 200% zoom.
+
+**Layout** - 360, 768 and 1280px; no sideways scroll; touch size; dark theme if
+the project has one.
+
+**Code** - effects that only derive state; server data copied into state; stale
+requests; missing cleanup; unstable keys; unsafe casts; wrong import direction;
+files in the wrong folder; nav items or paths outside `config`.
+
+**Security** - unsafe HTML or URLs; tokens in storage; secrets in `VITE_`;
+redirects from user input; permission only hidden in the UI; personal data in
+logs.
+
+**Must-have** (whole project only) - toaster, loaders, error boundary, empty and
+error states, 403/404, skip link, document titles, `.env.example`, tests.
+
+## Report
+
+Start with one line: number of findings by level and whether lint, types, tests
+and build pass. Then a table, worst first:
+
+| Level | Where | Problem | Fix |
+| --- | --- | --- | --- |
+| High | `UserForm.tsx:42` | native `<select>` | use `Dropdown` |
+
+- **High**: broken behaviour, security, cannot be used with keyboard or screen
+  reader, data loss.
+- **Medium**: breaks a standard people can see, or duplicates shared code.
+- **Low**: naming, structure, small cleanup.
+
+Group repeats into one row with a count. Say what was not checked. No praise, no
+list of things that are fine. End by offering to fix High and Medium.
+
+When asked to fix: smallest change, reuse shared components, rerun the scan and
+the checks, report what changed.

@@ -1,0 +1,57 @@
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --color-page: #f8fafc;
+  --color-surface: #ffffff;
+  --color-subtle: #f1f5f9;
+  --color-foreground: #0f172a;
+  --color-muted: #475569;
+  --color-placeholder: #64748b;
+  --color-line: #e2e8f0;
+  --color-control-line: #858fa1;
+
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-subtle: #eff6ff;
+  --color-on-primary: #ffffff;
+  --color-secondary: #e2e8f0;
+  --color-secondary-hover: #cbd5e1;
+  --color-on-secondary: #0f172a;
+  --color-success: #15803d;
+  --color-warning: #b45309;
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-on-danger: #ffffff;
+  --color-info: #0369a1;
+  --color-focus: #2563eb;
+  --color-backdrop: rgb(15 23 42 / 0.5);
+
+  --spacing-control-sm: 2rem;
+  --spacing-control: 2.5rem;
+  --spacing-control-lg: 3rem;
+  --spacing-header: 3.5rem;
+  --spacing-sidebar: 16rem;
+  --spacing-sidebar-collapsed: 4rem;
+
+  --animate-indeterminate: indeterminate 1.2s ease-in-out infinite;
+
+  @keyframes indeterminate {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(300%);
+    }
+  }
+}
+
+:root {
+  --z-sticky: 10;
+  --z-sidebar: 20;
+  --z-navbar: 30;
+  --z-drawer: 40;
+  --z-modal: 50;
+  --z-popover: 60;
+  --z-toast: 70;
+  --z-tooltip: 80;
+}
