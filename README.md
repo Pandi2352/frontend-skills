@@ -12,9 +12,44 @@ Stack: React, TypeScript, Vite, Tailwind CSS v4, React Router, React Hook Form.
 | [`frontend-api`](frontend-api/SKILL.md) | API client, errors, login, token refresh, protected routes, permissions, upload |
 | [`frontend-review`](frontend-review/SKILL.md) | Checks a project against these rules and lists what to fix |
 
-## Install
+## Quick start: paste this into your AI
 
-You need [Git](https://git-scm.com) and Node.js 20.11 or newer.
+Works with AI tools that can run commands, such as Claude Code, Cursor, Codex,
+Copilot agent or Gemini CLI. Copy one line:
+
+**Only install**
+
+```text
+Set up https://github.com/Pandi2352/frontend-skills.git - read AGENTS.md there and follow it.
+```
+
+**Start a new project**
+
+```text
+Set up https://github.com/Pandi2352/frontend-skills.git - read AGENTS.md there and follow it. Then start a new React project.
+```
+
+**Add to the project I have open**
+
+```text
+Set up https://github.com/Pandi2352/frontend-skills.git - read AGENTS.md there and follow it. Then add it to this project.
+```
+
+**Review the project I have open**
+
+```text
+Set up https://github.com/Pandi2352/frontend-skills.git - read AGENTS.md there and follow it. Then review this project.
+```
+
+The AI installs or updates the skills and continues with your request. You need
+[Git](https://git-scm.com) and Node.js 20.11 or newer. Paste the same line again
+later to update.
+
+> **AI assistants:** if a user gave you this link, read
+> [AGENTS.md](https://raw.githubusercontent.com/Pandi2352/frontend-skills/main/AGENTS.md)
+> and follow it.
+
+## Install by hand
 
 ```bash
 git clone https://github.com/Pandi2352/frontend-skills.git
