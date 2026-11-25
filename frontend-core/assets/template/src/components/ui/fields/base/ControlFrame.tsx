@@ -49,13 +49,13 @@ export function ControlFrame(props: ControlFrameProps) {
       aria-busy={state.loading || undefined}
     >
       {prefix && (
-        <span className="flex h-full shrink-0 items-center border-r border-line px-3 text-muted">
+        <span className="flex h-full shrink-0 items-center border-e border-line px-3 text-muted">
           {prefix}
         </span>
       )}
-      {Left && <Left aria-hidden className="pointer-events-none ml-3 size-4 shrink-0 text-muted" />}
+      {Left && <Left aria-hidden className="pointer-events-none ms-3 size-4 shrink-0 text-muted" />}
       {children}
-      <span className="flex shrink-0 items-center gap-0.5 pr-1.5 empty:hidden">
+      <span className="flex shrink-0 items-center gap-0.5 pe-1.5 empty:hidden">
         {onClear && !state.disabled && !state.readOnly && <ClearButton onClick={onClear} />}
         {state.loading && <Spinner className="p-1.5" label={fieldText.loading} />}
         {success && !state.loading && (
@@ -65,7 +65,7 @@ export function ControlFrame(props: ControlFrameProps) {
         {action}
       </span>
       {suffix && (
-        <span className="flex h-full shrink-0 items-center border-l border-line px-3 text-muted">
+        <span className="flex h-full shrink-0 items-center border-s border-line px-3 text-muted">
           {suffix}
         </span>
       )}

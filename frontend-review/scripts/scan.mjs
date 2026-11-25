@@ -25,7 +25,21 @@ const inUi = (f) => /(^|\/)components\/(ui|form)\//.test(f);
 const isApi = (f) => /(^|\/)services\/(api|upload)/.test(f);
 const isTest = (f) => /(\.(test|spec)\.|(^|\/)(test|tests|__tests__|e2e)\/)/.test(f);
 
+const heavy = [
+  'recharts', 'chart.js', 'react-chartjs-2', 'echarts', 'echarts-for-react', 'apexcharts', 'react-apexcharts', '@nivo/', 'd3', 'three',
+  '@react-three/', 'monaco-editor', '@monaco-editor/', 'codemirror', '@uiw/react-codemirror', 'quill', 'react-quill',
+  '@tiptap/', '@tinymce/', '@ckeditor/', 'mapbox-gl', 'maplibre-gl', 'react-map-gl', 'leaflet', 'react-leaflet',
+  '@react-google-maps/api', 'xlsx', 'exceljs', 'jspdf', 'pdfjs-dist', 'react-pdf', '@react-pdf/renderer',
+  'html2canvas', 'highlight.js', 'prismjs', 'react-syntax-highlighter', '@fullcalendar/', 'react-player', 'video.js',
+  'lottie-web', 'lottie-react',
+];
+const isHeavy = (line) => {
+  const from = /^import (?!type).*from ['"]([^'"]+)['"]/.exec(line)?.[1];
+  return !!from && heavy.some((h) => from === h || from.startsWith(h.endsWith('/') ? h : h + '/'));
+};
+
 // `tag` rules look at one whole JSX opening tag, also over several lines.
+// `needs` rules look at a whole file: `has` without `lacks`. `files`: which files, normally code.
 const rules = [
   { level: 'High', name: 'native picker element', fix: 'Dropdown, MultiDropdown or Combobox', tag: /^(select|datalist)$/ },
   { level: 'High', name: 'native date/time/color input', fix: 'DatePicker, TimePicker, MonthPicker or ColorPicker', tag: /^input$/, has: /\btype=["'{`\s]*(date|time|month|week|datetime-local|color)["'}`]/ },
@@ -48,7 +62,24 @@ const rules = [
   { level: 'Medium', name: 'request outside the API client', fix: 'feature service with api', line: /(?<![\w.])fetch\(|\baxios\b|new XMLHttpRequest/, skip: isApi },
   { level: 'Medium', name: 'any type', fix: 'real type or unknown', line: /(?::\s*|\bas\s+|<)any\b(?!\w)/, noComment: true },
   { level: 'Medium', name: 'type check disabled', fix: 'fix the type', line: /@ts-(?:ignore|nocheck)/ },
-  { level: 'Medium', name: 'dark: class', fix: 'change tokens, not components', line: /(?<![\w-])dark:/, skip: () => false },
+  { level: 'Medium', name: 'dark: class', fix: 'change tokens, not components', line: /(?<![\w-])dark:(?=[\w[-])/, skip: () => false },
+  { level: 'Medium', name: 'listener without cleanup', fix: 'removeEventListener or an abort signal in the effect cleanup', needs: { has: /\baddEventListener\(/, lacks: /removeEventListener|\bsignal\b|once: true/ } },
+  { level: 'Medium', name: 'interval without cleanup', fix: 'clearInterval in the effect cleanup', needs: { has: /\bsetInterval\(/, lacks: /clearInterval/ } },
+  { level: 'Medium', name: 'observer without cleanup', fix: 'disconnect in the effect cleanup', needs: { has: /new (?:Intersection|Resize|Mutation|Performance)Observer\(/, lacks: /\.(?:disconnect|unobserve)\(/ } },
+  { level: 'Medium', name: 'connection or worker without cleanup', fix: 'close or terminate in the effect cleanup', needs: { has: /new (?:WebSocket|EventSource|BroadcastChannel|Worker)\(/, lacks: /\.(?:close|terminate)\(/ } },
+  { level: 'Medium', name: 'file URL never released', fix: 'URL.revokeObjectURL', needs: { has: /createObjectURL\(/, lacks: /revokeObjectURL/ } },
+  { level: 'Medium', name: 'image without size', fix: 'Image, or width and height', tag: /^img$/, lacks: /\b(?:width|height)=|\bsize-|\b[hw]-|\{\.\.\./ },
+  { level: 'Medium', name: 'whole library imported', fix: 'single functions, or plain JavaScript', line: /from ['"](?:lodash|moment|underscore|@mui\/icons-material|react-icons)['"]|import \* as \w+ from ['"](?:lucide-react|lodash|date-fns|@mui\/[\w-]+|react-icons[\w/-]*)['"]|import \{[^}]*\bicons\b[^}]*\} from ['"]lucide-react/ },
+  { level: 'Medium', name: 'page loaded with the app', fix: 'lazy route', line: /^import (?!type)[^;]*from ['"][^'"]*\/pages\//, only: (f) => /(?:^|\/)(?:app\/router\/|App\.[jt]sx|main\.[jt]sx|routes?\.[jt]sx?|router\.[jt]sx?|[\w-]+[.-]routes?\.[jt]sx?)/.test(f) },
+  { level: 'Medium', name: 'new context value on every render', fix: 'useMemo, or split the context', line: /<\w*Context(?:\.Provider)? value=\{\s*[{[]/ },
+  { level: 'Medium', name: 'state set on every move or scroll', fix: 'ref, CSS, or IntersectionObserver', line: /\bon(?:Scroll|MouseMove|PointerMove|TouchMove|Wheel)=\{[^}&?]*\bset[A-Z]\w*\(/ },
+  { level: 'Medium', name: 'whole form watched', fix: 'useWatch or useFormState in the small component that needs it', line: /\b(?:form|methods)\.watch\(|=\s*watch\(/ },
+  { level: 'Medium', name: 'font from another server', fix: 'self-hosted @fontsource package', line: /fonts\.(?:googleapis|gstatic)\.com/, files: /\.(?:html|css|[jt]sx?)$/ },
+  { level: 'Medium', name: 'blocking script', fix: 'defer, or whenIdle', line: /<script(?![^>]*\b(?:defer|async|type=["']module))[^>]*\bsrc=/, files: /\.html$/ },
+  { level: 'Low', name: 'CSS @import of a URL', fix: 'import the file in main.tsx', line: /@import\s+(?:url\()?['"]?https?:/, files: /\.css$/ },
+  { level: 'Low', name: 'heavy library, check that it loads on demand', fix: 'React.lazy or import() where it is used', line: { test: isHeavy, source: '' } },
+  { level: 'Low', name: 'slow animation', fix: 'transition-colors, transform or opacity', line: /(?<![\w-])transition-(?:all|\[(?:width|height|top|left|margin)[^\]]*\])|transition:\s*(?:all|width|height|top|left|margin)\b/, files: /\.(?:css|[jt]sx?)$/ },
+  { level: 'Low', name: 'slow copy', fix: 'structuredClone', line: /JSON\.parse\(JSON\.stringify\(/ },
   { level: 'Low', name: 'index as key', fix: 'stable id', line: /\bkey=\{(?:i|idx|index)\}/ },
   { level: 'Low', name: 'console output', fix: 'logger or remove', line: /\bconsole\.(?:log|debug|info)\(/, noComment: true },
   { level: 'Low', name: 'fixed path in link', fix: 'ROUTES constant', line: /(?:\bto=["']\/\w|navigate\(["']\/\w)/ },
@@ -58,7 +89,7 @@ const rules = [
 
 function* walk(target) {
   if (statSync(target).isFile()) {
-    if (/\.(tsx?|jsx?)$/.test(target)) yield target;
+    if (/\.(tsx?|jsx?|css|html)$/.test(target)) yield target;
     return;
   }
   for (const entry of readdirSync(target, { withFileTypes: true })) {
@@ -90,7 +121,8 @@ function tags(text) {
 }
 
 const src = path.join(project, 'src');
-const targets = only.length ? only : [existsSync(src) ? src : project];
+const html = path.join(project, 'index.html');
+const targets = only.length ? only : existsSync(src) ? [src, ...(existsSync(html) ? [html] : [])] : [project];
 const findings = [];
 let count = 0;
 
@@ -108,7 +140,13 @@ for (const target of targets) {
     const isComment = lines.map((l) => /^\s*(?:\/\/|\*|\/\*|\{\/\*)/.test(l));
     const jsx = /\.[jt]sx$/.test(file) ? tags(text) : [];
     for (const rule of rules) {
-      if (rule.skip?.(name)) continue;
+      if (rule.skip?.(name) || rule.only?.(name) === false) continue;
+      if (!(rule.files ?? /\.[jt]sx?$/).test(name)) continue;
+      if (rule.needs) {
+        const at = lines.findIndex((l, i) => !isComment[i] && rule.needs.has.test(l));
+        if (at >= 0 && !rule.needs.lacks.test(text)) report(rule, at + 1);
+        continue;
+      }
       if (rule.tag) {
         for (const tag of jsx) {
           if (!rule.tag.test(tag.name)) continue;

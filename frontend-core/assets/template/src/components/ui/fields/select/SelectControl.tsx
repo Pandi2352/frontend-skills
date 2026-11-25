@@ -298,9 +298,9 @@ export function SelectControl<T extends Value>(props: SelectControlProps<T>) {
         className={bare ? cn('flex h-full items-center', className) : frameClass(state, multiple, className)}
         {...getReferenceProps()}
       >
-        {Left && <Left aria-hidden className="pointer-events-none ml-3 size-4 shrink-0 text-muted" />}
+        {Left && <Left aria-hidden className="pointer-events-none ms-3 size-4 shrink-0 text-muted" />}
         {multiple ? (
-          <div className={cn('flex min-w-0 flex-1 flex-wrap items-center gap-1', chips.length > 0 && 'p-1 pl-2')}>
+          <div className={cn('flex min-w-0 flex-1 flex-wrap items-center gap-1', chips.length > 0 && 'p-1 ps-2')}>
             {chips.map((o) => (
               <Chip
                 key={o.value}
@@ -319,7 +319,7 @@ export function SelectControl<T extends Value>(props: SelectControlProps<T>) {
           trigger
         )}
         {!bare && (
-          <span className="flex shrink-0 items-center pr-1.5">
+          <span className="flex shrink-0 items-center pe-1.5">
             {canClear && <ClearButton onClick={() => onChange([])} />}
             {loading && <Spinner className="p-1.5" label={fieldText.loading} />}
             <ChevronDown

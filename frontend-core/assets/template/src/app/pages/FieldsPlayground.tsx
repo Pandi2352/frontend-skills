@@ -191,7 +191,7 @@ export function FieldsPlayground() {
 
         <FormSection title="Location" columns={2}>
           <FormField control={control} name="phone"
-            rules={{ required: 'Enter a phone number', validate: (v) => F.isValidPhone(v) || 'Enter a valid phone number' }}
+            rules={{ required: 'Enter a phone number', validate: F.phoneRule() }}
             render={(field) => <F.PhoneInput {...field} label="Phone" required clearable preferredCountries={['US', 'IN', 'GB']} />} />
           <FormField control={control} name="countries"
             render={(field) => <F.CountryMultiSelect {...field} label="Countries" maxChips={2} />} />

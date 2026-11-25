@@ -11,5 +11,6 @@ export function FilePreview(props: { file: File; alt: string; className?: string
     image.current.src = url;
     return () => URL.revokeObjectURL(url);
   }, [file]);
+  // scan-ok: every caller gives a fixed size
   return <img ref={image} alt={alt} className={cn('object-cover', className)} />;
 }

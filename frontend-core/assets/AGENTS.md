@@ -35,6 +35,8 @@ and developer.
 - Nav items in `config/navigation.ts`, paths in `config/routes.ts`.
 - Pages → hooks → services → `api-client`. No `any`.
 - Loading, empty and error states for async views. WCAG 2.2 AA. Mobile-first.
+- Fast by default: lazy pages, parallel requests, cleanup in every effect, table
+  `columns` outside the component, `useWatch` instead of `watch`.
 - No new dependency without a reason. For versions, run
   `node scripts/resolve-versions.mjs --project <package>`: newest stable that
   supports the installed Node. Never change the Node version.

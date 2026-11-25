@@ -2,6 +2,7 @@
 // storage, and a reload restores it with the httpOnly refresh cookie.
 let token: string | null = null;
 const listeners = new Set<() => void>();
+// scan-ok: one channel for the whole life of the app
 const channel = typeof BroadcastChannel === 'undefined' ? null : new BroadcastChannel('session');
 
 const end = () => {

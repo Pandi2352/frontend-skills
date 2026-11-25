@@ -40,10 +40,15 @@
 
 ## Performance
 
-- Route splitting; lazy-load charts, editors and maps.
+- Lazy pages; charts, editors and maps on demand with `lazy` and `retryImport`.
 - Image dimensions, modern formats, lazy below the fold.
-- Debounce search; virtualize long lists; watch bundle size.
+- Debounce search; `DataTable virtual` above 200 rows; watch bundle size.
+- Requests together, never one after another without need.
+- `columns` and row functions outside the component. `useWatch`, not `watch`.
+- Every listener, timer, observer and socket has a cleanup.
 - Prevent layout shift with matching skeletons.
+- Measuring, limits, images, fonts, hosting: the `frontend-performance` skill, or
+  `docs/standards/performance/` in a project.
 
 ## Content and i18n
 

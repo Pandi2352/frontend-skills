@@ -2,7 +2,7 @@
 
 One implementation each. Check here and in the code before writing a new one.
 Already in the template: `useControllableState`, `useMergedRefs`,
-`useDebouncedCallback`, `useDelayedLoading`, `useDisclosure`, `useLocalStorage`,
+`useDebouncedCallback`, `useStableCallback`, `useDelayedLoading`, `useDisclosure`, `useLocalStorage`,
 `useKeyboardShortcut`, `useOnlineStatus`, `useSidebar`, `useConfirm`,
 `useTableState`, and utils `date`, `dom`, `csv`, `format-file-size`. With
 `frontend-api`: `useAuth`, `usePermission`. Build the others when first needed.
@@ -17,6 +17,7 @@ network) live in `lib` or `services`.
 | `useDisclosure(initial?)` | `isOpen, open, close, toggle` |
 | `useDebounce(value, ms)` | debounced value, cleans up |
 | `useDebouncedCallback(fn, ms)` | callback with `cancel` and `flush` |
+| `useStableCallback(fn)` | never changes, runs the newest code; for memoized rows |
 | `useControllableState` | one state for controlled and uncontrolled |
 | `useMediaQuery(query)` | SSR safe; `useIsMobile` built on it |
 | `useClickOutside(ref, fn)` | pointer events, multiple refs |

@@ -9,6 +9,8 @@ export interface Auth {
   signIn: (credentials: Credentials) => Promise<void>;
   signOut: () => Promise<void>;
   retry: () => void;
+  /** After the person changed their own profile. */
+  updateUser: (changes: Partial<AuthUser>) => void;
 }
 
 export const AuthContext = createContext<Auth | null>(null);

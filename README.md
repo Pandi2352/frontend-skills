@@ -10,6 +10,7 @@ Stack: React, TypeScript, Vite, Tailwind CSS v4, React Router, React Hook Form.
 | --- | --- |
 | [`frontend-core`](frontend-core/SKILL.md) | Project setup, folder structure, design rules, 45+ form fields, toaster, loaders, modal, confirm, data table, sidebar, navbar |
 | [`frontend-api`](frontend-api/SKILL.md) | API client, errors, login, token refresh, protected routes, permissions, upload |
+| [`frontend-performance`](frontend-performance/SKILL.md) | Size limits, lazy loading, virtual lists and tables, images, fonts, request speed, leak and Lighthouse checks, hosting files |
 | [`frontend-review`](frontend-review/SKILL.md) | Checks a project against these rules and lists what to fix |
 
 ## Quick start: paste this into your AI
@@ -73,10 +74,11 @@ Say what you want in normal words:
 | New project | "start a new React project" |
 | Page or form | "create a users page with a form" |
 | Backend | "connect the API and add login" |
+| Speed | "make this page faster", "check the bundle size" |
 | Check code | "review this project" |
 
-In Claude Code you can also type `/frontend-core`, `/frontend-api` or
-`/frontend-review`.
+In Claude Code you can also type `/frontend-core`, `/frontend-api`,
+`/frontend-performance` or `/frontend-review`.
 
 If your tool does not support skills, tell it: "Read
 `<path>/frontend-skills/frontend-core/SKILL.md` and follow it."
@@ -92,6 +94,9 @@ node frontend-core/scripts/add-to-project.mjs <your-project> --components
 
 # API and login code (add frontend-core with --components first)
 node frontend-api/scripts/add-to-project.mjs <your-project>
+
+# Performance code, checks and limits (add frontend-core with --components first)
+node frontend-performance/scripts/add-to-project.mjs <your-project>
 ```
 
 Existing files are never overwritten. The rules are added as `AGENTS.md`,
@@ -103,7 +108,8 @@ Afterwards:
 1. Fill in the `{{...}}` blanks in `AGENTS.md`.
 2. Install the packages: `node scripts/resolve-versions.mjs` prints the install
    commands. It picks the newest versions that work with your Node.
-   `frontend-api` also needs `@tanstack/react-query`.
+   `frontend-api` also needs `@tanstack/react-query`; `frontend-performance` needs
+   `web-vitals`, `@fontsource-variable/inter` and, for development, `lighthouse`.
 3. Use `frontend-core/assets/template/vite.config.ts` and `eslint.config.js`, or
    copy what you need from them.
 4. Add `"paths": { "@/*": ["./src/*"] }` to your app's tsconfig.
@@ -149,7 +155,11 @@ Guides:
 [sidebar and navbar](frontend-core/references/app-shell.md) ·
 [folder structure](frontend-core/references/structure.md) ·
 [what a project must have](frontend-core/references/must-have.md) ·
-[auth](frontend-api/references/auth.md)
+[auth](frontend-api/references/auth.md) ·
+[loading](frontend-performance/references/loading.md) ·
+[rendering](frontend-performance/references/rendering.md) ·
+[data](frontend-performance/references/data.md) ·
+[measuring](frontend-performance/references/measure.md)
 
 ## Make it yours
 
@@ -171,12 +181,14 @@ Change these files in your project:
 - No native `<select>`, date, time or color inputs, and no browser dialogs.
 - Design tokens only, `rounded-md`, no shadows, Lucide icons.
 - Loading, empty and error state for every view. Keyboard and mobile friendly.
+- Fast by default, with size limits that fail the check when exceeded.
 - Newest packages that work with your Node. Your Node version is never changed.
 
 ## Check a project
 
 ```bash
-node frontend-review/scripts/scan.mjs <your-project>
+node frontend-review/scripts/scan.mjs <your-project>          # rules and common speed problems
+node frontend-performance/scripts/check-size.mjs <your-project>   # after a build
 ```
 
 ## Update
@@ -195,7 +207,8 @@ Edit the files in this repository, not the installed copies. Then run
 
 ## Uninstall
 
-Delete the `frontend-core`, `frontend-api` and `frontend-review` folders in
+Delete the `frontend-core`, `frontend-api`, `frontend-performance` and
+`frontend-review` folders in
 `~/.agents/skills` and `~/.claude/skills`.
 
 ## Not included

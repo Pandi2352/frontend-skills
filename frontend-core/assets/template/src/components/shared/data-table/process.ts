@@ -4,7 +4,7 @@ import type { Column, TableState } from './types';
 const isEmpty = (v: unknown) => v === null || v === undefined || v === '';
 
 /** Search and sort in the browser. Empty values always come last. */
-export function processRows<T>(rows: readonly T[], columns: Column<T>[], state: TableState): T[] {
+export function processRows<T>(rows: readonly T[], columns: Column<T>[], state: Pick<TableState, 'search' | 'sort'>): T[] {
   const words = state.search.trim().toLowerCase().split(/\s+/).filter(Boolean);
   const searched = columns.filter((c) => c.value && c.searchable !== false);
   const found = words.length

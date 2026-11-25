@@ -1,21 +1,9 @@
-import {
-  AsYouType, getCountries, getCountryCallingCode, getExampleNumber, isSupportedCountry,
-  parsePhoneNumberFromString, type CountryCode,
-} from 'libphonenumber-js/min';
-import examples from 'libphonenumber-js/mobile/examples';
-import { useMemo, useState, type Ref } from 'react';
-import { appConfig } from '@/config/app.config';
+import { lazy, Suspense, useEffect, useId, useRef, type Ref, type RefObject } from 'react';
 import { fieldText } from '@/constants/field-text';
-import { useControllableState } from '@/hooks/useControllableState';
-import { countryName } from '@/lib/locations';
+import { retryImport } from '@/lib/lazy';
 import {
-  ControlFrame, FieldShell, HiddenInputs, innerInputClass, useField, type BaseFieldProps,
-  type Option, type ValueProps,
+  ControlFrame, FieldShell, HiddenInputs, innerInputClass, useField, type BaseFieldProps, type ValueProps,
 } from '../base';
-import { SelectControl } from '../select/SelectControl';
-
-/** Use in validation rules. */
-export const isValidPhone = (value: string) => !!parsePhoneNumberFromString(value)?.isValid();
 
 export interface PhoneInputProps extends BaseFieldProps, ValueProps<string> {
   defaultCountry?: string;
@@ -27,132 +15,67 @@ export interface PhoneInputProps extends BaseFieldProps, ValueProps<string> {
   ref?: Ref<HTMLInputElement>;
 }
 
-const asCountry = (code: string): CountryCode =>
-  isSupportedCountry(code) ? code : 'US';
+// Phone data is large, so pages do not wait for it.
+const PhoneControl = lazy(() =>
+  retryImport(() => import('./PhoneControl')).then((m) => ({ default: m.PhoneControl })),
+);
 
-/** Value: E.164, e.g. "+919876543210", or "" when empty. */
-export function PhoneInput(props: PhoneInputProps) {
+/** Validation rule: `rules={{ validate: phoneRule() }}`. Accepts an empty value; add `required`. */
+export const phoneRule =
+  (message: string = fieldText.invalidPhone) =>
+  async (value: string | null | undefined): Promise<true | string> => {
+    if (!value) return true;
+    const { isValidPhone } = await retryImport(() => import('@/lib/phone'));
+    return isValidPhone(value) || message;
+  };
+
+/** Same label, height and value until the real control is ready. */
+function PhonePlaceholder({ focusedRef, ...props }: PhoneInputProps & { focusedRef: RefObject<boolean> }) {
   const { shell, aria, state, controlClassName, rest } = useField(props);
-  const {
-    defaultCountry = appConfig.country, onlyCountries, preferredCountries, placeholder, clearable,
-    onCountryChange, onBlur, name, ref,
-  } = rest;
-  const [value, setValue] = useControllableState<string>({
-    value: rest.value,
-    defaultValue: rest.defaultValue ?? '',
-    onChange: rest.onChange,
-  });
-  const [chosen, setChosen] = useState<CountryCode>(asCountry(defaultCountry));
-  const [draft, setDraft] = useState<string | null>(null);
-
-  const parsed = value ? parsePhoneNumberFromString(value) : undefined;
-  const country = parsed?.country ?? chosen;
-  const dial = getCountryCallingCode(country);
-  const national = value.startsWith(`+${dial}`) ? value.slice(dial.length + 1) : value;
-  const shown = draft ?? parsed?.formatNational() ?? national;
-
-  const options = useMemo(() => {
-    const list = getCountries()
-      .filter((c) => !onlyCountries || onlyCountries.includes(c))
-      .map((c): Option => ({
-        value: c,
-        badge: c,
-        label: countryName(c),
-        keywords: `+${getCountryCallingCode(c)} ${getCountryCallingCode(c)}`,
-      }))
-      .sort((a, b) => a.label.localeCompare(b.label, appConfig.locale));
-    const first = (preferredCountries ?? []).flatMap((c) => list.find((o) => o.value === c) ?? []);
-    return [...first, ...list.filter((o) => !first.includes(o))];
-  }, [onlyCountries, preferredCountries]);
-
-  const type = (text: string, from: CountryCode) => {
-    const clean = text.replace(/[^\d+\s()-]/g, '');
-    const typing = new AsYouType(from);
-    const formatted = typing.input(clean);
-    const digits = clean.replace(/\D/g, '');
-    const found = typing.getCountry();
-    if (found && found !== from && clean.startsWith('+')) {
-      setChosen(found);
-      onCountryChange?.(found);
-    }
-    // Only format while adding; formatting while deleting would fight the person.
-    setDraft(clean.length > shown.length ? formatted : clean);
-    setValue(digits ? (typing.getNumberValue() ?? `+${getCountryCallingCode(from)}${digits}`) : '');
-  };
-
-  const changeCountry = (code: string | undefined) => {
-    if (!code) return;
-    const next = asCountry(code);
-    setChosen(next);
-    onCountryChange?.(next);
-    const digits = (parsed?.nationalNumber ?? national).replace(/\D/g, '');
-    if (digits) {
-      setDraft(null);
-      setValue(`+${getCountryCallingCode(next)}${digits}`);
-    }
-  };
-
+  const { name, ref, value: held, defaultValue } = rest;
+  const value = held ?? defaultValue ?? '';
   return (
     <FieldShell shell={shell}>
-      <ControlFrame
-        state={state}
-        className={controlClassName}
-        success={!!shell.success && !state.invalid}
-        onClear={
-          clearable && value
-            ? () => {
-                setDraft(null);
-                setValue('');
-              }
-            : undefined
-        }
-      >
-        <SelectControl
-          bare
-          searchable
-          aria={{
-            id: `${aria.id}-country`,
-            'aria-describedby': undefined,
-            'aria-invalid': undefined,
-            'aria-required': undefined,
-          }}
-          ariaLabel={fieldText.countryCode}
-          state={{ ...state, loading: false }}
-          options={options}
-          value={[country]}
-          onChange={(next) => changeCountry(next[0])}
-          renderValue={(o) => (
-            <span className="whitespace-nowrap">
-              {o.value} <span className="text-muted">+{dial}</span>
-            </span>
-          )}
-          renderOption={(o) => (
-            <span className="flex justify-between gap-2">
-              <span>{o.label}</span>
-              <span className="text-muted">+{getCountryCallingCode(asCountry(o.value))}</span>
-            </span>
-          )}
-        />
-        <span aria-hidden className="h-5 border-l border-line" />
+      <ControlFrame state={state} className={controlClassName}>
         <input
           {...aria}
           ref={ref}
           type="tel"
-          inputMode="tel"
-          autoComplete="tel"
-          placeholder={placeholder ?? getExampleNumber(country, examples)?.formatNational()}
+          aria-busy
+          readOnly
           disabled={state.disabled}
-          readOnly={state.readOnly}
-          value={shown}
-          onChange={(event) => type(event.target.value, country)}
+          value={value}
+          onFocus={() => {
+            focusedRef.current = true;
+          }}
           onBlur={() => {
-            setDraft(null);
-            onBlur?.();
+            focusedRef.current = false;
           }}
           className={innerInputClass}
         />
       </ControlFrame>
       <HiddenInputs name={name} values={value ? [value] : []} disabled={state.disabled} />
     </FieldShell>
+  );
+}
+
+/** Keeps the focus when the real control takes over. */
+function KeepFocus({ id, focusedRef }: { id: string; focusedRef: RefObject<boolean> }) {
+  useEffect(() => {
+    if (focusedRef.current) document.getElementById(id)?.focus();
+  }, [id, focusedRef]);
+  return null;
+}
+
+/** Value: E.164, e.g. "+919876543210", or "" when empty. */
+export function PhoneInput(props: PhoneInputProps) {
+  const autoId = useId();
+  const focusedRef = useRef(false);
+  const id = props.id ?? autoId;
+  return (
+    <Suspense fallback={<PhonePlaceholder {...props} id={id} focusedRef={focusedRef} />}>
+      <PhoneControl {...props} id={id} />
+      <KeepFocus id={id} focusedRef={focusedRef} />
+    </Suspense>
   );
 }

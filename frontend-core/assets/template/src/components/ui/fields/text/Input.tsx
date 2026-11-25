@@ -76,7 +76,7 @@ export function Input(props: InputProps) {
             setInner(event.target.value);
             onChange?.(event);
           }}
-          className={cn(innerInputClass, leftIcon && 'pl-2')}
+          className={cn(innerInputClass, leftIcon && 'ps-2')}
         />
       </ControlFrame>
     </FieldShell>

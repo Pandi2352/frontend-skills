@@ -23,8 +23,8 @@ Do not read every reference. Read the one that matches:
 | Any hook, util, helper, formatter, constant | `references/hooks-and-utils.md` |
 | React/TS rules, API, auth, hooks, tests, done check | `references/engineering.md` |
 
-Related skills: `frontend-api` (API, login, permissions), `frontend-review`
-(check code against these rules).
+Related skills: `frontend-api` (API, login, permissions), `frontend-performance`
+(speed), `frontend-review` (check code against these rules).
 
 ## Rules that always apply
 
@@ -54,13 +54,17 @@ Related skills: `frontend-api` (API, login, permissions), `frontend-review`
 11. **Lucide icons only.** No new dependency without a stated reason.
 12. **Config over hardcoding.** Routes, nav items, roles, query keys and
     option lists each live in one file.
+13. **Fast by default.** Lazy pages, requests in parallel, state as low as
+    possible, no effect for computed values, cleanup for everything started,
+    reserved space for images. More: `frontend-performance`.
 
 ## Stack
 
 React, TypeScript strict, Vite, Tailwind CSS v4 (`@tailwindcss/vite`), React
 Router, React Hook Form, Lucide React, `clsx` + `tailwind-merge`,
-`@floating-ui/react`, `libphonenumber-js` (phone), `country-region-data`
-(states, loaded on demand), Vitest, React Testing Library, ESLint, Prettier.
+`@floating-ui/react`, `libphonenumber-js` (phone, loaded on demand),
+`country-region-data` (states, loaded on demand), `@tanstack/react-virtual`
+(virtual table rows, loaded on demand), Vitest, React Testing Library, ESLint, Prettier.
 
 Add only when needed: Zod (non-trivial validation), TanStack Query (server
 data), TanStack Table (server-side or complex tables).
@@ -124,6 +128,7 @@ standards is not a request to scaffold, install or run anything.
    (`app-shell.md`), and fill `config/routes.ts` and `config/navigation.ts`. Build
    what is still open in `must-have.md` only when needed, then feature modules.
 7. If the project has a backend, use the `frontend-api` skill for API and login.
+   Use `frontend-performance` for size limits, preloading, images and fonts.
 8. Run `lint`, `typecheck`, `test`, `build`. Report real results.
 
 Build one component at a time unless the user asks for a batch. Show each in

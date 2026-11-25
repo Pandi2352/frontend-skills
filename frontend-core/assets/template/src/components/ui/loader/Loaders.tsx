@@ -103,6 +103,7 @@ export function Progress({ label, value, variant = 'primary', showValue, classNa
         className="h-2 overflow-hidden rounded-md bg-line"
       >
         <div
+          // scan-ok: one small bar with nothing inside
           className={cn('h-full transition-[width] duration-150', bars[variant], percent === undefined && 'w-1/3 animate-indeterminate')}
           style={percent === undefined ? undefined : { width: `${percent}%` }}
         />

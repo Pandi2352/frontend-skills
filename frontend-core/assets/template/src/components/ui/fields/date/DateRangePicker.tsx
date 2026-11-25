@@ -71,7 +71,7 @@ export function DateRangePicker(props: DateRangePickerProps) {
       <PopupPanel popup={popup} initialFocus={-1} role="dialog" aria-label={fieldText.chooseRange}>
         <div className="flex flex-col md:flex-row">
           {presets && (
-            <div className="flex flex-wrap gap-1 border-b border-line p-2 md:flex-col md:border-r md:border-b-0">
+            <div className="flex flex-wrap gap-1 border-b border-line p-2 md:flex-col md:border-e md:border-b-0">
               {presets.map((p) => (
                 <Button
                   key={p.label}

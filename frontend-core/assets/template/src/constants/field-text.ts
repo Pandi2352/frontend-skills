@@ -47,6 +47,7 @@ export const fieldText = {
   chooseImage: 'Choose image',
   replace: 'Replace',
   countryCode: 'Country code',
+  invalidPhone: 'Enter a valid phone number',
   country: 'Country',
   state: 'State / region',
   city: 'City',

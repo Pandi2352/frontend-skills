@@ -1,7 +1,7 @@
 import { CircleAlert } from 'lucide-react';
 import { useRef, type FormHTMLAttributes, type ReactNode } from 'react';
 import {
-  FormProvider, type FieldPath, type FieldValues, type SubmitHandler, type UseFormReturn,
+  FormProvider, useFormState, type FieldPath, type FieldValues, type SubmitHandler, type UseFormReturn,
 } from 'react-hook-form';
 import { cn } from '@/lib/cn';
 
@@ -36,7 +36,9 @@ export interface FormProps<V extends FieldValues>
  */
 export function Form<V extends FieldValues>(props: FormProps<V>) {
   const { form, onSubmit, fallbackError = 'Something went wrong. Try again.', children, className, ...rest } = props;
-  const rootError = form.formState.errors.root?.message;
+  // Subscribes here, so the page around the form does not draw again.
+  const { errors } = useFormState({ control: form.control });
+  const rootError = errors.root?.message;
 
   const busy = useRef(false);
 

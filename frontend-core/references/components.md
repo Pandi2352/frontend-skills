@@ -105,12 +105,14 @@ const columns: Column<User>[] = [
 | `columnPicker`, `exportName` | show/hide columns and density, CSV (safe in Excel) |
 | `mobile` | `scroll` or `cards` |
 | `scrollClassName="max-h-96"` | sticky header |
+| `virtual` | draws only visible rows, for more than 200 at once; give columns a width |
 | `empty`, `pageSizes`, `hidePagination`, `searchable` | others |
 
 In server mode export covers only the loaded rows; large exports belong to the
 server. `FilterBar` above the table: fields in a row, drawer on phones, chips.
-Not included: column resize, pinning, inline edit, virtual rows; use TanStack
-Table and Virtual when really needed. `Pagination` also works alone.
+Keep `columns`, `rowActions`, `getRowId` and `renderDetails` outside the component
+(or memoized), so a click draws one row and not all. Not included: column resize,
+pinning, inline edit; use TanStack Table when really needed. `Pagination` also works alone.
 
 ## States and display
 

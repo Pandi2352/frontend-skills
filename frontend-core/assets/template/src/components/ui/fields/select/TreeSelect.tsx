@@ -114,7 +114,7 @@ export function TreeSelect(props: TreeSelectProps) {
         className={frameClass(state, true, controlClassName)}
         {...getReferenceProps()}
       >
-        <div className={cn('flex min-w-0 flex-1 flex-wrap items-center gap-1', labels.length > 0 && 'p-1 pl-2')}>
+        <div className={cn('flex min-w-0 flex-1 flex-wrap items-center gap-1', labels.length > 0 && 'p-1 ps-2')}>
           {labels.map((n) => (
             <Chip
               key={n.value}
@@ -212,7 +212,7 @@ export function TreeSelect(props: TreeSelectProps) {
                   toggle(node);
                 }}
                 className={cn(
-                  'flex min-h-control cursor-pointer items-center gap-2 rounded-md pr-2',
+                  'flex min-h-control cursor-pointer items-center gap-2 rounded-md pe-2',
                   i === active && 'bg-subtle',
                   node.disabled && 'cursor-not-allowed opacity-60',
                 )}

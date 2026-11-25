@@ -88,7 +88,7 @@ export function TagsInput(props: TagsInputProps) {
         className={controlClassName}
         onClear={clearable && tags.length ? () => setTags([]) : undefined}
       >
-        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1 p-1 pl-2">
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1 p-1 ps-2">
           {tags.map((tag, i) => (
             <Chip
               key={`${tag}-${i}`}

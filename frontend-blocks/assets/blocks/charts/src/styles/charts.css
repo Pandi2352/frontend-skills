@@ -1,0 +1,26 @@
+/*
+ * Chart colors, checked for color blindness in this order. Give a series a fixed
+ * color; never reuse or reorder when series are filtered. Four light colors are
+ * below 3:1, so charts always have a legend and a table.
+ */
+@theme {
+  --color-chart-1: #257de0;
+  --color-chart-2: #f47230;
+  --color-chart-3: #00b894;
+  --color-chart-4: #f2a600;
+  --color-chart-5: #ee7fac;
+  --color-chart-6: #008a17;
+  --color-chart-7: #6a4ce2;
+  --color-chart-8: #ec4647;
+}
+
+[data-theme='dark'] {
+  --color-chart-1: #338ced;
+  --color-chart-2: #e76624;
+  --color-chart-3: #00a888;
+  --color-chart-4: #d28e05;
+  --color-chart-5: #e24d8b;
+  --color-chart-6: #0aac23;
+  --color-chart-7: #9887ef;
+  --color-chart-8: #eb6263;
+}

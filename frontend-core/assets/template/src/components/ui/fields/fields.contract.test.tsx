@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { createElement, type ComponentType } from 'react';
 import { describe, expect, it } from 'vitest';
 import * as F from './index';
+import { PhoneControl } from './location/PhoneControl';
 
 // The same promises are checked on every field.
 const options = [
@@ -38,7 +39,8 @@ const named: [string, AnyField, object?][] = [
   ['CountryMultiSelect', F.CountryMultiSelect],
   ['StateSelect', F.StateSelect, { country: null }],
   ['CitySelect', F.CitySelect, { country: 'US', state: null }],
-  ['PhoneInput', F.PhoneInput],
+  ['PhoneInput while loading', F.PhoneInput],
+  ['PhoneInput', PhoneControl],
   ['FileUpload', F.FileUpload],
   ['ImageUpload', F.ImageUpload],
   ['ColorPicker', F.ColorPicker],

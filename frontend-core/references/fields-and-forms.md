@@ -84,7 +84,7 @@ Text fields also accept `leftIcon`, `rightIcon`, `prefix`, `suffix`,
 | `TimePicker` | "HH:mm" or null | `stepMinutes`, `minTime`, `maxTime`, `hour12` |
 | `DateTimePicker` | "YYYY-MM-DDTHH:mm" or null | local time without timezone |
 | `MonthPicker`, `YearPicker` | "YYYY-MM", number, or null | limits |
-| `PhoneInput` | "+919876543210" or "" | all country codes, formats while typing, paste; rule: `isValidPhone` |
+| `PhoneInput` | "+919876543210" or "" | all country codes, formats while typing, paste; rule: `validate: phoneRule()` |
 | `CountrySelect`, `CountryMultiSelect` | "IN", ["IN"] | all 249, `preferred`, `only` |
 | `StateSelect` | code or null | states of `country`; text box when there is no list |
 | `CitySelect` | string or null | `loadCities` from your server; otherwise a text box |

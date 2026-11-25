@@ -23,13 +23,17 @@ Features of each item: `fields-and-forms.md`, `components.md`, `app-shell.md`,
 - [x] DataTable, FilterBar, RowActions, Pagination, `useTableState`
 - [x] Badge, Avatar, theme tokens, base styles
 - [x] Hooks: useControllableState, useMergedRefs, useDebouncedCallback,
-      useDelayedLoading, useDisclosure, useLocalStorage, useKeyboardShortcut,
+      useStableCallback, useDelayedLoading, useDisclosure, useLocalStorage, useKeyboardShortcut,
       useOnlineStatus
 - [x] Utils: date, dom, csv, format-file-size
 
 **Finished in the `frontend-api` skill**
 - [x] api-client, api-error, session, upload, query client, env, permissions
 - [x] AuthProvider, ProtectedRoute, GuestRoute, PermissionRoute, CanAccess
+
+**Finished in the `frontend-performance` skill**
+- [x] Image, VirtualList, LazySection, page preloading, new-release recovery,
+      web vitals, size limits, Lighthouse and leak checks, hosting files
 
 **Build when the project needs it**
 - [ ] Tabs, Accordion, Card, StatCard, KeyValueList, StatusBadge, CopyButton
@@ -52,7 +56,7 @@ Features of each item: `fields-and-forms.md`, `components.md`, `app-shell.md`,
 | Fields (not in the template) | RichText, Markdown, Code editor, Mention, Captcha, Map picker, Image crop. Each needs a library or service; agree on it first. |
 | Navigation | CommandMenu, Stepper, TreeView, MegaMenu, BottomNav, AnchorNav, BackToTop, WorkspaceSwitcher |
 | Overlays | Sheet, ContextMenu, HoverCard, Lightbox, PdfViewer, ProductTour, Announcement bar |
-| Data | Charts, Timeline, ActivityFeed, Calendar, Kanban, Gallery, Carousel, Accordion, InfiniteList, VirtualList, SortableList, Comments, Chat, Map |
+| Data | Charts, Timeline, ActivityFeed, Calendar, Kanban, Gallery, Carousel, Accordion, SortableList, Comments, Chat, Map |
 | Table | Export, import wizard, column pinning, resize, inline edit, expandable rows, tree rows, saved views |
 | System | Notifications, realtime, i18n, RTL, theme toggle, PWA, print styles, idle logout, maintenance page, cookie consent, analytics, feature flags, error reporting, global search, upload queue, autosave |
 

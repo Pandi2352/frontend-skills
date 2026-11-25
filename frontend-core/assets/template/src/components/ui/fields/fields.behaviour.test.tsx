@@ -375,10 +375,12 @@ describe('location', () => {
         {(v, set) => <F.PhoneInput label="Phone" defaultCountry="IN" value={v} onChange={set} />}
       </Held>,
     );
+    await screen.findByRole('combobox', { name: 'Country code' });
     await user.type(screen.getByLabelText('Phone'), '9876543210');
     expect(onValue).toHaveBeenLastCalledWith('+919876543210');
-    expect(F.isValidPhone('+919876543210')).toBe(true);
-    expect(F.isValidPhone('+9198')).toBe(false);
+    expect(await F.phoneRule()('+919876543210')).toBe(true);
+    expect(await F.phoneRule('Wrong')('+9198')).toBe('Wrong');
+    expect(await F.phoneRule()('')).toBe(true);
     await user.click(screen.getByRole('combobox', { name: 'Country code' }));
     await user.type(screen.getByRole('combobox', { name: 'Search' }), 'United Kingdom{Enter}');
     expect(onValue).toHaveBeenLastCalledWith('+449876543210');
@@ -392,6 +394,7 @@ describe('location', () => {
         {(v, set) => <F.PhoneInput label="Phone" defaultCountry="US" value={v} onChange={set} />}
       </Held>,
     );
+    await screen.findByRole('combobox', { name: 'Country code' });
     await user.click(screen.getByLabelText('Phone'));
     await user.paste('+44 20 7946 0958');
     expect(onValue).toHaveBeenLastCalledWith('+442079460958');

@@ -38,7 +38,7 @@ export function Sidebar({ groups, header, footer, loading }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'hidden shrink-0 flex-col border-r border-line bg-surface transition-[width] duration-150 lg:flex',
+        'hidden shrink-0 flex-col border-e border-line bg-surface lg:flex',
         isCollapsed ? 'w-sidebar-collapsed' : 'w-sidebar',
       )}
     >

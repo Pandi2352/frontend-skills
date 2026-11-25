@@ -99,9 +99,9 @@ function ToastCard({ item }: { item: ToastItem }) {
 }
 
 const positions = {
-  'top-right': 'top-0 sm:right-0',
+  'top-right': 'top-0 sm:end-0',
   'top-center': 'top-0 sm:left-1/2 sm:-translate-x-1/2',
-  'bottom-right': 'bottom-0 sm:right-0',
+  'bottom-right': 'bottom-0 sm:end-0',
   'bottom-center': 'bottom-0 sm:left-1/2 sm:-translate-x-1/2',
 };
 

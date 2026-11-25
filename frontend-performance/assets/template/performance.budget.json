@@ -1,0 +1,11 @@
+{
+  "size": {
+    "firstLoadJs": 170,
+    "firstLoadCss": 20,
+    "pageJs": 80,
+    "image": 200,
+    "font": 100
+  },
+  "lab": { "score": 0.9, "lcp": 3000, "cls": 0.1, "tbt": 200 },
+  "pages": ["/"]
+}

@@ -104,6 +104,35 @@ describe('DataTable', () => {
     expect(screen.getByRole('alert')).toHaveTextContent('Offline');
   });
 
+  it('draws only the row that changed', async () => {
+    const user = userEvent.setup();
+    const drawn = vi.fn((r: Row) => r.name);
+    const counted: Column<Row>[] = [{ id: 'name', header: 'Name', cell: drawn }];
+    render(<DataTable {...base} columns={counted} selectable />);
+    drawn.mockClear();
+    await user.click(screen.getByRole('checkbox', { name: 'Select Item 2' }));
+    expect(drawn.mock.calls.filter(([r]) => r.id !== 'r2')).toEqual([]);
+    await user.click(screen.getByRole('checkbox', { name: 'Select Item 3' }));
+    expect(screen.getByText('2 selected')).toBeVisible();
+  });
+
+  it('virtual draws only visible rows but selects all of them', async () => {
+    const user = userEvent.setup();
+    // jsdom has no layout.
+    const spies = [
+      vi.spyOn(Element.prototype, 'clientHeight', 'get').mockReturnValue(400),
+      vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(50),
+    ];
+    const many = Array.from({ length: 2000 }, (_, i) => ({ id: `r${i}`, name: `Item ${i}`, age: i }));
+    render(<DataTable {...base} data={many} virtual hidePagination selectable />);
+    await waitFor(() => expect(screen.getByText('Item 0').closest('tr')).toHaveAttribute('aria-rowindex', '2'));
+    expect(bodyRows().length).toBeLessThan(40);
+    expect(screen.getByRole('table')).toHaveAttribute('aria-rowcount', '2001');
+    await user.click(screen.getByRole('checkbox', { name: 'Select all rows on this page' }));
+    expect(screen.getByText('2000 selected')).toBeVisible();
+    spies.forEach((spy) => spy.mockRestore());
+  });
+
   it('server mode shows the rows as they come', async () => {
     const user = userEvent.setup();
     const onStateChange = vi.fn();

@@ -9,6 +9,11 @@
     cursor: pointer;
   }
 
+  /* Arrows follow the reading direction. */
+  [dir='rtl'] :is(.lucide-chevron-left, .lucide-chevron-right, .lucide-arrow-left, .lucide-arrow-right, .lucide-panel-left-open, .lucide-panel-left-close, .lucide-log-out) {
+    scale: -1 1;
+  }
+
   input[type='search']::-webkit-search-cancel-button {
     display: none;
   }

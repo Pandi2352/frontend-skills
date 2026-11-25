@@ -44,7 +44,7 @@ export function AppLayout({ nav, can = everything, navbar, children, ...sidebar 
     <SidebarProvider>
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-(--z-tooltip) focus:rounded-md focus:bg-surface focus:px-4 focus:py-2 focus:outline-2 focus:outline-focus"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:start-2 focus:z-(--z-tooltip) focus:rounded-md focus:bg-surface focus:px-4 focus:py-2 focus:outline-2 focus:outline-focus"
       >
         {uiText.skip}
       </a>

@@ -14,7 +14,7 @@ const rowClass = (active: boolean, collapsed: boolean) =>
     'focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus',
     collapsed && 'justify-center px-0',
     active
-      ? 'bg-primary-subtle font-medium text-primary before:absolute before:inset-y-2 before:left-0 before:w-0.5 before:bg-primary'
+      ? 'bg-primary-subtle font-medium text-primary before:absolute before:inset-y-2 before:start-0 before:w-0.5 before:bg-primary'
       : 'text-foreground hover:bg-subtle',
   );
 
@@ -103,7 +103,7 @@ function Parent({ item, collapsed, onNavigate }: RowProps) {
         <RowContent item={item} collapsed={false} />
         <ChevronDown aria-hidden className={cn('size-4 shrink-0 transition-transform duration-150', open && 'rotate-180')} />
       </button>
-      <ul id={id} hidden={!open} className="mt-0.5 ml-5 flex flex-col gap-0.5 border-l border-line pl-2">
+      <ul id={id} hidden={!open} className="mt-0.5 ms-5 flex flex-col gap-0.5 border-s border-line ps-2">
         {children.map((child) => (
           <li key={child.id}>
             <Row item={child} collapsed={false} onNavigate={onNavigate} />

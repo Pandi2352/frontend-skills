@@ -56,7 +56,7 @@ export function NavbarSearch({ onOpen, label = uiText.search }: { onOpen: () => 
           Ctrl K
         </kbd>
       </button>
-      <IconButton icon={Search} label={label} className="ml-auto md:hidden" onClick={onOpen} />
+      <IconButton icon={Search} label={label} className="ms-auto md:hidden" onClick={onOpen} />
     </>
   );
 }
@@ -130,7 +130,7 @@ export function NotificationMenu(props: NotificationMenuProps) {
         {unreadCount > 0 && (
           <span
             aria-hidden
-            className="pointer-events-none absolute top-0.5 right-0.5 min-w-4 rounded-full bg-danger px-1 text-center text-xs leading-4 text-on-danger"
+            className="pointer-events-none absolute top-0.5 end-0.5 min-w-4 rounded-full bg-danger px-1 text-center text-xs leading-4 text-on-danger"
           >
             {unreadCount > 99 ? '99+' : unreadCount}
           </span>

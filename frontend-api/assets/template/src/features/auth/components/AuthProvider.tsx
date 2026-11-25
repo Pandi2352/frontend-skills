@@ -52,6 +52,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           session.end();
         }
       },
+      updateUser: (changes) =>
+        setState((s) => (s.user ? { ...s, user: { ...s.user, ...changes } } : s)),
       retry: () => {
         setState({ status: 'loading', user: null });
         setAttempt((n) => n + 1);

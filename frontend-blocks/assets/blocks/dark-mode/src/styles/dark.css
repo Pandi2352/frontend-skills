@@ -1,0 +1,29 @@
+/* Same tokens, dark values. Text and controls keep WCAG AA contrast on every surface. */
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-page: #0f172a;
+  --color-surface: #1e293b;
+  --color-subtle: #273449;
+  --color-foreground: #f1f5f9;
+  --color-muted: #a9b6c8;
+  --color-placeholder: #94a3b8;
+  --color-line: #37455a;
+  --color-control-line: #7d8ca3;
+
+  --color-primary: #60a5fa;
+  --color-primary-hover: #93c5fd;
+  --color-primary-subtle: #1a3050;
+  --color-on-primary: #0f172a;
+  --color-secondary: #37455a;
+  --color-secondary-hover: #475569;
+  --color-on-secondary: #f1f5f9;
+  --color-success: #4ade80;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+  --color-danger-hover: #fca5a5;
+  --color-on-danger: #0f172a;
+  --color-info: #38bdf8;
+  --color-focus: #93c5fd;
+  --color-backdrop: rgb(0 0 0 / 0.65);
+}

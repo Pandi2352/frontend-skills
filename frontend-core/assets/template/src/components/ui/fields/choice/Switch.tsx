@@ -51,7 +51,7 @@ export function Switch(props: SwitchProps) {
           />
           <span
             aria-hidden
-            className="pointer-events-none absolute top-0.5 left-0.5 flex size-5 items-center justify-center rounded-full bg-surface transition-transform duration-150 peer-checked:translate-x-5"
+            className="pointer-events-none absolute top-0.5 start-0.5 flex size-5 items-center justify-center rounded-full bg-surface transition-transform duration-150 peer-checked:translate-x-5 rtl:peer-checked:-translate-x-5"
           >
             {state.loading && <Spinner size="xs" />}
           </span>

@@ -79,7 +79,7 @@ function DialogInner(props: DialogBaseProps) {
                 aria-busy={busy || undefined}
                 className={cn('relative flex flex-col border-line bg-surface text-foreground outline-none', panelClassName, className)}
               >
-                <div className={cn('shrink-0 border-b border-line p-4 pr-14', hideTitle && 'sr-only')}>
+                <div className={cn('shrink-0 border-b border-line p-4 pe-14', hideTitle && 'sr-only')}>
                   <h2 id={`${id}-title`} className="text-lg font-semibold break-words">
                     {title}
                   </h2>
@@ -102,7 +102,7 @@ function DialogInner(props: DialogBaseProps) {
                     size="sm"
                     label={uiText.close}
                     disabled={busy}
-                    className="absolute top-3 right-3"
+                    className="absolute top-3 end-3"
                     onClick={() => void requestClose()}
                   />
                 )}

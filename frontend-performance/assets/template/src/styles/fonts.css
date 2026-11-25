@@ -1,0 +1,12 @@
+/*
+ * Arial with the size of Inter, shown until Inter has loaded, so the text does
+ * not jump. For another font, replace these numbers.
+ */
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial');
+  ascent-override: 90.2%;
+  descent-override: 22.48%;
+  line-gap-override: 0%;
+  size-adjust: 107.4%;
+}

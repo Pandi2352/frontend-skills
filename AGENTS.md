@@ -15,8 +15,8 @@ installing.
   tell the user and stop. Do not install or change Node.
 - Read `install.mjs` before running it. It only copies the skill folders to
   `~/.agents/skills` and `~/.claude/skills`.
-- If one of those already has `frontend-core`, `frontend-api` or `frontend-review`
-  that did not come from here, ask before replacing it.
+- If one of those already has `frontend-core`, `frontend-api`,
+  `frontend-performance` or `frontend-review` that did not come from here, ask before replacing it.
 
 ## 2. Install or update
 
@@ -49,6 +49,7 @@ follow it now.
 | --- | --- |
 | New project, page, form, component | `$HOME/frontend-skills/frontend-core/SKILL.md` |
 | API, login, permissions | `$HOME/frontend-skills/frontend-api/SKILL.md` |
+| Speed, bundle size, long lists, leaks | `$HOME/frontend-skills/frontend-performance/SKILL.md` |
 | Check code | `$HOME/frontend-skills/frontend-review/SKILL.md` |
 
 If they only gave the link, say the skills are ready and ask one question: start a

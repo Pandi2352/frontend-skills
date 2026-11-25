@@ -102,7 +102,7 @@ export function ColorPicker(props: ColorPickerProps) {
       >
         <span
           aria-hidden
-          className="ml-3 size-5 shrink-0 rounded-md border border-control-line"
+          className="ms-3 size-5 shrink-0 rounded-md border border-control-line"
           style={{ backgroundColor: value ?? 'transparent' }}
         />
         <input
@@ -126,7 +126,7 @@ export function ColorPicker(props: ColorPickerProps) {
             setDraft(null);
             onBlur?.();
           }}
-          className={cn(innerInputClass, 'pl-2')}
+          className={cn(innerInputClass, 'ps-2')}
         />
       </ControlFrame>
       <HiddenInputs name={name} values={value ? [value] : []} disabled={state.disabled} />

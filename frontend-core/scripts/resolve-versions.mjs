@@ -16,7 +16,7 @@ import path from 'node:path';
 const STACK = [
   'react', 'react-dom', 'react-router', 'react-hook-form', 'lucide-react',
   'clsx', 'tailwind-merge', '@floating-ui/react', 'libphonenumber-js',
-  'country-region-data',
+  'country-region-data', '@tanstack/react-virtual',
 ];
 const STACK_DEV = [
   'vite', '@vitejs/plugin-react', 'typescript', 'tailwindcss',

@@ -31,8 +31,8 @@ export function Modal({ size = 'md', fullScreenOnMobile, ...props }: ModalProps)
 }
 
 const sides = {
-  left: { overlay: 'justify-start', panel: 'h-full border-r' },
-  right: { overlay: 'justify-end', panel: 'h-full border-l' },
+  left: { overlay: 'justify-start', panel: 'h-full border-e' },
+  right: { overlay: 'justify-end', panel: 'h-full border-s' },
   bottom: { overlay: 'items-end', panel: 'max-h-[85dvh] w-full rounded-t-md border-t' },
 };
 const drawerWidths = { sm: 'max-w-72', md: 'max-w-md', lg: 'max-w-2xl' };

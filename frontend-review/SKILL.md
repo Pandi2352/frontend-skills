@@ -1,6 +1,6 @@
 ---
 name: frontend-review
-description: Reviews a React + TypeScript + Tailwind frontend against the user's FrontendCore standards and lists what to fix - native select or date inputs, uneven field heights, duplicated components, hardcoded colors, shadows, missing labels or error messages, accessibility, loading/empty/error states, types, API misuse, security. Use whenever the user asks to check, review, audit, verify or clean up frontend code, a page, a component or a whole project, or asks "is this following my standards" or "what is missing".
+description: Reviews a React + TypeScript + Tailwind frontend against the user's FrontendCore standards and lists what to fix - native select or date inputs, uneven field heights, duplicated components, hardcoded colors, shadows, missing labels or error messages, accessibility, loading/empty/error states, types, API misuse, performance, security. Use whenever the user asks to check, review, audit, verify or clean up frontend code, a page, a component or a whole project, or asks "is this following my standards" or "what is missing".
 ---
 
 # Frontend review
@@ -48,6 +48,11 @@ the project has one.
 **Code** - effects that only derive state; server data copied into state; stale
 requests; missing cleanup; unstable keys; unsafe casts; wrong import direction;
 files in the wrong folder; nav items or paths outside `config`.
+
+**Performance** - requests in a row that could run together; one request per row;
+state too high, so typing redraws the page; row functions or columns created in
+the component of a large table; long lists drawn completely; heavy parts not
+loaded on demand; skeletons of another size. Fixing: `frontend-performance`.
 
 **Security** - unsafe HTML or URLs; tokens in storage; secrets in `VITE_`;
 redirects from user input; permission only hidden in the UI; personal data in

@@ -17,6 +17,15 @@ export interface Column<T> {
   defaultHidden?: boolean;
 }
 
+export const alignClass = { start: 'text-start', center: 'text-center', end: 'text-end' };
+
+export function showCell<T>(column: Column<T>, row: T): ReactNode {
+  if (column.cell) return column.cell(row);
+  const value = column.value?.(row);
+  if (value === null || value === undefined || value === '') return '—';
+  return value instanceof Date ? value.toLocaleDateString() : String(value);
+}
+
 export interface TableState {
   page: number;
   pageSize: number;
