@@ -40,7 +40,7 @@ const nothing = changed && !changed.length;
 const steps = [
   ['types', has('typescript') && existsSync('tsconfig.json') && (existsSync('tsconfig.app.json') ? 'npx tsc -b --noEmit' : 'npx tsc --noEmit')],
   ['lint', has('eslint') && !nothing && `npx eslint --max-warnings 0 ${list ?? '.'}`],
-  ['tests', has('vitest') && !nothing && (changed ? `npx vitest related --run --silent --reporter=dot ${list}` : 'npx vitest run --silent --reporter=dot')],
+  ['tests', has('vitest') && !nothing && (changed ? `npx vitest related --run --silent --passWithNoTests --reporter=dot ${list}` : 'npx vitest run --silent --passWithNoTests --reporter=dot')],
   ['build', !fast && has('vite') && 'npx vite build --logLevel error'],
   ['size', !fast && existsSync('performance.budget.json') && script('performance/check-size.mjs') && `node ${quote(script('performance/check-size.mjs'))}`],
   ['scan', !nothing && script('scan.mjs') && `node ${quote(script('scan.mjs'))} . ${list ?? ''}`],

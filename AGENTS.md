@@ -66,6 +66,9 @@ node "$HOME/frontend-skills/skills/frontend-core/scripts/add-to-project.mjs" <pr
 
 Leave out `--components` if it has its own components. Files are never overwritten.
 
+New project: build it step by step as `frontend-core/SKILL.md` says. After each step tell
+the developer what to check, ask, and stop.
+
 ## 4. Report
 
 Short: what was installed, where, and what you did next. Mention anything that failed.

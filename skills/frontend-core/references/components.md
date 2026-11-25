@@ -1,7 +1,7 @@
 # Components
 
 Finished and tested code is in the template. **Use it, do not rewrite it.** Live
-examples: `src/app/pages/ComponentsPlayground.tsx`. Fields: `fields-and-forms.md`.
+examples: `src/app/pages/BasicsPlayground.tsx`. Fields: `fields-and-forms.md`.
 Sidebar and navbar: `app-shell.md`. All words are in `constants/ui-text.ts`.
 
 `AppProviders` mounts `Toaster`, `ConfirmProvider` and an `ErrorBoundary` once,

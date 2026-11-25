@@ -44,9 +44,9 @@ Tested, accessible, works on phones.
 </td>
 <td width="33%" valign="top">
 
-### ⚡ One command
-A complete project, or a complete feature with list, details, form, routes and tests.
-The AI only changes what is special.
+### ⚡ Step by step
+A project step by step, or a complete feature with list, details, form, routes and tests.
+You check each step before the next.
 
 </td>
 <td width="33%" valign="top">
@@ -211,62 +211,88 @@ themselves too: `node install.mjs --project <your-project>`.
 
 ## 🆕 New project, step by step
 
-**1. Say what you want.** One message is enough:
+The AI builds **one step, then stops**. You check it, say OK, and only then the next one
+starts. Nothing is built behind your back.
+
+**1. Say what you want**
 
 ```text
-Start a new React project "Shop admin" in ./shop. Teal #0f766e, light and dark,
-sidebar. Dashboard and login. Modules: orders, customers, products.
+Start a new React project "Shop admin" in ./shop. Teal #0f766e, light and dark, sidebar.
+Parts: dashboard, login. Features: orders, customers.
 ```
 
-**2. The AI runs one command.** You can run it yourself too:
+**2. Check each step and answer**
 
-```bash
-node ~/frontend-skills/skills/frontend-core/scripts/create.mjs shop --title "Shop admin" --color "#0f766e" --dark --blocks dashboard,auth-pages,account-pages
-```
+| Step | What is built | What you check |
+| --- | --- | --- |
+| 1️⃣ Setup | config, theme, packages | it starts; color, font and name |
+| 2️⃣ Layout | sidebar or navbar, page frame, 404 | menu, collapse, phone drawer |
+| 3️⃣ Common components | buttons, cards, tabs, dialogs, toasts, loaders | `/playground` |
+| 4️⃣ Forms | all 45+ fields, validation | `/playground/fields` |
+| 5️⃣ Hooks and utils | helpers | `docs/COMPONENTS.md` |
+| 6️⃣ Table | table, filters, command menu | `/playground/table` |
+| 7️⃣ API | client, login state, permissions | your server address |
+| 8️⃣ Speed | size limits, images, long lists | `npm run size` |
+| 9️⃣ Parts | dashboard, login, dark mode, one at a time | the page itself |
+| 🔟 Features | orders, customers, one at a time | list, form, delete |
 
-You get a project that runs: config, theme with readable shades, sidebar, login and guarded
-routes, dashboard, the newest packages **for your Node version** (which is never changed).
+| You say | The AI does |
+| --- | --- |
+| ✅ **"OK"** | builds the next step |
+| ✏️ **"Make the sidebar darker"** | changes only that, then asks again |
+| ⏭️ **"Skip"** | leaves the next step out |
+| ➕ **"Add a kanban board"** | plans one more step |
+| 📍 **"Where are we?"** | shows the plan; also in a new chat |
+| 🚀 **"Build everything at once"** | all steps without stopping |
 
-**3. Add features, one at a time.**
+`docs/PROGRESS.md` in your project always shows what is done:
 
 ```text
-Add an orders feature: customer (required), total (currency), status open/paid/shipped, due date, note.
+- [x] 1. Setup: config, theme and packages
+- [x] 2. Layout: sidebar, navbar and page frame
+- [~] 3. Common components        <- built, waiting for your check
+- [ ] 4. Form fields and forms
 ```
 
-**4. Connect your server.** Set `VITE_API_URL` in `.env`, then:
+**3. Connect your server.** Set `VITE_API_URL` in `.env`, then:
 
 ```text
 Connect the API. Here is the OpenAPI file: ./openapi.json
 ```
 
-**5. Check.** One command, short output:
+<details>
+<summary><b>🧑‍💻 Run the steps yourself, without an AI</b></summary>
+
+<br>
 
 ```bash
-npm run verify
+S=~/frontend-skills/skills/frontend-core/scripts
+node $S/create.mjs shop --title "Shop admin" --color "#0f766e" --dark --blocks dashboard,auth-pages --features orders
+node $S/steps.mjs shop             # plan
+node $S/steps.mjs shop ok next     # I checked it, build the next
+node $S/steps.mjs shop skip        # leave the next out
+node $S/steps.mjs shop add kanban  # one more part
 ```
 
-```text
-ok    types  16s
-ok    lint   24s
-ok    tests  93s  338 tests
-ok    build  10s
-ok    size   1s
-ok    scan   2s  High 0, Medium 0, Low 0
-```
+Each step installs only the packages it needs, newest for your Node version (which is never
+changed). Files you changed are not overwritten.
+</details>
 
 ```mermaid
 flowchart LR
-    A([💬 You say it]) --> B[🤖 AI opens<br/>one short skill]
-    B --> C[⚙️ create or<br/>generate script]
-    C --> D[✏️ AI adapts only<br/>what is special]
-    D --> E[✅ verify]
-    E -->|something failed| D
-    E --> F([🎉 Done])
+    A([💬 You say it]) --> B[⚙️ Script builds<br/>one step]
+    B --> C[✅ AI runs verify]
+    C -->|something failed| B
+    C --> D{👀 You check}
+    D -->|change it| E[✏️ AI changes<br/>only that]
+    E --> C
+    D -->|OK| F([➡️ Next step])
+    F --> B
     style A fill:#8b5cf6,color:#fff,stroke:none
-    style B fill:#3b82f6,color:#fff,stroke:none
-    style C fill:#0ea5e9,color:#fff,stroke:none
+    style B fill:#0ea5e9,color:#fff,stroke:none
+    style C fill:#10b981,color:#fff,stroke:none
     style D fill:#f59e0b,color:#1f2937,stroke:none
-    style E fill:#10b981,color:#fff,stroke:none
+    style E fill:#3b82f6,color:#fff,stroke:none
     style F fill:#ec4899,color:#fff,stroke:none
 ```
 
@@ -283,6 +309,8 @@ flowchart LR
 | `--layout navbar` | without sidebar |
 | `--blocks a,b` | ready parts, see the list below |
 | `--locale en-IN --currency INR --country IN` | formats and defaults |
+| `--features a,b` | features to plan as steps |
+| `--all` | everything at once, without stopping |
 | `--no-api` | without server code |
 | `--no-install` | only files |
 </details>
@@ -329,7 +357,7 @@ endpoints. One feature per message.
 <img src="docs/images/tokens.svg" alt="With skills 55k tokens, 9 tool calls, 6.3 minutes. Without 111k tokens, 36 tool calls, 11.7 minutes." width="760">
 </div>
 
-<sub>One run each with Claude Sonnet: a new project with theme, login, dashboard and an
+<sub>One run each with Claude Sonnet, everything at once: a new project with theme, login, dashboard and an
 orders feature. The numbers include the tool's own start-up text, so the part you can
 influence shrank even more. The result with skills came with 329 tests, the other with
 20. Your numbers will differ.</sub>
@@ -353,7 +381,7 @@ influence shrank even more. The result with skills came with 329 tests, the othe
 
 **Your part**
 
-1. One feature per chat. Start a new session for the next one.
+1. A few steps per chat. The plan is saved, so a new session can continue.
 2. Say the fields and endpoints in the first message.
 3. Do not say "read all skills" or "read the whole project".
 4. Let it run `verify` once at the end, `--fast` in between.

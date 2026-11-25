@@ -1,6 +1,15 @@
 # New project, special cases
 
-`create.mjs` does all of this. Read on only when it cannot be used.
+`create.mjs` and `steps.mjs` do all of this. Read on only when they cannot be used.
+
+## Steps
+
+State: `docs/steps.json` (for the scripts) and `docs/PROGRESS.md` (for people). A step is
+to do, built, checked or skipped. `next` refuses while one waits for its check. Every step
+copies its part with everything it imports, adds the tests that can run, installs only
+the packages it needs, and connects it in router, App, main, menu and shell. Files changed
+by hand are not overwritten: the new version is in `docs/proposed/`; merge it, then delete
+it. Generated features are always kept.
 
 ## Options
 
@@ -12,6 +21,8 @@
 | `--blocks a,b` | from `frontend-blocks`; `auth-pages` also adds guarded routes |
 | `--locale en-IN --currency INR --country IN` | formats and defaults |
 | `--no-api` | no server: no API client, login state or TanStack Query |
+| `--features a,b` | features to plan as steps |
+| `--all` | every step at once, without stopping |
 | `--no-install` | files only |
 
 The folder must be empty. Afterwards: `.env`, the real endpoints in `*.service.ts`,

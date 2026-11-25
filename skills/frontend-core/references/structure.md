@@ -20,7 +20,8 @@ project-root/
 │   │   └── pages/                  # app-level pages only
 │   │       ├── StatusPages.tsx     # 403, 404
 │   │       ├── FieldsPlayground.tsx      # dev only
-│   │       └── ComponentsPlayground.tsx  # dev only
+│   │       ├── BasicsPlayground.tsx      # dev only
+│   │       └── TablePlayground.tsx       # dev only
 │   │
 │   ├── components/
 │   │   ├── ui/                     # primitives: no business logic, no API

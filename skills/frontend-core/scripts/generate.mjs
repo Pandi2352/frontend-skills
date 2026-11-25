@@ -79,7 +79,7 @@ it('shows its content and passes native props', () => {
   expect(screen.getByText('Hello')).toBeVisible();
 });
 `);
-  console.log(`Added src/${base}. Next: real props and states, a test for each, an example in ComponentsPlayground.`);
+  console.log(`Added src/${base}. Next: real props and states, a test for each, an example in BasicsPlayground.`);
 }
 
 if (kind === 'page') {

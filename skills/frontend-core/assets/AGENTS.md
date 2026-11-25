@@ -6,6 +6,9 @@ React, TypeScript, Vite, Tailwind CSS v4.
 
 ## Work like this
 
+0. `docs/PROGRESS.md` shows the steps. Build one step or feature, verify, tell the
+   developer what to check, ask "OK, change or skip?" and stop. Continue only after
+   their OK (`steps.mjs` of the `frontend-core` skill).
 1. Read `docs/COMPONENTS.md`: the short list of what exists. Reuse it.
 2. Props: `node scripts/index-components.mjs DataTable Dropdown`. Do not open component
    files or guess.

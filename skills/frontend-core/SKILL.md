@@ -9,18 +9,33 @@ Scripts copy and generate finished code. You choose, connect and adapt. Never op
 `assets/` and never retype what a script writes: that costs many tokens and is worse.
 `<skill>` is the folder of this file.
 
-## New project
+## New project: one step, then stop
+
+Developers check each step. Never build the next one without their OK, and never use
+`--all` unless they ask for everything at once.
 
 Ask in one message only what is missing: folder, title, color, dark theme, sidebar or
-navbar, modules. "Just start" means blue, light, sidebar. Then:
+navbar, parts, features. "Just start" means blue, light, sidebar. Then:
 
 ```
-node <skill>/scripts/create.mjs my-app --title "My app" --color "#2563eb" --dark --blocks dashboard,auth-pages
+node <skill>/scripts/create.mjs my-app --title "My app" --color "#2563eb" --dark --blocks dashboard,auth-pages --features orders,customers
+node <skill>/scripts/steps.mjs my-app            # plan and state, also in a later chat
+node <skill>/scripts/steps.mjs my-app ok next    # after their OK: builds one step
 ```
 
-It writes everything, installs the newest packages for the installed Node and prints a
-short summary. Blocks: `node <skill>/../frontend-blocks/scripts/add.mjs --list`. Only
-if that fails or something special is needed: `references/new-project.md`.
+Order: setup, layout, common components, forms, hooks, table, API, speed, parts,
+features. The script does the work and prints what to check. Each time:
+
+1. `node scripts/verify.mjs --fast` in the project; fix what fails.
+2. Show the printed check list in a few lines.
+3. Ask: "OK, change something, or skip the next?" **Then stop and wait.**
+
+They want a change: do only that, verify, ask again. Also: `skip`, `add charts`,
+`add feature:products`. A feature step: ask for its fields and rules, generate, adapt,
+then `steps.mjs my-app built feature:orders`. "to do" lines are for you.
+
+Parts: `node <skill>/../frontend-blocks/scripts/add.mjs --list`. Only if something
+special is needed: `references/new-project.md`.
 
 ## Every feature
 
@@ -34,8 +49,8 @@ node scripts/verify.mjs --fast                          # while working
 node scripts/verify.mjs                                 # once, at the end
 ```
 
-1. Look at the project first: `AGENTS.md`, then `docs/COMPONENTS.md` (a short list of
-   what exists).
+1. Look at the project first: `AGENTS.md`, `docs/PROGRESS.md` (steps), then
+   `docs/COMPONENTS.md` (a short list of what exists).
 2. Generate, then change only what is special. Reuse; ask for props instead of
    opening component files or guessing.
 3. Run `verify.mjs`. It prints little. Do not run the single checks as well.
