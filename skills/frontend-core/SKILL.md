@@ -9,47 +9,54 @@ Scripts copy and generate finished code. You choose, connect and adapt. Never op
 `assets/` and never retype what a script writes: that costs many tokens and is worse.
 `<skill>` is the folder of this file.
 
-## New project: one step, then stop
+## Build only what they ask
 
-Developers check each step. Never build the next one without their OK, and never use
-`--all` unless they ask for everything at once.
+Build exactly what the developer asked for, one thing at a time. Nothing extra, also not
+"while I am here". Then suggest, ask and **stop**. They check before the next thing.
 
-Ask in one message only what is missing: folder, title, color, dark theme, sidebar or
-navbar, parts, features. "Just start" means blue, light, sidebar. Then:
-
-```
-node <skill>/scripts/create.mjs my-app --title "My app" --color "#2563eb" --dark --blocks dashboard,auth-pages --features orders,customers
-node <skill>/scripts/steps.mjs my-app            # plan and state, also in a later chat
-node <skill>/scripts/steps.mjs my-app ok next    # after their OK: builds one step
-```
-
-Order: setup, layout, common components, forms, hooks, table, API, speed, parts,
-features. The script does the work and prints what to check. Each time:
-
-1. `node scripts/verify.mjs --fast` in the project; fix what fails.
-2. Show the printed check list in a few lines.
-3. Ask: "OK, change something, or skip the next?" **Then stop and wait.**
-
-They want a change: do only that, verify, ask again. Also: `skip`, `add charts`,
-`add feature:products`. A feature step: ask for its fields and rules, generate, adapt,
-then `steps.mjs my-app built feature:orders`. "to do" lines are for you.
-
-Parts: `node <skill>/../frontend-blocks/scripts/add.mjs --list`. Only if something
-special is needed: `references/new-project.md`.
-
-## Every feature
-
-In the project folder:
+New project: ask in one message only what is missing (folder, title, color).
 
 ```
-node scripts/generate.mjs feature orders --fields "customer:text!, total:currency!, status:select(open|paid), dueOn:date, note:textarea"
+node <skill>/scripts/create.mjs my-app --title "My app" --color "#2563eb" --ask sidebar,login,feature:orders
+node <skill>/scripts/steps.mjs my-app                  # what was asked, what is done, ideas
+node <skill>/scripts/steps.mjs my-app ok               # they checked the last one
+node <skill>/scripts/steps.mjs my-app next             # the next thing they asked for
+node <skill>/scripts/steps.mjs my-app build toast      # something new they asked for
+node <skill>/scripts/steps.mjs my-app build feature:orders --fields "customer:text!, total:currency!"
+node <skill>/scripts/steps.mjs my-app complete         # after writing code by hand
+```
+
+`--ask` holds only what they named; it is remembered. `create` builds just the setup, with
+the sidebar or navbar when that comes first. Any order works: each thing brings only the code it imports and its packages.
+`list` shows what can be built: steps, parts, single components, hooks and utils.
+
+After each thing:
+
+1. `node scripts/verify.mjs --fast` in the project; fix what fails. "to do" lines are yours.
+2. Tell in a few lines what was built and what to check (the script prints it).
+3. Give 2 to 4 of the printed ideas, the best first, in your own short words. Add one
+   of your own only if their project clearly needs it.
+4. Ask "OK? What next?" and stop. Never build an idea without a yes.
+
+A change: do only that, verify, ask again. Feature without fields: ask for them first.
+"Everything at once": `create.mjs … --ask … --all`. Special cases:
+`references/new-project.md`.
+
+## Working in a project
+
+Features: `steps.mjs … build feature:…`, or `generate.mjs feature …` when the project has
+no `docs/steps.json`. Field types: `text textarea email url phone number currency percent
+date switch country select(a|b)`, `!` is required. In the project folder:
+
+```
 node scripts/generate.mjs component shared/StatusDot
+node scripts/generate.mjs page reports/SalesReport
 node scripts/index-components.mjs DataTable Dropdown    # props of these
 node scripts/verify.mjs --fast                          # while working
 node scripts/verify.mjs                                 # once, at the end
 ```
 
-1. Look at the project first: `AGENTS.md`, `docs/PROGRESS.md` (steps), then
+1. Look at the project first: `AGENTS.md`, `docs/PROGRESS.md` (what is built), then
    `docs/COMPONENTS.md` (a short list of what exists).
 2. Generate, then change only what is special. Reuse; ask for props instead of
    opening component files or guessing.

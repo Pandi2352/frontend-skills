@@ -1,102 +1,146 @@
 #!/usr/bin/env node
-// Builds a project in small steps. After each one the developer checks it.
+// Builds what the developer asked for, one thing at a time, and suggests what could
+// come next. Nothing else is built.
 //
-//   node steps.mjs <project>                 what is done, what comes next
-//   node steps.mjs <project> next            build the next step
-//   node steps.mjs <project> ok              the developer checked it
-//   node steps.mjs <project> ok next         both
-//   node steps.mjs <project> skip            leave the next step out
-//   node steps.mjs <project> add charts      plan a ready part, or  add feature:orders
-//   node steps.mjs <project> built feature:orders   a feature was generated
+//   node steps.mjs <project>                        what was asked, what is done, ideas
+//   node steps.mjs <project> ok                     the developer checked the last one
+//   node steps.mjs <project> build layout           build one thing
+//   node steps.mjs <project> build feature:orders --fields "customer:text!, total:currency!"
+//   node steps.mjs <project> add dashboard login    remember for later, do not build
+//   node steps.mjs <project> next                   build the next thing that was asked
+//   node steps.mjs <project> drop dashboard         they do not want it any more
+//   node steps.mjs <project> complete               copy what the code imports but lacks
+//   node steps.mjs <project> list                   everything that can be built
+//
+// Names: layout, basics, forms, helpers, table, api, speed, the parts of
+// frontend-blocks, feature:<name>, or one component, hook or util (toast, DatePicker).
 
-import { existsSync } from 'node:fs';
 import path from 'node:path';
-import { buildStep, expandBlocks, fail, loadState, saveState, stepInfo, STEPS } from './lib/project.mjs';
+import { parseArgs } from 'node:util';
+import { blockList, buildStep, fail, findStep, finish, loadState, saveState, stepInfo, STEPS } from './lib/project.mjs';
+import { suggest } from './lib/suggest.mjs';
 
-const [folder, ...commands] = process.argv.slice(2);
-if (!folder) fail('Usage: node steps.mjs <project> [next | ok | skip | add <name> | built <step>]');
+let parsed;
+try {
+  parsed = parseArgs({
+    allowPositionals: true,
+    options: { fields: { type: 'string' }, singular: { type: 'string' }, 'no-install': { type: 'boolean', default: false } },
+  });
+} catch (error) {
+  fail(error.message);
+}
+const { values: opt, positionals } = parsed;
+const [folder, command, ...names] = positionals;
+if (!folder) fail('Usage: node steps.mjs <project> [ok | build <name> | add <names> | next | drop <name> | complete | list]');
 const project = path.resolve(folder);
 const state = loadState(project);
 if (!state) fail(`${project} has no docs/steps.json. Start with create.mjs; for an existing project use add-to-project.mjs.`);
+const installPackages = !opt['no-install'];
 
-const noInstall = commands.includes('--no-install');
-const words = commands.filter((c) => !c.startsWith('--'));
-const waiting = () => state.steps.find((s) => s.state === 'built');
+const waiting = () => state.steps.filter((s) => s.state === 'built');
 const next = () => state.steps.find((s) => s.state === 'todo');
-const number = (step) => `${state.steps.indexOf(step) + 1} of ${state.steps.length}`;
+const meaning = (word) => findStep(word) ?? fail(`"${word}" is not known. See: steps.mjs ${folder} list`);
 
-/** What the developer should look at, and the sign for the AI to stop. */
-export function tellCheck(step, { notes = [], todo = [] } = {}) {
-  const info = stepInfo(step.id);
-  console.log(`Step ${number(step)} is built: ${info.title}`);
+function ideas() {
+  const asked = state.steps.filter((s) => s.state === 'todo');
+  if (asked.length) {
+    console.log('Asked for, not built yet:');
+    for (const s of asked) console.log(`  - ${stepInfo(s.id).title}`);
+  }
+  const list = suggest(project, { planned: state.steps.map((s) => s.id) });
+  if (list.length) {
+    console.log('Ideas for the next step (build nothing of this without their yes):');
+    for (const { say, why } of list) console.log(`  - "${say}" (${why})`);
+  }
+}
+
+function report(step, { notes = [], todo = [] } = {}) {
+  console.log(`Built: ${stepInfo(step.id).title}`);
   for (const note of notes.slice(0, 8)) console.log(`  note: ${note}`);
   for (const line of todo) console.log(`  to do: ${line}`);
   console.log('Developer, please check:');
-  for (const line of info.check) console.log(`  - ${line}`);
-  const after = state.steps.find((s) => s.state === 'todo');
-  console.log(after ? `Next would be: ${stepInfo(after.id).title}` : 'This was the last step.');
-  console.log('AI: run scripts/verify.mjs --fast, show this list, ask "OK, change something, or skip the next?" and STOP.');
+  for (const line of stepInfo(step.id).check) console.log(`  - ${line}`);
+  ideas();
+  console.log('AI: run scripts/verify.mjs --fast. Then show the check list and 2 to 4 ideas, ask what they want next, and STOP.');
 }
 
-if (!words.length) {
-  const mark = { todo: ' ', built: '~', ok: 'x', skipped: '-' };
-  for (const step of state.steps) console.log(`[${mark[step.state]}] ${stepInfo(step.id).title}`);
-  if (waiting()) tellCheck(waiting());
-  else console.log(next() ? `Next: ${stepInfo(next().id).title}` : 'All steps are done.');
+function build(id) {
+  let step = state.steps.find((s) => s.id === id);
+  if (step && step.state !== 'todo') fail(`${stepInfo(id).title} is already built.`);
+  if (id.startsWith('feature:') && !opt.fields) {
+    fail(`Ask the developer for the fields of ${id.slice(8)}, then: steps.mjs ${folder} build ${id} --fields "name:text!, status:select(open|done)"`);
+  }
+  if (!step) state.steps.push((step = { id, state: 'todo' }));
+  const result = buildStep(project, state, id, { installPackages, fields: opt.fields, singular: opt.singular });
+  step.state = 'built';
+  saveState(project, state);
+  report(step, result);
 }
 
-for (let i = 0; i < words.length; i++) {
-  const word = words[i];
-  if (word === 'ok') {
-    const step = waiting();
-    if (!step) fail('Nothing is waiting for a check.');
-    step.state = 'ok';
+switch (command) {
+  case undefined: {
+    const mark = { todo: ' ', built: '~', ok: 'x' };
+    for (const s of state.steps) console.log(`[${mark[s.state]}] ${stepInfo(s.id).title}`);
+    ideas();
+    break;
+  }
+  case 'ok': {
+    if (!waiting().length) fail('Nothing is waiting for a check.');
+    for (const s of waiting()) {
+      s.state = 'ok';
+      console.log(`Checked: ${stepInfo(s.id).title}`);
+    }
     saveState(project, state);
-    console.log(`Checked: ${stepInfo(step.id).title}`);
-  } else if (word === 'next') {
-    if (waiting()) fail(`Step ${number(waiting())} (${stepInfo(waiting().id).title}) was not checked yet. Ask the developer; after their OK run: steps.mjs ${folder} ok next`);
+    ideas();
+    break;
+  }
+  case 'build': {
+    if (names.length !== 1) fail('One thing at a time: build <name>. Use "add" to remember others.');
+    build(meaning(names[0]));
+    break;
+  }
+  case 'next': {
+    if (waiting().length) fail(`${stepInfo(waiting()[0].id).title} was not checked yet. Ask the developer; after their OK: steps.mjs ${folder} ok`);
     const step = next();
     if (!step) {
-      console.log('All steps are done. Add more with: steps.mjs <project> add <part> or add feature:<name>');
-      break;
-    }
-    const [kind, name] = step.id.split(':');
-    if (kind === 'feature' && !existsSync(path.join(project, 'src/features', name))) {
-      console.log(`Next step ${number(step)}: feature ${name}.`);
-      console.log('AI: ask the developer for its fields and rules, then in the project run');
-      console.log(`  node scripts/generate.mjs feature ${name} --fields "…"`);
-      console.log(`and after adapting it: steps.mjs ${folder} built feature:${name}`);
-      break;
-    }
-    const result = buildStep(project, state, step.id, { installPackages: !noInstall });
-    step.state = 'built';
-    saveState(project, state);
-    tellCheck(step, result);
-  } else if (word === 'built') {
-    const id = words[++i];
-    const step = state.steps.find((s) => s.id === id);
-    if (!step) fail(`No step ${id}. Plan it first: steps.mjs ${folder} add ${id}`);
-    if (id.startsWith('feature:') && !existsSync(path.join(project, 'src/features', id.split(':')[1]))) fail(`src/features/${id.split(':')[1]} does not exist yet.`);
-    step.state = 'built';
-    saveState(project, state);
-    tellCheck(step);
-  } else if (word === 'skip') {
-    const step = next();
-    if (!step) fail('There is no next step.');
-    if (step.id === 'setup' || step.id === 'layout') fail(`${stepInfo(step.id).title} cannot be left out.`);
-    step.state = 'skipped';
-    saveState(project, state);
-    console.log(`Skipped: ${stepInfo(step.id).title}`);
-  } else if (word === 'add') {
-    const name = words[++i];
-    if (!name) fail('add what? For example: add charts, add feature:orders');
-    const ids = name.startsWith('feature:') ? [name] : STEPS[name] ? [name] : [`block:${expandBlocks([name]).at(-1)}`];
-    for (const id of ids) {
-      const there = state.steps.find((s) => s.id === id);
-      if (there?.state === 'skipped') there.state = 'todo';
-      else if (!there) state.steps.push({ id, state: 'todo' });
+      console.log('Everything they asked for is built.');
+      ideas();
+    } else build(step.id);
+    break;
+  }
+  case 'add': {
+    if (!names.length) fail('add what?');
+    for (const id of names.map(meaning)) {
+      if (!state.steps.some((s) => s.id === id)) state.steps.push({ id, state: 'todo' });
+      console.log(`Remembered: ${stepInfo(id).title}`);
     }
     saveState(project, state);
-    console.log(`Planned: ${ids.map((id) => stepInfo(id).title).join(', ')}`);
-  } else fail(`Unknown command "${word}".`);
+    break;
+  }
+  case 'drop': {
+    for (const id of names.map(meaning)) {
+      const step = state.steps.find((s) => s.id === id);
+      if (!step) fail(`${stepInfo(id).title} was not asked for.`);
+      if (step.state !== 'todo') fail(`${stepInfo(id).title} is already built. Removing code is a change: ask what should go.`);
+      state.steps.splice(state.steps.indexOf(step), 1);
+      console.log(`Dropped: ${stepInfo(id).title}`);
+    }
+    saveState(project, state);
+    break;
+  }
+  case 'complete': {
+    const { added, notes, todo } = finish(project, state, { installPackages });
+    saveState(project, state);
+    console.log(`${added} files copied.`);
+    for (const line of [...notes.slice(0, 5), ...todo]) console.log(`  ${line}`);
+    break;
+  }
+  case 'list':
+    console.log(`Steps: ${Object.entries(STEPS).map(([id, s]) => `${id} (${s.title})`).join(', ')}`);
+    console.log('Parts:');
+    for (const [id, about] of blockList()) console.log(`  ${id}: ${about}`);
+    console.log('Also: feature:<name> with --fields, or one component, hook or util, e.g. toast, modal, DatePicker, useClipboard.');
+    break;
+  default:
+    fail(`Unknown command "${command}".`);
 }

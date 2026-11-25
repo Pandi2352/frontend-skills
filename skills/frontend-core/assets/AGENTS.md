@@ -6,15 +6,15 @@ React, TypeScript, Vite, Tailwind CSS v4.
 
 ## Work like this
 
-0. `docs/PROGRESS.md` shows the steps. Build one step or feature, verify, tell the
-   developer what to check, ask "OK, change or skip?" and stop. Continue only after
-   their OK (`steps.mjs` of the `frontend-core` skill).
+0. Build only what the developer asks, one thing at a time. Then verify, say what to
+   check, suggest 2 to 4 next steps, ask, and stop. `docs/PROGRESS.md` shows the state;
+   `steps.mjs` of the `frontend-core` skill builds and suggests.
 1. Read `docs/COMPONENTS.md`: the short list of what exists. Reuse it.
 2. Props: `node scripts/index-components.mjs DataTable Dropdown`. Do not open component
    files or guess.
-3. New feature (list, details, form, routes, tests):
-   `node scripts/generate.mjs feature orders --fields "customer:text!, total:currency!, status:select(open|paid)"`.
-   New component: `generate.mjs component shared/Name`. Then change what is special.
+3. New feature, part or component: `steps.mjs <project> build …` of the skill; it brings
+   what is missing. Without the skill: `node scripts/generate.mjs feature orders --fields
+   "customer:text!, status:select(open|paid)"` or `component shared/Name`. Then adapt.
 4. `node scripts/verify.mjs --fast` while working, `node scripts/verify.mjs` at the end.
    Do not run the single checks as well.
 5. After adding shared code: `node scripts/index-components.mjs`.

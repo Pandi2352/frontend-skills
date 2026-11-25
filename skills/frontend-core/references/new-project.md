@@ -2,27 +2,25 @@
 
 `create.mjs` and `steps.mjs` do all of this. Read on only when they cannot be used.
 
-## Steps
+## How it works
 
-State: `docs/steps.json` (for the scripts) and `docs/PROGRESS.md` (for people). A step is
-to do, built, checked or skipped. `next` refuses while one waits for its check. Every step
-copies its part with everything it imports, adds the tests that can run, installs only
-the packages it needs, and connects it in router, App, main, menu and shell. Files changed
-by hand are not overwritten: the new version is in `docs/proposed/`; merge it, then delete
-it. Generated features are always kept.
+`create.mjs` writes the setup, and the layout when it is asked for first. `steps.mjs build` copies one thing with everything it
+imports, the tests that can run, and only the packages it needs, and connects it in router,
+App, main, menu and shell. State: `docs/steps.json` (scripts) and `docs/PROGRESS.md`
+(people). `next` refuses while something waits for its check; `build` is for a new wish.
+Files changed by hand are not overwritten: the new version is in `docs/proposed/`; merge it,
+then delete it. Generated features are kept. Ideas come from the project: fields, parts
+that are there, parts that are missing.
 
 ## Options
 
 | Option | Meaning |
 | --- | --- |
 | `--title`, `--color "#rrggbb"` | name; main color, darkened if text would be unreadable |
-| `--dark` | light and dark |
-| `--layout navbar` | without sidebar |
-| `--blocks a,b` | from `frontend-blocks`; `auth-pages` also adds guarded routes |
+| `--ask a,b` | what they asked for, in order; built one by one |
+| `--layout navbar` | without sidebar, when a layout is built |
 | `--locale en-IN --currency INR --country IN` | formats and defaults |
-| `--no-api` | no server: no API client, login state or TanStack Query |
-| `--features a,b` | features to plan as steps |
-| `--all` | every step at once, without stopping |
+| `--all` | builds everything in `--ask` now; features still need fields |
 | `--no-install` | files only |
 
 The folder must be empty. Afterwards: `.env`, the real endpoints in `*.service.ts`,

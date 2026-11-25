@@ -722,6 +722,7 @@ it('saves a change', async () => {
 
   console.log(`Feature ${plural}: ${written.length} files in src/${dir}, paths${todo.length ? '' : ', route and menu item'} added.`);
   for (const line of todo) console.log(`  ${line}`);
+  if (!existsSync(path.join(src, 'components/shared/data-table')) || !existsSync(path.join(src, 'components/form'))) console.log('Some components are missing: run steps.mjs <project> complete of the frontend-core skill.');
   console.log(`Check: services/${plural}.service.ts (server paths and names), menu icon, permissions. Then: node scripts/verify.mjs --fast`);
 }
 

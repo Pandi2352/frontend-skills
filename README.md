@@ -18,7 +18,7 @@
 
 **[🚀 Quick start](#-quick-start)** ·
 **[🧰 Your tool](#-set-up-your-tool)** ·
-**[🆕 New project](#-new-project-step-by-step)** ·
+**[🆕 New project](#-new-project-you-ask-it-builds-only-that)** ·
 **[💬 What to say](#-what-to-say)** ·
 **[🪙 Tokens](#-tokens-how-it-stays-small)** ·
 **[🩹 Help](#-something-does-not-work)**
@@ -44,9 +44,9 @@ Tested, accessible, works on phones.
 </td>
 <td width="33%" valign="top">
 
-### ⚡ Step by step
-A project step by step, or a complete feature with list, details, form, routes and tests.
-You check each step before the next.
+### 🎯 Only what you ask
+It builds only what you ask: one component, one part, or a whole feature with tests. You
+check it, then it suggests what could come next.
 
 </td>
 <td width="33%" valign="top">
@@ -209,69 +209,80 @@ themselves too: `node install.mjs --project <your-project>`.
 
 ---
 
-## 🆕 New project, step by step
+## 🆕 New project: you ask, it builds only that
 
-The AI builds **one step, then stops**. You check it, say OK, and only then the next one
-starts. Nothing is built behind your back.
+The AI builds **exactly what you ask for, one thing at a time**. Then it tells you what to
+check, suggests what could come next, and **waits**.
 
-**1. Say what you want**
+**1. Start with what you want now**
 
 ```text
-Start a new React project "Shop admin" in ./shop. Teal #0f766e, light and dark, sidebar.
-Parts: dashboard, login. Features: orders, customers.
+Start a new React project "Shop admin" in ./shop. Teal #0f766e, with a sidebar.
 ```
 
-**2. Check each step and answer**
+You get the setup and the sidebar. Nothing else. You check it and say OK.
 
-| Step | What is built | What you check |
-| --- | --- | --- |
-| 1️⃣ Setup | config, theme, packages | it starts; color, font and name |
-| 2️⃣ Layout | sidebar or navbar, page frame, 404 | menu, collapse, phone drawer |
-| 3️⃣ Common components | buttons, cards, tabs, dialogs, toasts, loaders | `/playground` |
-| 4️⃣ Forms | all 45+ fields, validation | `/playground/fields` |
-| 5️⃣ Hooks and utils | helpers | `docs/COMPONENTS.md` |
-| 6️⃣ Table | table, filters, command menu | `/playground/table` |
-| 7️⃣ API | client, login state, permissions | your server address |
-| 8️⃣ Speed | size limits, images, long lists | `npm run size` |
-| 9️⃣ Parts | dashboard, login, dark mode, one at a time | the page itself |
-| 🔟 Features | orders, customers, one at a time | list, form, delete |
+**2. Ask for the next thing, or take a suggestion**
+
+```text
+Built: Feature: orders
+Please check:
+  - /orders : list, search, sort, filter
+  - create, edit, delete, required fields
+Ideas for the next step:
+  - "Show the orders as a board by status" (orders have a status)
+  - "Show the orders in a calendar by dueOn" (orders have a date)
+  - "Add login pages" (everybody can open the pages now)
+OK? What next?
+```
+
+The ideas come from **your** project: its fields, what it has and what is missing.
 
 | You say | The AI does |
 | --- | --- |
-| ✅ **"OK"** | builds the next step |
+| ✅ **"OK"** | marks it as checked and asks what comes next |
+| 🧱 **"Add toasts"**, **"Add a date picker"** | copies only that, with what it needs |
+| 📋 **"Add orders: customer, total, status"** | builds only that feature |
 | ✏️ **"Make the sidebar darker"** | changes only that, then asks again |
-| ⏭️ **"Skip"** | leaves the next step out |
-| ➕ **"Add a kanban board"** | plans one more step |
-| 📍 **"Where are we?"** | shows the plan; also in a new chat |
-| 🚀 **"Build everything at once"** | all steps without stopping |
+| 📝 **"Later I also want login"** | remembers it, builds nothing |
+| 🗑️ **"I do not want the dashboard any more"** | forgets it |
+| 📍 **"Where are we?"** | shows what is done and ideas; also in a new chat |
+| 🚀 **"Build everything at once"** | does not stop in between |
 
-`docs/PROGRESS.md` in your project always shows what is done:
+**3. What you can ask for**, in any order
 
-```text
-- [x] 1. Setup: config, theme and packages
-- [x] 2. Layout: sidebar, navbar and page frame
-- [~] 3. Common components        <- built, waiting for your check
-- [ ] 4. Form fields and forms
-```
+| | Examples |
+| --- | --- |
+| 🖼️ Frame | sidebar or navbar |
+| 🧱 Components | all common ones, or one: toast, modal, tabs, card, stepper |
+| 📝 Forms | all fields, or one: date picker, phone, upload |
+| 📊 Data | table, charts, kanban, calendar, CSV import |
+| 🔐 People | login, profile, settings, notifications |
+| 🌗 App | dark mode, languages, autosave, idle logout, speed |
+| 📋 Features | your own data with list, details, form and tests |
 
-**3. Connect your server.** Set `VITE_API_URL` in `.env`, then:
+`docs/PROGRESS.md` in your project shows what is done.
+
+**4. Connect your server.** Set `VITE_API_URL` in `.env`, then:
 
 ```text
 Connect the API. Here is the OpenAPI file: ./openapi.json
 ```
 
 <details>
-<summary><b>🧑‍💻 Run the steps yourself, without an AI</b></summary>
+<summary><b>🧑‍💻 Do it yourself, without an AI</b></summary>
 
 <br>
 
 ```bash
 S=~/frontend-skills/skills/frontend-core/scripts
-node $S/create.mjs shop --title "Shop admin" --color "#0f766e" --dark --blocks dashboard,auth-pages --features orders
-node $S/steps.mjs shop             # plan
-node $S/steps.mjs shop ok next     # I checked it, build the next
-node $S/steps.mjs shop skip        # leave the next out
-node $S/steps.mjs shop add kanban  # one more part
+node $S/create.mjs shop --title "Shop admin" --color "#0f766e" --ask sidebar,login
+node $S/steps.mjs shop                 # what was asked, what is done, ideas
+node $S/steps.mjs shop ok              # I checked it
+node $S/steps.mjs shop next            # the next thing I asked for
+node $S/steps.mjs shop build toast     # something new
+node $S/steps.mjs shop build feature:orders --fields "customer:text!, status:select(open|paid)"
+node $S/steps.mjs shop list            # everything that can be built
 ```
 
 Each step installs only the packages it needs, newest for your Node version (which is never
@@ -280,14 +291,14 @@ changed). Files you changed are not overwritten.
 
 ```mermaid
 flowchart LR
-    A([💬 You say it]) --> B[⚙️ Script builds<br/>one step]
+    A([💬 You say it]) --> B[⚙️ Script builds<br/>only that]
     B --> C[✅ AI runs verify]
     C -->|something failed| B
     C --> D{👀 You check}
     D -->|change it| E[✏️ AI changes<br/>only that]
     E --> C
-    D -->|OK| F([➡️ Next step])
-    F --> B
+    D -->|OK| F[💡 AI suggests<br/>next steps]
+    F --> A
     style A fill:#8b5cf6,color:#fff,stroke:none
     style B fill:#0ea5e9,color:#fff,stroke:none
     style C fill:#10b981,color:#fff,stroke:none
@@ -305,13 +316,10 @@ flowchart LR
 | --- | --- |
 | `--title "My app"` | name in the sidebar and browser tab |
 | `--color "#2563eb"` | main color; made darker if text would be hard to read |
-| `--dark` | light and dark theme |
 | `--layout navbar` | without sidebar |
-| `--blocks a,b` | ready parts, see the list below |
 | `--locale en-IN --currency INR --country IN` | formats and defaults |
-| `--features a,b` | features to plan as steps |
-| `--all` | everything at once, without stopping |
-| `--no-api` | without server code |
+| `--ask a,b` | what you want, in order; built one by one |
+| `--all` | builds everything in `--ask` at once |
 | `--no-install` | only files |
 </details>
 
@@ -357,7 +365,7 @@ endpoints. One feature per message.
 <img src="docs/images/tokens.svg" alt="With skills 55k tokens, 9 tool calls, 6.3 minutes. Without 111k tokens, 36 tool calls, 11.7 minutes." width="760">
 </div>
 
-<sub>One run each with Claude Sonnet, everything at once: a new project with theme, login, dashboard and an
+<sub>One run each with Claude Sonnet, everything in one request: a new project with theme, login, dashboard and an
 orders feature. The numbers include the tool's own start-up text, so the part you can
 influence shrank even more. The result with skills came with 329 tests, the other with
 20. Your numbers will differ.</sub>
@@ -381,7 +389,7 @@ influence shrank even more. The result with skills came with 329 tests, the othe
 
 **Your part**
 
-1. A few steps per chat. The plan is saved, so a new session can continue.
+1. A few things per chat. The state is saved, so a new session can continue.
 2. Say the fields and endpoints in the first message.
 3. Do not say "read all skills" or "read the whole project".
 4. Let it run `verify` once at the end, `--fast` in between.

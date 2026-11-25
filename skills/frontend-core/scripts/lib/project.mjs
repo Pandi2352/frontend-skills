@@ -47,10 +47,10 @@ const stateFile = (project) => path.join(project, 'docs/steps.json');
 export const loadState = (project) => (existsSync(stateFile(project)) ? JSON.parse(text(stateFile(project))) : null);
 export function saveState(project, state) {
   write(project, 'docs/steps.json', JSON.stringify(state, null, 2));
-  const mark = { todo: '[ ]', built: '[~]', ok: '[x]', skipped: '[-]' };
+  const mark = { todo: '[ ]', built: '[~]', ok: '[x]' };
   write(project, 'docs/PROGRESS.md', `# Progress
 
-[x] checked, [~] built and waiting for the developer's check, [ ] to do, [-] skipped
+[x] checked, [~] built and waiting for the developer's check, [ ] asked for, not built yet
 
 ${state.steps.map((s, i) => `- ${mark[s.state]} ${i + 1}. ${stepInfo(s.id).title}`).join('\n')}
 `);
@@ -80,11 +80,13 @@ export function stepInfo(id) {
   if (STEPS[id]) return STEPS[id];
   const [kind, name] = id.split(':');
   if (kind === 'block') return { title: `Part: ${name}`, check: BLOCK_CHECKS[name] ?? ['use it on a page and try it'] };
-  return { title: `Feature: ${name}`, check: [`/${name} : list, search, sort, filter`, 'create, edit, delete, required fields, unsaved changes', `server names in src/features/${name}/services`] };
+  if (kind === 'code') return { title: `Code: ${name}`, check: [`node scripts/index-components.mjs ${name} shows its props`, 'use it on a page and try it'] };
+  return { title: `Feature: ${name}`, check: [`/${name} : list, search, sort, filter`, 'create, edit, delete, required fields', `server names in src/features/${name}/services`] };
 }
 
 const blocksFile = () => path.join(sibling('frontend-blocks'), 'assets/blocks.json');
 const allBlocks = () => (existsSync(blocksFile()) ? JSON.parse(text(blocksFile())) : {});
+export const blockList = () => Object.entries(allBlocks()).map(([id, b]) => [id, b.about]);
 /** The blocks with the ones they need, in the right order. */
 export function expandBlocks(names) {
   const all = allBlocks();
@@ -98,12 +100,26 @@ export function expandBlocks(names) {
   return out;
 }
 
-export function planSteps({ api, blocks, features }) {
-  // Parts that others need come along with them, so they are no steps of their own.
-  const asked = expandBlocks(blocks).filter((b) => blocks.includes(b));
-  const ids = ['setup', 'layout', 'basics', 'forms', 'helpers', 'table', ...(api ? ['api'] : []), 'speed',
-    ...asked.map((b) => `block:${b}`), ...features.map((f) => `feature:${f}`)];
-  return ids.map((id) => ({ id, state: 'todo' }));
+const key = (text) => text.toLowerCase().replace(/[^a-z\d]/g, '');
+const ALIASES = {
+  sidebar: 'layout', navbar: 'layout', shell: 'layout', components: 'basics', common: 'basics', fields: 'forms', form: 'forms', hooks: 'helpers', utils: 'helpers',
+  datatable: 'table', filters: 'table', performance: 'speed', backend: 'api',
+  login: 'block:auth-pages', auth: 'block:auth-pages', register: 'block:auth-pages', otp: 'block:auth-pages', profile: 'block:account-pages', settings: 'block:account-pages',
+  dark: 'block:dark-mode', theme: 'block:dark-mode', languages: 'block:i18n', translations: 'block:i18n', board: 'block:kanban', chart: 'block:charts', import: 'block:csv-import',
+};
+
+/** What a word means: a step, a ready part, a feature, or a single component, hook or util. */
+export function findStep(word) {
+  if (/^(feature|block|code):/.test(word)) {
+    if (word.startsWith('block:')) expandBlocks([word.slice(6)]);
+    return word.startsWith('feature:') ? `feature:${word.slice(8).toLowerCase().replace(/[^a-z\d]+/g, '-')}` : word;
+  }
+  const k = key(word);
+  if (STEPS[k]) return k;
+  const block = Object.keys(allBlocks()).find((b) => key(b) === k);
+  if (block) return `block:${block}`;
+  if (ALIASES[k]) return ALIASES[k];
+  return codeFiles(word).length ? `code:${word}` : null;
 }
 
 // ---- Copying
@@ -112,47 +128,116 @@ const coreTemplate = path.join(core, 'assets/template/src');
 const importsOf = (file) =>
   /\.tsx?$/.test(file) ? [...text(file).matchAll(/(?:\bfrom|\bimport\(|\bimport|vi\.mock\()\s*['"]([^'"]+)['"]/g)].map((m) => m[1]) : [];
 const isLocal = (spec) => spec.startsWith('@/') || spec.startsWith('.');
-function resolveIn(root, from, spec) {
-  const base = spec.startsWith('@/') ? path.join(root, spec.slice(2)) : path.join(path.dirname(path.join(root, from)), spec);
-  return [base, `${base}.ts`, `${base}.tsx`, path.join(base, 'index.ts')].find(isFile);
+
+/** Every place finished code can come from. */
+let sources;
+function roots() {
+  sources ??= [
+    { root: coreTemplate },
+    { root: path.join(sibling('frontend-api'), 'assets/template/src') },
+    { root: path.join(sibling('frontend-performance'), 'assets/template/src') },
+    ...Object.keys(allBlocks()).map((block) => ({ block, root: path.join(sibling('frontend-blocks'), 'assets/blocks', block, 'src') })),
+  ].filter((r) => existsSync(r.root)).map((r) => ({ ...r, files: new Set(listFiles(r.root)) }));
+  return sources;
+}
+const candidates = (from, spec) => {
+  const base = spec.startsWith('@/') ? spec.slice(2) : path.posix.join(path.posix.dirname(from), spec);
+  return [base, `${base}.ts`, `${base}.tsx`, `${base}/index.ts`];
+};
+const inProject = (project, from, spec) => candidates(from, spec).find((f) => isFile(path.join(project, 'src', f)));
+function inSources(from, spec) {
+  for (const file of candidates(from, spec)) {
+    const source = roots().find((r) => r.files.has(file));
+    if (source) return { file, source };
+  }
+  return null;
 }
 
-/** Files of the template, chosen by a pattern, plus everything they import. */
-function copyPart(project, pattern) {
-  const todo = listFiles(coreTemplate).filter((f) => pattern.test(f) && !/\.test\./.test(f));
+/** Copies files with everything they import. A part brings all of its files. */
+function pull(project, wanted) {
+  const queue = [...wanted];
   const seen = new Set();
   let added = 0;
-  while (todo.length) {
-    const file = todo.pop();
+  while (queue.length) {
+    const { file, source } = queue.pop();
     if (seen.has(file)) continue;
     seen.add(file);
-    for (const spec of importsOf(path.join(coreTemplate, file)).filter(isLocal)) {
-      const found = resolveIn(coreTemplate, file, spec);
-      if (found) todo.push(slash(path.relative(coreTemplate, found)));
+    if (source.block && !seen.has(`block ${source.block}`)) {
+      seen.add(`block ${source.block}`);
+      for (const name of expandBlocks([source.block])) {
+        const other = roots().find((r) => r.block === name);
+        for (const f of other.files) if (!/\.test\./.test(f)) queue.push({ file: f, source: other });
+      }
+    }
+    for (const spec of importsOf(path.join(source.root, file)).filter(isLocal)) {
+      if (inProject(project, file, spec)) continue;
+      const found = inSources(file, spec);
+      if (found) queue.push(found);
     }
     const target = path.join(project, 'src', file);
     if (existsSync(target)) continue;
     mkdirSync(path.dirname(target), { recursive: true });
-    copyFileSync(path.join(coreTemplate, file), target);
+    copyFileSync(path.join(source.root, file), target);
     added++;
   }
   return added;
 }
+const pullFiles = (project, files) =>
+  pull(project, files.map((file) => ({ file, source: roots().find((r) => r.files.has(file)) })).filter((f) => f.source));
+const pullPattern = (project, pattern) => pullFiles(project, [...roots()[0].files].filter((f) => pattern.test(f) && !/\.test\./.test(f)));
+
+/** Files of one component, hook or util by its name. */
+function codeFiles(word) {
+  const name = word.replace(/^code:/, '');
+  const k = key(name);
+  const [coreRoot, , speedRoot] = roots();
+  const all = [...new Set([...coreRoot.files, ...(speedRoot?.files ?? [])])].filter((f) => /\.tsx?$/.test(f) && !/\.test\.|^app\/|^test\//.test(f));
+  const folder = all.filter((f) => /^components\//.test(f) && key(f.split('/').at(-2)) === k && f.endsWith('/index.ts'));
+  return folder.length ? folder : all.filter((f) => key(f.split('/').at(-1).replace(/\.tsx?$/, '')) === k);
+}
+
+/** Copies what the code in the project imports but does not have yet. */
+export function complete(project) {
+  const src = path.join(project, 'src');
+  const open = [];
+  const unknown = [];
+  let usesQueries = false;
+  for (const file of listFiles(src).filter((f) => /\.tsx?$/.test(f))) {
+    for (const spec of importsOf(path.join(src, file))) {
+      if (spec === '@tanstack/react-query' && !/\.test\./.test(file)) usesQueries = true;
+      if (!isLocal(spec) || inProject(project, file, spec)) continue;
+      const found = inSources(file, spec);
+      if (found) open.push(found);
+      else unknown.push(`src/${file} imports ${spec}`);
+    }
+  }
+  if (usesQueries && !isFile(path.join(src, 'lib/query-client.ts'))) open.push({ file: 'lib/query-client.ts', source: roots().find((r) => r.files.has('lib/query-client.ts')) });
+  // Dialogs and toasts work only inside their provider.
+  if (['components/shared/confirm/index.ts', 'components/ui/toast/index.ts'].some((f) => isFile(path.join(src, f)))) {
+    const provider = 'app/providers/AppProviders.tsx';
+    if (!isFile(path.join(src, provider))) open.push({ file: provider, source: roots()[0] });
+  }
+  const added = pull(project, open.filter((o) => o.source));
+  // The API client needs its address.
+  const example = path.join(sibling('frontend-api'), 'assets/template/.env.example');
+  if (isFile(path.join(src, 'config/env.ts'))) {
+    for (const name of ['.env.example', '.env']) if (!existsSync(path.join(project, name))) copyFileSync(example, path.join(project, name));
+  }
+  return { added, unknown };
+}
 
 /** Tests whose imports are all there now. */
 function copyTests(project) {
-  const src = path.join(project, 'src');
-  let added = 0;
-  for (const file of listFiles(coreTemplate).filter((f) => /\.test\.tsx?$/.test(f))) {
-    const target = path.join(src, file);
-    if (existsSync(target)) continue;
-    if (importsOf(path.join(coreTemplate, file)).filter(isLocal).every((spec) => resolveIn(src, file, spec))) {
-      mkdirSync(path.dirname(target), { recursive: true });
-      copyFileSync(path.join(coreTemplate, file), target);
-      added++;
+  for (const { root, files } of roots()) {
+    for (const file of files) {
+      const target = path.join(project, 'src', file);
+      if (!/\.test\.tsx?$/.test(file) || existsSync(target)) continue;
+      if (importsOf(path.join(root, file)).filter(isLocal).every((spec) => inProject(project, file, spec))) {
+        mkdirSync(path.dirname(target), { recursive: true });
+        copyFileSync(path.join(root, file), target);
+      }
     }
   }
-  return added;
 }
 
 // ---- Packages
@@ -195,7 +280,7 @@ function writeSetup(project, o, notes) {
   mkdirSync(path.join(project, 'src/styles'), { recursive: true });
   copyFileSync(path.join(speed, 'src/styles/fonts.css'), path.join(project, 'src/styles/fonts.css'));
   for (const f of ['theme.css', 'base.css']) copyFileSync(path.join(coreTemplate, 'styles', f), path.join(project, 'src/styles', f));
-  copyPart(project, /^(lib\/cn\.ts|config\/(app\.config|routes)\.ts|constants\/ui-text\.ts|test\/setup\.ts)$/);
+  pullPattern(project, /^(lib\/cn\.ts|config\/(app\.config|routes)\.ts|constants\/ui-text\.ts|test\/setup\.ts)$/);
 
   write(project, 'package.json', JSON.stringify({
     name: o.name, private: true, version: '0.1.0', type: 'module',
@@ -229,7 +314,8 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: './src/test/setup.ts',
-    testTimeout: 30_000,${o.api ? "\n    env: { VITE_API_URL: 'http://localhost/api' }," : ''}
+    testTimeout: 30_000,
+    env: { VITE_API_URL: 'http://localhost/api' },
   },
 });
 `);
@@ -243,7 +329,7 @@ export default defineConfig({
   edit(project, 'src/config/app.config.ts', ["name: 'My app'", `name: ${quoted}`], ["locale: 'en-US'", `locale: '${o.locale}'`], ["currency: 'USD'", `currency: '${o.currency}'`], ["country: 'US'", `country: '${o.country}'`]);
   const routes = path.join(project, 'src/config/routes.ts');
   writeFileSync(routes, text(routes).replace(/  users: \{[\s\S]*?\n  \},\n/, ''));
-  edit(project, 'AGENTS.md', ['{{PROJECT_NAME}}', o.title], ['{{ONE_LINE_PURPOSE}}\n\n', ''], ['{{LIGHT_OR_BOTH}}', o.blocks.includes('dark-mode') ? 'light and dark' : 'light only'], ['{{SIDEBAR_OR_NAVBAR}}', o.layout], ['{{MODULES}}', o.features.join(', ') || 'add them here']);
+  edit(project, 'AGENTS.md', ['{{PROJECT_NAME}}', o.title], ['{{ONE_LINE_PURPOSE}}\n\n', ''], ['{{LIGHT_OR_BOTH}}', o.dark ? 'light and dark' : 'light only'], ['{{SIDEBAR_OR_NAVBAR}}', o.layout], ['{{MODULES}}', 'add them here']);
 }
 
 const rgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
@@ -327,7 +413,7 @@ function writeApp(project, state, todo) {
   const has = (file) => existsSync(path.join(project, 'src', file));
   const put = (file, content) => managed(project, state, todo, file, content);
   const layout = has('app/layouts/AppLayout.tsx');
-  const api = has('services/api.ts');
+  const api = has('lib/query-client.ts');
   const authPages = has('features/auth/pages/LoginPage.tsx');
   const account = has('features/account/pages/ProfilePage.tsx');
   const dashboard = has('features/dashboard/pages/DashboardPage.tsx');
@@ -566,7 +652,7 @@ ${inside.map((l) => `            ${l}`).join('\n')}
     'export const router = createBrowserRouter(routes);',
   ].join('\n'));
 
-  const providers = layout;
+  const providers = has('app/providers/AppProviders.tsx');
   put('src/app/App.tsx', [
     ...(api ? ["import { QueryClientProvider } from '@tanstack/react-query';"] : []),
     "import { RouterProvider } from 'react-router';",
@@ -638,32 +724,53 @@ const PATTERNS = {
   table: /^(components\/shared\/(data-table|command-menu)\/|app\/pages\/TablePlayground)/,
 };
 
-/** Returns what is left for the AI or developer. */
-export function buildStep(project, state, id, { installPackages = true } = {}) {
+/** Builds exactly one thing. Returns what is left for the AI or developer. */
+export function buildStep(project, state, id, { installPackages = true, fields, singular } = {}) {
   const o = state.options;
   const notes = [];
   const todo = [];
   const [kind, name] = id.split(':');
+  const wasDark = existsSync(path.join(project, 'src/styles/dark.css'));
   if (id === 'setup') writeSetup(project, o, notes);
-  else if (PATTERNS[id]) copyPart(project, PATTERNS[id]);
-  else if (id === 'api') {
-    run(path.join(sibling('frontend-api'), 'scripts/add-to-project.mjs'), [project], project);
-    if (!existsSync(path.join(project, '.env'))) copyFileSync(path.join(project, '.env.example'), path.join(project, '.env'));
-  } else if (id === 'speed') run(path.join(sibling('frontend-performance'), 'scripts/add-to-project.mjs'), [project], project);
+  else if (PATTERNS[id]) pullPattern(project, PATTERNS[id]);
+  else if (id === 'api') run(path.join(sibling('frontend-api'), 'scripts/add-to-project.mjs'), [project], project);
+  else if (id === 'speed') run(path.join(sibling('frontend-performance'), 'scripts/add-to-project.mjs'), [project], project);
+  else if (kind === 'code') pullFiles(project, codeFiles(name));
   else if (kind === 'block') {
-    const wasDark = existsSync(path.join(project, 'src/styles/dark.css'));
-    const out = run(path.join(sibling('frontend-blocks'), 'scripts/add.mjs'), [project, name], project);
+    const source = roots().find((r) => r.block === name);
+    pullFiles(project, [...source.files].filter((f) => !/\.test\./.test(f)));
     // Some are connected below; the others need a place on a page.
     const connected = ['auth-pages', 'account-pages', 'dashboard', 'dark-mode', 'notifications', 'i18n', 'charts'];
-    const hint = out.split('\n').find((line) => line.startsWith(`${name}: `) && !line.includes('files added'));
+    const hint = allBlocks()[name].next;
     if (hint && !connected.includes(name)) todo.push(hint);
-    if (!wasDark && existsSync(path.join(project, 'src/styles/dark.css'))) applyDarkColor(project, o.primary);
+  } else if (kind === 'feature') {
+    pullFiles(project, ['services/api.ts', 'types/api.types.ts']);
+    run(path.join(core, 'scripts/generate.mjs'), ['feature', name, '--project', project, '--fields', fields, ...(singular ? ['--singular', singular] : [])], project);
   }
-  if (kind !== 'feature') {
-    copyTests(project);
-    writeApp(project, state, todo);
-    if (installPackages) install(project, notes);
-  }
+  // Twice: the connecting files can need more, and more can need a provider.
+  complete(project);
+  complete(project);
+  writeApp(project, state, todo);
+  complete(project);
+  const { unknown } = complete(project);
+  todo.push(...unknown);
+  if (!wasDark && existsSync(path.join(project, 'src/styles/dark.css'))) applyDarkColor(project, o.primary);
+  copyTests(project);
+  if (installPackages) install(project, notes);
   run(path.join(core, 'scripts/index-components.mjs'), [project], project);
   return { notes, todo };
+}
+
+/** Finishes what somebody wrote: missing files and packages. */
+export function finish(project, state, { installPackages = true } = {}) {
+  const notes = [];
+  const todo = [];
+  const { added } = complete(project);
+  complete(project);
+  writeApp(project, state, todo);
+  todo.push(...complete(project).unknown);
+  copyTests(project);
+  if (installPackages) install(project, notes);
+  run(path.join(core, 'scripts/index-components.mjs'), [project], project);
+  return { added, notes, todo };
 }

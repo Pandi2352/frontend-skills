@@ -8,6 +8,9 @@ description: Copies finished React + Tailwind parts into a project - charts, das
 Copy with the script; do not open or retype `assets/`. Add a block only when the
 project needs it.
 
+A project with `docs/steps.json`: use `steps.mjs <project> build <part>` of `frontend-core`
+(it brings everything the part needs and connects it). Other projects:
+
 ```
 node <skill>/scripts/add.mjs --list
 node <skill>/scripts/add.mjs <project> charts kanban
