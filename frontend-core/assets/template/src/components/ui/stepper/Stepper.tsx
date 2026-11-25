@@ -45,7 +45,7 @@ export function Stepper({ label, steps, current, reached = current, onStepClick,
               >
                 {step.error ? <CircleAlert className="size-4" /> : isDone ? <Check className="size-4" /> : i + 1}
               </span>
-              <span className="hidden min-w-0 text-start text-sm md:block">
+              <span className="sr-only min-w-0 text-start text-sm md:not-sr-only md:block">
                 <span className={cn('block truncate', isCurrent && 'font-medium')}>{step.label}</span>
                 {step.description && <span className="hidden truncate text-xs text-muted md:block">{step.description}</span>}
               </span>

@@ -2,7 +2,7 @@
 
 One implementation each. Check here and in the code before writing a new one.
 Already in the template: `useControllableState`, `useMergedRefs`,
-`useDebouncedCallback`, `useStableCallback`, `useDelayedLoading`, `useDisclosure`, `useLocalStorage`,
+`useDebouncedCallback`, `useStableCallback`, `useUrlState`, `useStepper`, `useClipboard`, `useDelayedLoading`, `useDisclosure`, `useLocalStorage`,
 `useKeyboardShortcut`, `useOnlineStatus`, `useSidebar`, `useConfirm`,
 `useTableState`, and utils `date`, `dom`, `csv`, `format-file-size`. With
 `frontend-api`: `useAuth`, `usePermission`. Build the others when first needed.
@@ -17,6 +17,7 @@ network) live in `lib` or `services`.
 | `useDisclosure(initial?)` | `isOpen, open, close, toggle` |
 | `useDebounce(value, ms)` | debounced value, cleans up |
 | `useDebouncedCallback(fn, ms)` | callback with `cancel` and `flush` |
+| `useUrlState(key, initial, allowed?, clear?)` | one value in the address |
 | `useStableCallback(fn)` | never changes, runs the newest code; for memoized rows |
 | `useControllableState` | one state for controlled and uncontrolled |
 | `useMediaQuery(query)` | SSR safe; `useIsMobile` built on it |
@@ -43,7 +44,8 @@ When needed: `useThrottle`, `useInterval`, `useTimeout`, `useCountdown`,
 `usePrevious`, `useIntersection`, `useInfiniteScroll`, `useResizeObserver`,
 `useScrollPosition`, `useHover`, `useIdle`, `useEventSource`, `useWebSocket`,
 `useFileDrop`, `useUpload`, `usePrint`, `useFullscreen`, `useGeolocation`,
-`useUndo`, `useStepper`, `useFeatureFlag`, `useTheme`, `useAutosave`.
+`useUndo`, `useFeatureFlag`. In `frontend-blocks`: `useTheme`, `useAutosave`,
+`useUnsavedChanges`, `useDragSort`, `useRealtime`.
 
 ## Core utils (`src/utils`)
 

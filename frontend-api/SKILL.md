@@ -46,6 +46,8 @@ the token is never sent to another host.
 
 ## Feature pattern
 
+`generate.mjs feature …` of `frontend-core` writes this, with pages and tests.
+
 ```ts
 // features/users/services/users.service.ts
 export const usersService = {

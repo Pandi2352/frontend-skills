@@ -41,8 +41,8 @@ const form = useForm({ defaultValues: { email: '', password: '' } });
 
 - Wrong login: one message for both cases ("Email or password is incorrect").
 - Forgot password: same reply whether or not the account exists.
-- Also needed as required: reset, verify, OTP, change password, session expired
-  message, idle sign out.
+- Finished pages (login, register, code, forgot, reset, change password, profile,
+  settings) and idle sign out: `frontend-blocks`.
 
 ## Permissions
 

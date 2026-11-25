@@ -33,7 +33,7 @@ add('GEMINI.md', (file) => writeFileSync(file, '@./AGENTS.md\n'));
 for (const name of readdirSync(path.join(skill, 'references'))) {
   copy(`references/${name}`, `docs/standards/${name}`);
 }
-copy('scripts/resolve-versions.mjs', 'scripts/resolve-versions.mjs');
+for (const name of ['resolve-versions', 'generate', 'index-components']) copy(`scripts/${name}.mjs`, `scripts/${name}.mjs`);
 
 if (process.argv.includes('--components')) {
   const source = path.join(skill, 'assets/template/src');

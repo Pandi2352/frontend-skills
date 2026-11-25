@@ -4,7 +4,9 @@ Finished and tested code is in the template. **Use it, do not rewrite it.**
 
 ```tsx
 // app/router/router.tsx
-export const router = createBrowserRouter([
+export const routes: RouteObject[] = [{
+  HydrateFallback: PageLoader,       // until the first lazy page is there
+  children: [
   { element: <AuthLayout logo={<Logo />} />, children: [{ path: ROUTES.login, lazy: loginPage }] },
   {
     element: (
@@ -21,7 +23,9 @@ export const router = createBrowserRouter([
     ),
     children: [...usersRoutes, { path: '*', element: <NotFoundPage /> }],
   },
-]);
+  ],
+}];
+export const router = createBrowserRouter(routes);
 
 // main.tsx
 <AppProviders><RouterProvider router={router} /></AppProviders>

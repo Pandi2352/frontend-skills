@@ -21,10 +21,15 @@ and developer.
 | Hooks, utils, helpers, formatters | `hooks-and-utils.md` |
 | Colors, sizes, theme | `design-tokens.md` |
 | TypeScript, API, auth, tests, done check | `engineering.md` |
+| Before saying it is done | `ai-mistakes.md` |
 
 ## Rules
 
-- Search `src/components`, `hooks`, `utils` and `lib`; reuse before creating.
+- Read `docs/COMPONENTS.md` before creating anything: it lists every component, hook
+  and util with its props. After adding shared code: `node scripts/index-components.mjs`.
+- New feature, component or page: `node scripts/generate.mjs` first, then adapt.
+- No invented packages, props or endpoints. No fake data, empty handlers or
+  `// ... rest of the code`.
 - All fields use `components/ui/fields`: same height (`h-control`), border,
   radius and states. Label above, error directly below.
 - Never use `<select>`, `<datalist>`, native date/time/color inputs, or

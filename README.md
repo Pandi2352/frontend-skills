@@ -8,7 +8,8 @@ Stack: React, TypeScript, Vite, Tailwind CSS v4, React Router, React Hook Form.
 
 | Skill | What it does |
 | --- | --- |
-| [`frontend-core`](frontend-core/SKILL.md) | Project setup, folder structure, design rules, 45+ form fields, toaster, loaders, modal, confirm, data table, sidebar, navbar |
+| [`frontend-core`](frontend-core/SKILL.md) | Project setup, folder structure, design rules, 45+ form fields, toaster, loaders, modal, confirm, data table, tabs, command menu, sidebar, navbar, generators |
+| [`frontend-blocks`](frontend-blocks/SKILL.md) | Charts, dashboard, kanban, calendar, CSV import, auth and account pages, dark mode, languages, notifications, realtime; copied only when you need them |
 | [`frontend-api`](frontend-api/SKILL.md) | API client, errors, login, token refresh, protected routes, permissions, upload |
 | [`frontend-performance`](frontend-performance/SKILL.md) | Size limits, lazy loading, virtual lists and tables, images, fonts, request speed, leak and Lighthouse checks, hosting files |
 | [`frontend-review`](frontend-review/SKILL.md) | Checks a project against these rules and lists what to fix |
@@ -74,11 +75,13 @@ Say what you want in normal words:
 | New project | "start a new React project" |
 | Page or form | "create a users page with a form" |
 | Backend | "connect the API and add login" |
+| Feature | "create an orders feature with customer, total and status" |
+| Ready parts | "add a dashboard with charts", "add dark mode" |
 | Speed | "make this page faster", "check the bundle size" |
 | Check code | "review this project" |
 
-In Claude Code you can also type `/frontend-core`, `/frontend-api`,
-`/frontend-performance` or `/frontend-review`.
+In Claude Code you can also type `/frontend-core`, `/frontend-blocks`,
+`/frontend-api`, `/frontend-performance` or `/frontend-review`.
 
 If your tool does not support skills, tell it: "Read
 `<path>/frontend-skills/frontend-core/SKILL.md` and follow it."
@@ -97,6 +100,20 @@ node frontend-api/scripts/add-to-project.mjs <your-project>
 
 # Performance code, checks and limits (add frontend-core with --components first)
 node frontend-performance/scripts/add-to-project.mjs <your-project>
+
+# Single blocks; see the list first
+node frontend-blocks/scripts/add.mjs --list
+node frontend-blocks/scripts/add.mjs <your-project> charts dark-mode
+```
+
+## Generate code
+
+```bash
+# Complete feature: list, details, create, edit, service, queries, routes, tests
+node frontend-core/scripts/generate.mjs feature orders --project <your-project> --fields "customer:text!, total:currency!, status:select(open|paid), dueOn:date"
+
+# One file that lists every component and its props, so the AI reads less
+node frontend-core/scripts/index-components.mjs <your-project>
 ```
 
 Existing files are never overwritten. The rules are added as `AGENTS.md`,
@@ -156,6 +173,9 @@ Guides:
 [folder structure](frontend-core/references/structure.md) ·
 [what a project must have](frontend-core/references/must-have.md) ·
 [auth](frontend-api/references/auth.md) ·
+[data blocks](frontend-blocks/references/data.md) ·
+[pages and features](frontend-blocks/references/features.md) ·
+[common AI mistakes](frontend-core/references/ai-mistakes.md) ·
 [loading](frontend-performance/references/loading.md) ·
 [rendering](frontend-performance/references/rendering.md) ·
 [data](frontend-performance/references/data.md) ·
@@ -187,7 +207,7 @@ Change these files in your project:
 ## Check a project
 
 ```bash
-node frontend-review/scripts/scan.mjs <your-project>          # rules and common speed problems
+node frontend-review/scripts/scan.mjs <your-project>          # rules, speed, AI mistakes
 node frontend-performance/scripts/check-size.mjs <your-project>   # after a build
 ```
 
@@ -207,12 +227,13 @@ Edit the files in this repository, not the installed copies. Then run
 
 ## Uninstall
 
-Delete the `frontend-core`, `frontend-api`, `frontend-performance` and
-`frontend-review` folders in
+Delete the `frontend-core`, `frontend-blocks`, `frontend-api`,
+`frontend-performance` and `frontend-review` folders in
 `~/.agents/skills` and `~/.claude/skills`.
 
 ## Not included
 
-- Tabs, accordion, stepper, command menu and charts have rules, but no code yet.
+- Calendar with hours, map charts and Excel files.
+- The generator and blocks assume API paths; check each `*.service.ts`.
 - Rich text, code editor, captcha, maps and image crop need a library you choose.
 - Cities have no built-in list. Connect your own API with `loadCities`.

@@ -1,6 +1,6 @@
 ---
 name: frontend-review
-description: Reviews a React + TypeScript + Tailwind frontend against the user's FrontendCore standards and lists what to fix - native select or date inputs, uneven field heights, duplicated components, hardcoded colors, shadows, missing labels or error messages, accessibility, loading/empty/error states, types, API misuse, performance, security. Use whenever the user asks to check, review, audit, verify or clean up frontend code, a page, a component or a whole project, or asks "is this following my standards" or "what is missing".
+description: Reviews a React + TypeScript + Tailwind frontend against the user's FrontendCore standards and lists what to fix - native select or date inputs, uneven field heights, duplicated components, hardcoded colors, shadows, missing labels or error messages, accessibility, loading/empty/error states, types, API misuse, performance, security, common AI mistakes (invented packages, unnecessary effects, fake data). Use whenever the user asks to check, review, audit, verify or clean up frontend code, a page, a component or a whole project, or asks "is this following my standards" or "what is missing".
 ---
 
 # Frontend review
@@ -53,6 +53,11 @@ files in the wrong folder; nav items or paths outside `config`.
 state too high, so typing redraws the page; row functions or columns created in
 the component of a large table; long lists drawn completely; heavy parts not
 loaded on demand; skeletons of another size. Fixing: `frontend-performance`.
+
+**AI mistakes** - invented props, endpoints or packages; leftovers (fake data, empty
+handlers, missing code); effects that only compute; races; old values in callbacks;
+state changed in place; claims without a run. List: `ai-mistakes.md` of
+`frontend-core`, or `docs/standards/` in a project.
 
 **Security** - unsafe HTML or URLs; tokens in storage; secrets in `VITE_`;
 redirects from user input; permission only hidden in the UI; personal data in

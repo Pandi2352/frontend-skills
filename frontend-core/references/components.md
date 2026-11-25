@@ -123,14 +123,32 @@ pinning, inline edit; use TanStack Table when really needed. `Pagination` also w
 - `Alert variant title action onDismiss`, `Badge variant size icon`,
   `Avatar name src size`, `PageHeader`, `Breadcrumb`.
 
+## Tabs, accordion, cards and more
+
+```tsx
+const [tab, setTab] = useUrlState('tab', 'general', ['general', 'billing']);
+<Tabs label="Settings" value={tab} onChange={setTab} items={[{ id: 'general', label: 'General', content: <General /> }]} />
+<Accordion multiple items={[{ id: 'a', title: 'Question', content: 'Answer' }]} />
+<Card title="Order" actions={…} footer={…}>…</Card>
+<StatCard label="Revenue" value="$1,200" change={0.12} changeNote="than last month" lowerIsBetter={false} />
+<KeyValueList items={[{ label: 'Number', value: no, copy: no }]} columns={2} />
+<Timeline label="History" items={[{ id: '1', title: 'Paid', time: '10:30', tone: 'success', icon: CreditCard }]} />
+<CopyButton text={no} iconOnly label="Copy number" />
+
+const steps = useStepper(3);
+<Stepper label="Checkout" steps={list} current={steps.current} reached={steps.reached} onStepClick={steps.goTo} />
+<Button onClick={() => steps.next(() => form.trigger(['name']))}>Next</Button>
+
+<CommandMenu open={menu.isOpen} onClose={menu.close} recentKey="commands" commands={[
+  { id: 'users', label: 'Users', group: 'Go to', icon: Users, onSelect: () => navigate(ROUTES.users.list) }]} />
+```
+
+`Tabs`: `orientation="vertical"`, `keepMounted` for half-filled forms. `CommandMenu`
+opens from `NavbarSearch`; `onSearch` and `isSearching` for server results.
+
+Charts, kanban, sortable list, calendar, import and whole pages: `frontend-blocks`.
+
 ## Not in the template yet
 
-Build as shared when first needed, with the contract in `must-have.md`: Tabs,
-Accordion, Stepper, CommandMenu, Card, StatCard, KeyValueList, Timeline,
-ActivityFeed, Gallery, charts, submenus.
-
-- Tabs: arrow keys, disabled, URL sync, scroll on phones.
-- Accordion: button with `aria-expanded`, one or many open.
-- Stepper: complete, current and error, keeps values.
-- Command menu: search, groups, recent, keyboard; opens from `NavbarSearch`.
-- Charts: title, legend, loading, empty, text alternative.
+Build as shared when first needed, with the contract in `must-have.md`: ActivityFeed,
+Gallery, Carousel, HoverCard, ContextMenu, Lightbox, submenus.

@@ -1,0 +1,59 @@
+{
+  "charts": {
+    "about": "Line, area, column, stacked, donut and ranking charts, sparkline. Tooltip, keyboard, legend, table view",
+    "needs": ["card"],
+    "next": "Import '@/styles/charts.css' after index.css"
+  },
+  "drag-sort": { "about": "Sortable list; drag with mouse, touch and keyboard", "needs": ["stable-callback"] },
+  "kanban": { "about": "Board with columns, limits and moving cards", "blocks": ["drag-sort"] },
+  "calendar": { "about": "Month and agenda calendar with events" },
+  "csv-import": { "about": "Import wizard: file, match columns, check, progress, report", "needs": ["stepper"] },
+  "infinite-list": {
+    "about": "Endless list for useInfiniteQuery with all states",
+    "needs": ["virtual-list", "api"],
+    "packages": ["@tanstack/react-query", "@tanstack/react-virtual"]
+  },
+  "dark-mode": {
+    "about": "Dark theme, theme menu and settings field",
+    "next": "Import '@/styles/dark.css' after theme.css in styles/index.css. Call useApplyTheme() in App. Put the script from references/features.md into index.html"
+  },
+  "i18n": {
+    "about": "Languages with typed texts, plurals, right-to-left",
+    "next": "In main.tsx: await startI18n() before createRoot. Languages are listed in lib/i18n.ts, texts in src/locales"
+  },
+  "unsaved-changes": { "about": "Asks before leaving a changed form", "needs": ["stable-callback"], "next": "Put <UnsavedChangesGuard /> inside Form. Needs a data router (createBrowserRouter)" },
+  "autosave": { "about": "Saves while typing, with status and retry", "needs": ["stable-callback"] },
+  "idle-logout": { "about": "Warning and sign-out after inactivity, over all tabs", "needs": ["stable-callback"], "next": "Render <IdleLogout minutes={15} onLogout={signOut} /> in the signed-in layout" },
+  "realtime": {
+    "about": "WebSocket with reconnect; messages reload queries",
+    "needs": ["stable-callback", "api"],
+    "packages": ["@tanstack/react-query"],
+    "next": "Create the client with createRealtime, give it with RealtimeContext and call useRealtimeConnection in the signed-in layout"
+  },
+  "notifications": {
+    "about": "Bell, page, unread count, mark as read",
+    "needs": ["api"],
+    "blocks": ["infinite-list"],
+    "routes": { "notifications": "/notifications" },
+    "next": "Put <NotificationBell /> into the navbar, add NotificationsPage to the router, check services/notifications.service.ts"
+  },
+  "auth-pages": {
+    "about": "Login, register, verify code, forgot and reset password, change password",
+    "needs": ["api"],
+    "routes": { "login": "/login", "register": "/register", "verifyEmail": "/verify-email", "forgotPassword": "/forgot-password", "resetPassword": "/reset-password" },
+    "next": "Add the pages to GuestRoute inside AuthLayout, check services/account.service.ts and the password rules"
+  },
+  "account-pages": {
+    "about": "Profile and settings pages",
+    "needs": ["api", "tabs"],
+    "blocks": ["auth-pages", "dark-mode", "unsaved-changes"],
+    "routes": { "profile": "/profile", "settings": "/settings" },
+    "next": "Add ProfilePage and SettingsPage to the router and the user menu, check services/profile.service.ts"
+  },
+  "dashboard": {
+    "about": "Dashboard page: numbers, charts, recent table, period filter",
+    "needs": ["api"],
+    "blocks": ["charts"],
+    "next": "Add DashboardPage to the router and replace the numbers in services/dashboard.service.ts"
+  }
+}

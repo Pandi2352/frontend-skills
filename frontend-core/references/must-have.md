@@ -21,9 +21,11 @@ Features of each item: `fields-and-forms.md`, `components.md`, `app-shell.md`,
       NotificationMenu, NavbarSearch, skip link
 - [x] PageContainer, PageHeader, PageToolbar, Breadcrumb, 403 and 404 pages
 - [x] DataTable, FilterBar, RowActions, Pagination, `useTableState`
-- [x] Badge, Avatar, theme tokens, base styles
+- [x] Tabs, Accordion, Card, StatCard, Stepper, KeyValueList, Timeline, CopyButton,
+      CommandMenu
+- [x] Badge, Avatar, theme tokens, base styles, right-to-left support
 - [x] Hooks: useControllableState, useMergedRefs, useDebouncedCallback,
-      useStableCallback, useDelayedLoading, useDisclosure, useLocalStorage, useKeyboardShortcut,
+      useStableCallback, useUrlState, useStepper, useClipboard, useDelayedLoading, useDisclosure, useLocalStorage, useKeyboardShortcut,
       useOnlineStatus
 - [x] Utils: date, dom, csv, format-file-size
 
@@ -35,10 +37,15 @@ Features of each item: `fields-and-forms.md`, `components.md`, `app-shell.md`,
 - [x] Image, VirtualList, LazySection, page preloading, new-release recovery,
       web vitals, size limits, Lighthouse and leak checks, hosting files
 
+**Finished in the `frontend-blocks` skill; add when needed**
+- [x] Charts, dashboard, kanban, sortable list, calendar, CSV import, infinite list
+- [x] Login, register, code, forgot, reset, change password, profile, settings
+- [x] Dark mode, languages, unsaved-changes guard, autosave, notifications, realtime,
+      idle logout
+
 **Build when the project needs it**
-- [ ] Tabs, Accordion, Card, StatCard, KeyValueList, StatusBadge, CopyButton
 - [ ] Other hooks and utils from `hooks-and-utils.md`
-- [ ] Unsaved-changes guard, logger, messages and options constants
+- [ ] Logger, messages and options constants
 
 **Set up per project**
 - [ ] Router, routes, navigation, app config, fonts, favicon, page titles and meta
@@ -54,11 +61,11 @@ Features of each item: `fields-and-forms.md`, `components.md`, `app-shell.md`,
 | Area | Items |
 | --- | --- |
 | Fields (not in the template) | RichText, Markdown, Code editor, Mention, Captcha, Map picker, Image crop. Each needs a library or service; agree on it first. |
-| Navigation | CommandMenu, Stepper, TreeView, MegaMenu, BottomNav, AnchorNav, BackToTop, WorkspaceSwitcher |
+| Navigation | TreeView, MegaMenu, BottomNav, AnchorNav, BackToTop, WorkspaceSwitcher |
 | Overlays | Sheet, ContextMenu, HoverCard, Lightbox, PdfViewer, ProductTour, Announcement bar |
-| Data | Charts, Timeline, ActivityFeed, Calendar, Kanban, Gallery, Carousel, Accordion, SortableList, Comments, Chat, Map |
+| Data | ActivityFeed, Gallery, Carousel, Comments, Chat, Map |
 | Table | Export, import wizard, column pinning, resize, inline edit, expandable rows, tree rows, saved views |
-| System | Notifications, realtime, i18n, RTL, theme toggle, PWA, print styles, idle logout, maintenance page, cookie consent, analytics, feature flags, error reporting, global search, upload queue, autosave |
+| System | PWA, print styles, maintenance page, cookie consent, analytics, feature flags, error reporting, global search, upload queue |
 
 ## Feature contract for every shared item
 

@@ -51,7 +51,8 @@ project-root/
 │   │   │   ├── modal/              # Dialog.tsx (base), Modal.tsx (Modal, Drawer)
 │   │   │   ├── dropdown-menu/  tooltip/  pagination/
 │   │   │   ├── alert/  badge/  avatar/
-│   │   │   ├── tabs/  accordion/  card/  stepper/    # when needed
+│   │   │   ├── tabs/  accordion/  card/  stepper/  timeline/
+│   │   │   ├── copy-button/  key-value-list/
 │   │   │   └── overlays.test.tsx
 │   │   │
 │   │   ├── form/                   # React Hook Form bindings
@@ -70,6 +71,7 @@ project-root/
 │   │   └── shared/                 # composed from ui, used by many features
 │   │       ├── confirm/            # ConfirmProvider, useConfirm
 │   │       ├── data-table/         # DataTable, FilterBar, RowActions, useTableState, process
+│   │       ├── command-menu/
 │   │       ├── states/             # EmptyState, NoResults, ErrorState, AsyncView, OfflineBanner
 │   │       ├── error-boundary/
 │   │       └── shared.test.tsx

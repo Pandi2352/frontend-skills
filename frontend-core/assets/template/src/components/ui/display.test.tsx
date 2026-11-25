@@ -98,7 +98,7 @@ it('Stepper opens only reached steps; useStepper waits for the check', async () 
   await user.click(screen.getByRole('button', { name: 'Cart' }));
   expect(open).toHaveBeenCalledWith(0);
   expect(screen.queryByRole('button', { name: 'Pay' })).toBeNull();
-  expect(screen.getByText('Address').closest('li')).toHaveAttribute('aria-current', 'step');
+  expect(screen.getAllByText('Address').at(-1)?.closest('li')).toHaveAttribute('aria-current', 'step');
 
   const { result } = renderHook(() => useStepper(2));
   await act(async () => { await result.current.next(() => false); });

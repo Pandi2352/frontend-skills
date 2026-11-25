@@ -33,6 +33,27 @@ const heavy = [
   'html2canvas', 'highlight.js', 'prismjs', 'react-syntax-highlighter', '@fullcalendar/', 'react-player', 'video.js',
   'lottie-web', 'lottie-react',
 ];
+/** Every useEffect with its body. */
+const effectsIn = (file) => {
+  const found = [];
+  for (const match of file.matchAll(/useEffect\(\s*(?:async\s*)?\(\)\s*=>\s*/g)) {
+    let at = match.index + match[0].length;
+    const block = file[at] === '{';
+    let depth = 0;
+    let end = at;
+    for (; end < file.length; end++) {
+      const c = file[end];
+      if ('({['.includes(c)) depth++;
+      else if (')}]'.includes(c)) {
+        depth--;
+        if (block && depth === 0) break;
+        if (!block && depth < 0) break;
+      } else if (!block && c === ',' && depth === 0) break;
+    }
+    found.push({ index: match.index, body: file.slice(block ? at + 1 : at, end) });
+  }
+  return found;
+};
 const isHeavy = (line) => {
   const from = /^import (?!type).*from ['"]([^'"]+)['"]/.exec(line)?.[1];
   return !!from && heavy.some((h) => from === h || from.startsWith(h.endsWith('/') ? h : h + '/'));
@@ -63,6 +84,17 @@ const rules = [
   { level: 'Medium', name: 'any type', fix: 'real type or unknown', line: /(?::\s*|\bas\s+|<)any\b(?!\w)/, noComment: true },
   { level: 'Medium', name: 'type check disabled', fix: 'fix the type', line: /@ts-(?:ignore|nocheck)/ },
   { level: 'Medium', name: 'dark: class', fix: 'change tokens, not components', line: /(?<![\w-])dark:(?=[\w[-])/, skip: () => false },
+  { level: 'High', name: 'code left out', fix: 'write the missing code', line: /(?:\/\/|\/\*|\{\/\*)\s*\.{3}\s*(?:rest|existing|other|same|remaining|your|more)\b|(?:rest of (?:the|your) (?:code|component|file)|implementation (?:here|goes here)|existing code (?:here|stays)|add your (?:logic|code) here)/i, comments: true },
+  { level: 'High', name: 'failure hidden', fix: 'handle it, or say in a comment why it can be ignored', line: /catch\s*(?:\([^)]*\))?\s*\{\s*\}|\.catch\(\(\w*\)\s*=>\s*\{\s*\}\)/ },
+  { level: 'High', name: 'request in an effect', fix: 'useQuery', effect: /\b(?:fetch|axios|api\.(?:get|post|put|patch|delete)|\w+Service\.\w+)\(/, skip: (f) => /Provider\.tsx$/.test(f) },
+  { level: 'Medium', name: 'effect that only computes', fix: 'compute while rendering', effect: /^\s*\{?\s*set[A-Z]\w*\([^;]*\);?\s*\}?\s*$/ },
+  { level: 'Medium', name: 'async effect', fix: 'an async function inside, with a cleanup', line: /useEffect\(\s*async\b/ },
+  { level: 'Medium', name: 'fake data', fix: 'the real service, or an empty state', line: /\b(?:lorem ipsum|john doe|jane doe|jane smith|john smith|foo@bar|test@test|example user)\b|jsonplaceholder|reqres\.in|fakestoreapi|dummyjson|picsum\.photos|via\.placeholder|placehold\.co|randomuser\.me|\b(?:mock|dummy|fake|sample)(?:Data|Users?|Items?|Products?|Response|Api)\b/i, skip: (f) => /Playground/.test(f) },
+  { level: 'Medium', name: 'fake waiting', fix: 'the real request', line: /new Promise\(\s*\(?(\w+)\)?\s*=>\s*setTimeout\(\s*\1\b/, skip: (f) => /Playground|retry|lib\/lazy/.test(f) },
+  { level: 'Medium', name: 'button that does nothing', fix: 'the real action, or remove it', line: /on(?:Click|Submit|Select|Change)=\{\(\w*\)\s*=>\s*(?:\{\s*\}|undefined|null|console\.\w+\([^)]*\))\}|href=["']#["']/, skip: (f) => /Playground/.test(f) },
+  { level: 'Medium', name: 'random or time value while rendering', fix: 'useId, or create it in an event', line: /\bkey=\{[^}]*(?:Math\.random|Date\.now|crypto\.randomUUID|uuid)\(|\bid=\{[^}]*Math\.random\(/ },
+  { level: 'Medium', name: 'prop copied into state', fix: 'use the prop, or a key on the component', line: /useState(?:<[^>]*>)?\(\s*props\.\w+\s*\)/ },
+  { level: 'Medium', name: 'query data copied into state', fix: 'use the data directly', line: /set[A-Z]\w*\(\s*(?:query|data|\w+Query|\w+\.data)(?:\.data)?(?:\?\.\w+)?\s*\)/, effectOnly: true },
   { level: 'Medium', name: 'listener without cleanup', fix: 'removeEventListener or an abort signal in the effect cleanup', needs: { has: /\baddEventListener\(/, lacks: /removeEventListener|\bsignal\b|once: true/ } },
   { level: 'Medium', name: 'interval without cleanup', fix: 'clearInterval in the effect cleanup', needs: { has: /\bsetInterval\(/, lacks: /clearInterval/ } },
   { level: 'Medium', name: 'observer without cleanup', fix: 'disconnect in the effect cleanup', needs: { has: /new (?:Intersection|Resize|Mutation|Performance)Observer\(/, lacks: /\.(?:disconnect|unobserve)\(/ } },
@@ -142,6 +174,13 @@ for (const target of targets) {
     for (const rule of rules) {
       if (rule.skip?.(name) || rule.only?.(name) === false) continue;
       if (!(rule.files ?? /\.[jt]sx?$/).test(name)) continue;
+      if (rule.effect || rule.effectOnly) {
+        for (const { index, body } of effectsIn(text)) {
+          const hit = (rule.effect ?? rule.line).test(body);
+          if (hit) report(rule, text.slice(0, index).split('\n').length);
+        }
+        continue;
+      }
       if (rule.needs) {
         const at = lines.findIndex((l, i) => !isComment[i] && rule.needs.has.test(l));
         if (at >= 0 && !rule.needs.lacks.test(text)) report(rule, at + 1);
@@ -157,11 +196,33 @@ for (const target of targets) {
         }
       } else {
         lines.forEach((l, i) => {
-          if (isComment[i] && !/ts-|eslint|TODO|FIXME|HACK/.test(rule.line.source)) return;
+          if (isComment[i] && !rule.comments && !/ts-|eslint|TODO|FIXME|HACK/.test(rule.line.source)) return;
           if (rule.inClass && !/class(?:Name)?=|cn\(|['"`]/.test(l)) return;
           if (rule.line.test(l)) report(rule, i + 1);
         });
       }
+    }
+  }
+}
+
+// Packages that are used but not installed: often made up.
+const manifest = path.join(project, 'package.json');
+if (existsSync(manifest)) {
+  const { builtinModules } = await import('node:module');
+  const { dependencies = {}, devDependencies = {}, peerDependencies = {} } = JSON.parse(readFileSync(manifest, 'utf8'));
+  const installed = new Set([...Object.keys(dependencies), ...Object.keys(devDependencies), ...Object.keys(peerDependencies)]);
+  for (const target of targets) {
+    for (const file of walk(target)) {
+      if (!/\.[jt]sx?$/.test(file)) continue;
+      const name = path.relative(project, file).replaceAll('\\', '/');
+      readFileSync(file, 'utf8').split('\n').forEach((l, i) => {
+        const from = /^\s*(?:import|export)\b.*?from\s+['"]([^'"]+)['"]|^\s*\} from ['"]([^'"]+)['"]|^\s*import\s+['"]([^'"]+)['"]|\bimport\(\s*['"]([^'"]+)['"]/.exec(l)?.slice(1).find(Boolean);
+        if (!from || /^(?:[./~#]|@\/|node:|virtual:|https?:)/.test(from)) return;
+        const pkg = from.split('/').slice(0, from.startsWith('@') ? 2 : 1).join('/');
+        if (!installed.has(pkg) && !builtinModules.includes(pkg) && !l.includes('scan-ok:')) {
+          findings.push({ level: 'High', name: 'package not in package.json', fix: 'check that it exists on npm, then install it, or use what is there', at: `${name}:${i + 1} ${pkg}` });
+        }
+      });
     }
   }
 }

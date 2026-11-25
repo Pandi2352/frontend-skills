@@ -22,9 +22,25 @@ Do not read every reference. Read the one that matches:
 | Button, modal, toaster, loaders, table, other UI | `references/components.md` |
 | Any hook, util, helper, formatter, constant | `references/hooks-and-utils.md` |
 | React/TS rules, API, auth, hooks, tests, done check | `references/engineering.md` |
+| Before saying any React work is done | `references/ai-mistakes.md` |
 
-Related skills: `frontend-api` (API, login, permissions), `frontend-performance`
-(speed), `frontend-review` (check code against these rules).
+In a project, read `docs/COMPONENTS.md` first: every component, hook and util with
+its props in one file. Missing or old: `node <skill>/scripts/index-components.mjs
+<project>`. Run it again after adding shared code.
+
+Write new features, components and pages with the generator, then change what is
+special. It gives types, service, queries, form, list, details, create, edit, routes
+and tests that already follow the rules:
+
+```
+node <skill>/scripts/generate.mjs feature orders --project <project> --fields "customer:text!, total:currency!, status:select(open|paid), dueOn:date, note:textarea"
+node <skill>/scripts/generate.mjs component shared/StatusDot --project <project>
+```
+
+Related skills: `frontend-api` (API, login, permissions), `frontend-blocks` (charts,
+dashboard, kanban, calendar, import, auth and account pages, dark mode, languages,
+notifications and more), `frontend-performance` (speed), `frontend-review` (check code
+against these rules).
 
 ## Rules that always apply
 
@@ -117,7 +133,7 @@ standards is not a request to scaffold, install or run anything.
    exists, not as an empty placeholder.
 5. Run `node <skill>/scripts/add-to-project.mjs <project> --components`. It
    copies finished, tested code: fields, forms, Button, Toaster, loaders, Modal,
-   Drawer, Confirm, menus, DataTable, Sidebar, Navbar, layouts, states, tokens and
+   Drawer, Confirm, menus, Tabs, Cards, Stepper, CommandMenu, DataTable, Sidebar, Navbar, layouts, states, tokens and
    two playgrounds. Use it as it is; do not rewrite it. For a new project also take
    `assets/template/vite.config.ts` and `eslint.config.js` (alias, tests, ban on
    `<select>`), add `"paths": { "@/*": ["./src/*"] }` to the app tsconfig, import
@@ -129,7 +145,8 @@ standards is not a request to scaffold, install or run anything.
    what is still open in `must-have.md` only when needed, then feature modules.
 7. If the project has a backend, use the `frontend-api` skill for API and login.
    Use `frontend-performance` for size limits, preloading, images and fonts.
-8. Run `lint`, `typecheck`, `test`, `build`. Report real results.
+8. Run `index-components.mjs`, then `lint`, `typecheck`, `test`, `build`. Report real
+   results.
 
 Build one component at a time unless the user asks for a batch. Show each in
 the `/playground` dev route with all its states.

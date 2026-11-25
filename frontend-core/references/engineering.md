@@ -70,6 +70,8 @@ use logical properties (`ms-`, `pe-`) for RTL.
 
 ## Component done check
 
+First read `ai-mistakes.md`.
+
 - [ ] Reused existing parts; no duplicate created
 - [ ] Tokens only, `rounded-md`, no shadow
 - [ ] Field height and style match the others
