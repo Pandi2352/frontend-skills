@@ -1,239 +1,568 @@
-# Frontend skills
+<div align="center">
 
-Ready-made skills that teach AI coding tools to build React frontends the same
-way every time. The AI copies finished, tested code instead of writing it again,
-so you explain less, use fewer tokens, and every project looks and works alike.
+<img src="docs/images/banner.svg" alt="Frontend Skills: finished React code for AI coding tools" width="100%">
 
-Stack: React, TypeScript, Vite, Tailwind CSS v4, React Router, React Hook Form.
+<br>
 
-| Skill | What it does |
-| --- | --- |
-| [`frontend-core`](frontend-core/SKILL.md) | Project setup, folder structure, design rules, 45+ form fields, toaster, loaders, modal, confirm, data table, tabs, command menu, sidebar, navbar, generators |
-| [`frontend-blocks`](frontend-blocks/SKILL.md) | Charts, dashboard, kanban, calendar, CSV import, auth and account pages, dark mode, languages, notifications, realtime; copied only when you need them |
-| [`frontend-api`](frontend-api/SKILL.md) | API client, errors, login, token refresh, protected routes, permissions, upload |
-| [`frontend-performance`](frontend-performance/SKILL.md) | Size limits, lazy loading, virtual lists and tables, images, fonts, request speed, leak and Lighthouse checks, hosting files |
-| [`frontend-review`](frontend-review/SKILL.md) | Checks a project against these rules and lists what to fix |
+![React](https://img.shields.io/badge/React_19-20232a?style=for-the-badge&logo=react&logoColor=61dafb)
+![TypeScript](https://img.shields.io/badge/TypeScript_strict-3178c6?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind_v4-0ea5e9?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646cff?style=for-the-badge&logo=vite&logoColor=white)
 
-## Quick start: paste this into your AI
+![Skills](https://img.shields.io/badge/skills-5-8b5cf6?style=flat-square)
+![Fields](https://img.shields.io/badge/form_fields-45%2B-ec4899?style=flat-square)
+![Blocks](https://img.shields.io/badge/ready_blocks-16-f97316?style=flat-square)
+![Idle cost](https://img.shields.io/badge/idle_cost-~400_tokens-10b981?style=flat-square)
+![Node](https://img.shields.io/badge/Node-20.19%2B-5fa04e?style=flat-square&logo=nodedotjs&logoColor=white)
 
-Works with AI tools that can run commands, such as Claude Code, Cursor, Codex,
-Copilot agent or Gemini CLI. Copy one line:
+**[🚀 Quick start](#-quick-start)** ·
+**[🧰 Your tool](#-set-up-your-tool)** ·
+**[🆕 New project](#-new-project-step-by-step)** ·
+**[💬 What to say](#-what-to-say)** ·
+**[🪙 Tokens](#-tokens-how-it-stays-small)** ·
+**[🩹 Help](#-something-does-not-work)**
 
-**Only install**
+</div>
 
-```text
-Set up https://github.com/Pandi2352/frontend-skills.git - read AGENTS.md there and follow it.
-```
+---
 
-**Start a new project**
+## ✨ What is this?
 
-```text
-Set up https://github.com/Pandi2352/frontend-skills.git - read AGENTS.md there and follow it. Then start a new React project.
-```
+Skills teach your AI coding tool to build React frontends **the same way every time**.
+The finished code is already here. The AI runs a script that copies or generates it,
+so it does not write, guess or explain the same things again.
 
-**Add to the project I have open**
+<table>
+<tr>
+<td width="33%" valign="top">
 
-```text
-Set up https://github.com/Pandi2352/frontend-skills.git - read AGENTS.md there and follow it. Then add it to this project.
-```
+### 🧱 Finished code
+Forms, tables, dialogs, sidebar, login, dashboard, charts, kanban, dark mode and more.
+Tested, accessible, works on phones.
 
-**Review the project I have open**
+</td>
+<td width="33%" valign="top">
 
-```text
-Set up https://github.com/Pandi2352/frontend-skills.git - read AGENTS.md there and follow it. Then review this project.
-```
+### ⚡ One command
+A complete project, or a complete feature with list, details, form, routes and tests.
+The AI only changes what is special.
 
-The AI installs or updates the skills and continues with your request. You need
-[Git](https://git-scm.com) and Node.js 20.11 or newer. Paste the same line again
-later to update.
+</td>
+<td width="33%" valign="top">
 
-> **AI assistants:** if a user gave you this link, read
-> [AGENTS.md](https://raw.githubusercontent.com/Pandi2352/frontend-skills/main/AGENTS.md)
-> and follow it.
+### 🪙 Few tokens
+About 400 tokens while you do not use them. Details load only when needed, and scripts
+answer in a few lines.
 
-## Install by hand
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td width="50%"><img src="docs/images/dash.png" alt="Dashboard in the light theme"></td>
+<td width="50%"><img src="docs/images/dash-dark.png" alt="Dashboard in the dark theme"></td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/images/orders.png" alt="Generated orders list"></td>
+<td width="50%"><img src="docs/images/form-dark.png" alt="Generated order form in the dark theme"></td>
+</tr>
+</table>
+
+<div align="center"><sub>Dashboard block, and the list and form that <code>generate.mjs</code> writes</sub></div>
+
+---
+
+## 🚀 Quick start
+
+You need [Git](https://git-scm.com) and [Node.js](https://nodejs.org) 20.19 or newer.
+
+### The easy way: paste one line into your AI
+
+Choose one and paste it into the chat of your tool:
+
+> 🆕 **Start a new project**
+>
+> ```text
+> Set up https://github.com/Pandi2352/frontend-skills.git - read AGENTS.md there and follow it. Then start a new React project.
+> ```
+
+> ➕ **Add it to the project I have open**
+>
+> ```text
+> Set up https://github.com/Pandi2352/frontend-skills.git - read AGENTS.md there and follow it. Then add it to this project.
+> ```
+
+> 🔍 **Review the project I have open**
+>
+> ```text
+> Set up https://github.com/Pandi2352/frontend-skills.git - read AGENTS.md there and follow it. Then review this project.
+> ```
+
+> 📦 **Only install, or update**
+>
+> ```text
+> Set up https://github.com/Pandi2352/frontend-skills.git - read AGENTS.md there and follow it.
+> ```
+
+The AI downloads the skills, installs them and continues with your request. Your tool
+may ask you to allow the commands.
+
+### By hand: two commands
 
 ```bash
-git clone https://github.com/Pandi2352/frontend-skills.git
-cd frontend-skills
-node install.mjs
+git clone --depth 1 https://github.com/Pandi2352/frontend-skills.git ~/frontend-skills
+node ~/frontend-skills/install.mjs
 ```
 
-This copies the skills to `~/.agents/skills` and `~/.claude/skills`. Start a new
-session in your AI tool afterwards.
+It finds the tools on your computer and installs for all of them. **Then start a new
+session in your tool.**
 
-One skill only: `node install.mjs frontend-core`
+> **🤖 AI assistants:** if a user gave you this link, read
+> [AGENTS.md](https://raw.githubusercontent.com/Pandi2352/frontend-skills/main/AGENTS.md)
+> and follow it. Do not read the whole repository.
 
-> If you already have a skill with the same name, its files are replaced.
+---
 
-## Use
+## 🧰 Set up your tool
 
-Say what you want in normal words:
+| Tool | Install | Folder it reads | Start a skill yourself |
+| --- | --- | --- | --- |
+| 🟠 **Claude Code** | `node install.mjs --tool claude` | `~/.claude/skills` | `/frontend-core` |
+| 🟢 **Codex** | `node install.mjs --tool codex` | `~/.agents/skills` | `$frontend-core` |
+| ⚪ **Cursor** | `node install.mjs --tool cursor` | `~/.agents/skills` | `/frontend-core` |
+| 🟡 **opencode** | `node install.mjs --tool opencode` | `~/.agents/skills` | name it in your message |
+| 🔵 **Gemini CLI** | `node install.mjs --tool gemini` | `~/.agents/skills` | name it in your message |
+| 🟣 **GitHub Copilot** | `node install.mjs --tool copilot` | `~/.agents/skills` | `/frontend-core` |
+| 🔴 **Antigravity** | `node install.mjs --tool antigravity` | `~/.gemini/config/skills` | `/frontend-core` |
+| 🟤 **Cline** | `node install.mjs --tool cline` | `~/.cline/skills` | `/frontend-core` |
+| ⚫ **Kilo Code** | `node install.mjs --tool kilo` | `~/.agents/skills` | `/frontend-core` |
+| 🩵 **Windsurf** | `node install.mjs --tool windsurf` | `~/.codeium/windsurf/skills` | name it in your message |
+| 🟩 **Roo Code** | `node install.mjs --tool roo` | `~/.roo/skills` | name it in your message |
+
+You rarely have to start one yourself. Say what you want, and the tool chooses.
+
+<details>
+<summary><b>🟠 Claude Code</b>: also as a plugin</summary>
+
+<br>
+
+```text
+/plugin marketplace add Pandi2352/frontend-skills
+/plugin install frontend-skills@frontend-skills
+```
+
+Use either the plugin or `install.mjs`, not both, or every skill is listed twice.
+Type `/frontend` to see them.
+</details>
+
+<details>
+<summary><b>🟢 Codex</b></summary>
+
+<br>
+
+Type `/skills` or `$` to see them. A new skill does not appear? Restart Codex. Codex
+limits the list of all skills together; if you have many others, remove some.
+</details>
+
+<details>
+<summary><b>⚪ Cursor</b></summary>
+
+<br>
+
+Type `/` in the Agent chat. Cursor also reads `~/.claude/skills`. If the skills appear
+twice, keep one: `node install.mjs --tool claude --uninstall`.
+Skills work in Agent mode, not in Ask mode.
+</details>
+
+<details>
+<summary><b>🟡 opencode</b></summary>
+
+<br>
+
+Check with `opencode debug skill`. It reads `.agents` and `.claude` and shows each skill
+once.
+</details>
+
+<details>
+<summary><b>🔵 Gemini CLI, 🟣 Copilot and others</b></summary>
+
+<br>
+
+- **Gemini CLI** asks before it opens a skill; allow it.
+- **Copilot** needs agent mode. If VS Code does not list them, put them into the project
+  instead: `node install.mjs --project <your-project>`.
+- **A tool without skills:** say *"Read `~/frontend-skills/skills/frontend-core/SKILL.md`
+  and follow it."*
+</details>
+
+<details>
+<summary><b>👥 Share with your team</b></summary>
+
+<br>
+
+Projects made with these skills contain `AGENTS.md`, `docs/` and `scripts/`, so teammates
+and other tools follow the same rules without installing anything. To commit the skills
+themselves too: `node install.mjs --project <your-project>`.
+</details>
+
+---
+
+## 🆕 New project, step by step
+
+**1. Say what you want.** One message is enough:
+
+```text
+Start a new React project "Shop admin" in ./shop. Teal #0f766e, light and dark,
+sidebar. Dashboard and login. Modules: orders, customers, products.
+```
+
+**2. The AI runs one command.** You can run it yourself too:
+
+```bash
+node ~/frontend-skills/skills/frontend-core/scripts/create.mjs shop --title "Shop admin" --color "#0f766e" --dark --blocks dashboard,auth-pages,account-pages
+```
+
+You get a project that runs: config, theme with readable shades, sidebar, login and guarded
+routes, dashboard, the newest packages **for your Node version** (which is never changed).
+
+**3. Add features, one at a time.**
+
+```text
+Add an orders feature: customer (required), total (currency), status open/paid/shipped, due date, note.
+```
+
+**4. Connect your server.** Set `VITE_API_URL` in `.env`, then:
+
+```text
+Connect the API. Here is the OpenAPI file: ./openapi.json
+```
+
+**5. Check.** One command, short output:
+
+```bash
+npm run verify
+```
+
+```text
+ok    types  16s
+ok    lint   24s
+ok    tests  93s  338 tests
+ok    build  10s
+ok    size   1s
+ok    scan   2s  High 0, Medium 0, Low 0
+```
+
+```mermaid
+flowchart LR
+    A([💬 You say it]) --> B[🤖 AI opens<br/>one short skill]
+    B --> C[⚙️ create or<br/>generate script]
+    C --> D[✏️ AI adapts only<br/>what is special]
+    D --> E[✅ verify]
+    E -->|something failed| D
+    E --> F([🎉 Done])
+    style A fill:#8b5cf6,color:#fff,stroke:none
+    style B fill:#3b82f6,color:#fff,stroke:none
+    style C fill:#0ea5e9,color:#fff,stroke:none
+    style D fill:#f59e0b,color:#1f2937,stroke:none
+    style E fill:#10b981,color:#fff,stroke:none
+    style F fill:#ec4899,color:#fff,stroke:none
+```
+
+<details>
+<summary><b>⚙️ All options of <code>create.mjs</code></b></summary>
+
+<br>
+
+| Option | Meaning |
+| --- | --- |
+| `--title "My app"` | name in the sidebar and browser tab |
+| `--color "#2563eb"` | main color; made darker if text would be hard to read |
+| `--dark` | light and dark theme |
+| `--layout navbar` | without sidebar |
+| `--blocks a,b` | ready parts, see the list below |
+| `--locale en-IN --currency INR --country IN` | formats and defaults |
+| `--no-api` | without server code |
+| `--no-install` | only files |
+</details>
+
+### ➕ Existing project
+
+```bash
+cd ~/frontend-skills/skills
+node frontend-core/scripts/add-to-project.mjs <your-project> --components   # components and rules
+node frontend-api/scripts/add-to-project.mjs <your-project>                 # API and login code
+node frontend-performance/scripts/add-to-project.mjs <your-project>         # speed code and checks
+node frontend-blocks/scripts/add.mjs <your-project> charts dark-mode        # single blocks
+```
+
+Your files are never overwritten. Leave out `--components` if you have your own. Or say:
+*"Use frontend-core in this project."*
+
+---
+
+## 💬 What to say
 
 | You want | Say |
 | --- | --- |
-| New project | "start a new React project" |
-| Page or form | "create a users page with a form" |
-| Backend | "connect the API and add login" |
-| Feature | "create an orders feature with customer, total and status" |
-| Ready parts | "add a dashboard with charts", "add dark mode" |
-| Speed | "make this page faster", "check the bundle size" |
-| Check code | "review this project" |
+| 📋 A feature | "Add a customers feature with name, email, phone, country and status" |
+| 📝 A form | "Create a settings form with logo upload, time zone and tax rate" |
+| 📊 Numbers | "Add a dashboard with revenue, orders and a chart" |
+| 🗂️ A board | "Show the tasks as a kanban board" |
+| 📥 Import | "Let people import customers from a CSV file" |
+| 🔐 Login | "Add login, register and forgot password" |
+| 🌗 Theme | "Add dark mode" |
+| 🌍 Languages | "Add Tamil and Arabic" |
+| 🔌 Server | "Connect the API and show server errors below the fields" |
+| 🐢 Speed | "The orders page is slow, make it faster" |
+| 🔍 Check | "Review this page and list what to fix" |
 
-In Claude Code you can also type `/frontend-core`, `/frontend-blocks`,
-`/frontend-api`, `/frontend-performance` or `/frontend-review`.
+**Good requests are short and complete:** which data, which fields are required, which
+endpoints. One feature per message.
 
-If your tool does not support skills, tell it: "Read
-`<path>/frontend-skills/frontend-core/SKILL.md` and follow it."
+---
 
-## Add to an existing project
+## 🪙 Tokens: how it stays small
 
-```bash
-# Rules and standards only
-node frontend-core/scripts/add-to-project.mjs <your-project>
+<div align="center">
+<img src="docs/images/tokens.svg" alt="With skills 55k tokens, 9 tool calls, 6.3 minutes. Without 111k tokens, 36 tool calls, 11.7 minutes." width="760">
+</div>
 
-# Rules and all components
-node frontend-core/scripts/add-to-project.mjs <your-project> --components
+<sub>One run each with Claude Sonnet: a new project with theme, login, dashboard and an
+orders feature. The numbers include the tool's own start-up text, so the part you can
+influence shrank even more. The result with skills came with 329 tests, the other with
+20. Your numbers will differ.</sub>
 
-# API and login code (add frontend-core with --components first)
-node frontend-api/scripts/add-to-project.mjs <your-project>
+| When | What the AI reads | Tokens, about |
+| --- | --- | --- |
+| Always, unused | name and description of 5 skills | **400** |
+| In a project made with it | `AGENTS.md` | **480** |
+| You ask for frontend work | one skill file | **500 to 1,200** |
+| To see what exists | `docs/COMPONENTS.md` | **1,100** |
+| Props of one component | `index-components.mjs DataTable` | **100 to 300** |
+| Special case | one reference file | **500 to 2,600** |
+| Never | the finished code (it is copied, not read) | 0 instead of **174,000** |
 
-# Performance code, checks and limits (add frontend-core with --components first)
-node frontend-performance/scripts/add-to-project.mjs <your-project>
+**Why it works**
 
-# Single blocks; see the list first
-node frontend-blocks/scripts/add.mjs --list
-node frontend-blocks/scripts/add.mjs <your-project> charts dark-mode
-```
+- 🧩 **On demand.** A tool loads only names at first, then one file, then one detail.
+- ⚙️ **Scripts instead of writing.** Copying 180 files costs one command.
+- 🔎 **Asking instead of opening.** Props come from a script, not from big files.
+- 🤫 **Short answers.** `verify` prints one line per check and only the first errors.
 
-## Generate code
+**Your part**
 
-```bash
-# Complete feature: list, details, create, edit, service, queries, routes, tests
-node frontend-core/scripts/generate.mjs feature orders --project <your-project> --fields "customer:text!, total:currency!, status:select(open|paid), dueOn:date"
+1. One feature per chat. Start a new session for the next one.
+2. Say the fields and endpoints in the first message.
+3. Do not say "read all skills" or "read the whole project".
+4. Let it run `verify` once at the end, `--fast` in between.
+5. Remove skills you never use: `node install.mjs frontend-core frontend-blocks`.
 
-# One file that lists every component and its props, so the AI reads less
-node frontend-core/scripts/index-components.mjs <your-project>
-```
+---
 
-Existing files are never overwritten. The rules are added as `AGENTS.md`,
-`CLAUDE.md`, `GEMINI.md` and `docs/standards/`, so other AI tools and teammates
-follow them even without installing the skills.
+## 📦 What is inside
 
-Afterwards:
-
-1. Fill in the `{{...}}` blanks in `AGENTS.md`.
-2. Install the packages: `node scripts/resolve-versions.mjs` prints the install
-   commands. It picks the newest versions that work with your Node.
-   `frontend-api` also needs `@tanstack/react-query`; `frontend-performance` needs
-   `web-vitals`, `@fontsource-variable/inter` and, for development, `lighthouse`.
-3. Use `frontend-core/assets/template/vite.config.ts` and `eslint.config.js`, or
-   copy what you need from them.
-4. Add `"paths": { "@/*": ["./src/*"] }` to your app's tsconfig.
-5. Import `@/styles/index.css` in `main.tsx`.
-
-Or let the AI do it: "use frontend-core in this project".
-
-## Examples
-
-Every field takes the same props. Only `label` is required:
-
-```tsx
-<Input label="Email" type="email" required helperText="Work email" error={message} />
-<PhoneInput label="Phone" value={phone} onChange={setPhone} />
-<Dropdown label="Role" options={roles} clearable searchable />
-```
-
-In a form, `{...field}` connects the value, error and focus:
-
-```tsx
-<Form form={form} onSubmit={save}>
-  <FormField control={form.control} name="email" rules={{ required: 'Enter your email' }}
-    render={(field) => <Input {...field} label="Email" required />} />
-  <FormActions submitLabel="Save" />
-</Form>
-```
-
-Toast and confirm:
-
-```tsx
-toast.success('User saved');
-
-if (await confirm({ title: 'Delete user?', variant: 'danger' })) remove();
-```
-
-See all of them working in
-[`FieldsPlayground.tsx`](frontend-core/assets/template/src/app/pages/FieldsPlayground.tsx) and
-[`ComponentsPlayground.tsx`](frontend-core/assets/template/src/app/pages/ComponentsPlayground.tsx).
-
-Guides:
-[fields and forms](frontend-core/references/fields-and-forms.md) ·
-[components](frontend-core/references/components.md) ·
-[sidebar and navbar](frontend-core/references/app-shell.md) ·
-[folder structure](frontend-core/references/structure.md) ·
-[what a project must have](frontend-core/references/must-have.md) ·
-[auth](frontend-api/references/auth.md) ·
-[data blocks](frontend-blocks/references/data.md) ·
-[pages and features](frontend-blocks/references/features.md) ·
-[common AI mistakes](frontend-core/references/ai-mistakes.md) ·
-[loading](frontend-performance/references/loading.md) ·
-[rendering](frontend-performance/references/rendering.md) ·
-[data](frontend-performance/references/data.md) ·
-[measuring](frontend-performance/references/measure.md)
-
-## Make it yours
-
-Change these files in your project:
-
-| Change | File |
+| Skill | For |
 | --- | --- |
-| Colors, sizes, spacing | `src/styles/theme.css` |
-| App name, language format, currency, country | `src/config/app.config.ts` |
-| Words shown by components | `src/constants/ui-text.ts`, `field-text.ts` |
-| Menu and paths | `src/config/navigation.ts`, `routes.ts` |
-| Roles and permissions | `src/config/permissions.ts` |
-| Login addresses | `src/features/auth/services/auth.service.ts` |
+| 🧱 **[frontend-core](skills/frontend-core/SKILL.md)** | new projects, generators, 45+ fields, forms, tables, dialogs, sidebar, navbar |
+| 🧩 **[frontend-blocks](skills/frontend-blocks/SKILL.md)** | ready parts, copied only when you need them |
+| 🔌 **[frontend-api](skills/frontend-api/SKILL.md)** | API client, login, token refresh, permissions, upload |
+| ⚡ **[frontend-performance](skills/frontend-performance/SKILL.md)** | size limits, lazy loading, long lists, images, leak and Lighthouse checks |
+| 🔍 **[frontend-review](skills/frontend-review/SKILL.md)** | finds rule breaks, slow code and AI mistakes |
 
-## Main rules
+<details>
+<summary><b>🧱 Components</b></summary>
+
+<br>
+
+- **Text:** input, password, search, textarea, mask, OTP, tags, inline edit
+- **Numbers:** number, currency, percent, slider, range, rating
+- **Choice:** checkbox, radio, switch, dropdown, combobox, multi-select, tree, transfer list
+- **Date:** date, range, time, date-time, month, year
+- **Place:** phone, country, state, city, address, time zone, currency, language
+- **Files:** file, image, avatar, signature, color
+- **Feedback:** toast, modal, drawer, confirm, alert, tooltip, loaders, skeletons, progress
+- **Data:** table, pagination, filters, cards, stats, key-value list, timeline, badge, avatar
+- **Navigation:** sidebar, navbar, tabs, accordion, stepper, breadcrumb, command menu
+- **States:** empty, no results, error, offline, error boundary, 403, 404
+</details>
+
+<details>
+<summary><b>🧩 Blocks</b></summary>
+
+<br>
+
+| Block | What |
+| --- | --- |
+| `charts` | line, area, column, stacked, donut, ranking, sparkline |
+| `dashboard` | numbers, charts, recent rows, period filter |
+| `kanban`, `drag-sort` | board and sortable list, also by touch and keyboard |
+| `calendar` | month and agenda |
+| `csv-import` | file, match columns, check, import |
+| `infinite-list` | endless list |
+| `auth-pages` | login, register, code, forgot, reset, change password |
+| `account-pages` | profile, settings |
+| `dark-mode`, `i18n` | themes; languages with right-to-left |
+| `unsaved-changes`, `autosave` | nothing gets lost |
+| `notifications`, `realtime` | bell and page; WebSocket |
+| `idle-logout` | sign out after inactivity |
+
+<img src="docs/images/charts.png" alt="Line, column, stacked and area charts" width="720">
+</details>
+
+<details>
+<summary><b>⌨️ Commands in a project</b></summary>
+
+<br>
+
+```bash
+node scripts/generate.mjs feature orders --fields "customer:text!, total:currency!, status:select(open|paid), dueOn:date"
+node scripts/generate.mjs component shared/StatusDot
+node scripts/generate.mjs page reports/SalesReport
+node scripts/index-components.mjs                  # list what exists
+node scripts/index-components.mjs DataTable        # props of one
+node scripts/verify.mjs --fast                     # changed files only
+node scripts/verify.mjs                            # everything
+node scripts/resolve-versions.mjs --project zod    # newest version for your Node
+npm run measure                                    # Lighthouse; needs the lighthouse package
+```
+
+Field types: `text textarea email url phone number currency percent date switch country
+select(a|b)`. `!` means required.
+</details>
+
+<details>
+<summary><b>📏 Rules every project follows</b></summary>
+
+<br>
 
 - Reuse before writing. One version of every component.
-- All fields have the same height and look. Error directly below the field.
-- No native `<select>`, date, time or color inputs, and no browser dialogs.
+- All fields have the same height and look. Label above, error directly below.
+- No native `<select>`, date, time or color inputs, no browser dialogs.
 - Design tokens only, `rounded-md`, no shadows, Lucide icons.
-- Loading, empty and error state for every view. Keyboard and mobile friendly.
-- Fast by default, with size limits that fail the check when exceeded.
+- Loading, empty and error state in every view. Keyboard, WCAG AA, 360 px.
 - Newest packages that work with your Node. Your Node version is never changed.
+</details>
 
-## Check a project
+<details>
+<summary><b>🎨 Make it yours</b></summary>
+
+<br>
+
+| Change | File in your project |
+| --- | --- |
+| Colors, sizes, spacing | `src/styles/theme.css`, `dark.css` |
+| Name, formats, currency, country | `src/config/app.config.ts` |
+| Words inside components | `src/constants/ui-text.ts`, `field-text.ts` |
+| Menu and paths | `src/config/navigation.ts`, `routes.ts` |
+| Roles and permissions | `src/config/permissions.ts` |
+| Server addresses | `src/features/*/services/*.service.ts` |
+| Rules for the AI | `AGENTS.md` |
+
+Guides: [fields and forms](skills/frontend-core/references/fields-and-forms.md) ·
+[components](skills/frontend-core/references/components.md) ·
+[app shell](skills/frontend-core/references/app-shell.md) ·
+[data blocks](skills/frontend-blocks/references/data.md) ·
+[pages and features](skills/frontend-blocks/references/features.md) ·
+[auth](skills/frontend-api/references/auth.md) ·
+[loading](skills/frontend-performance/references/loading.md) ·
+[rendering](skills/frontend-performance/references/rendering.md) ·
+[AI mistakes](skills/frontend-core/references/ai-mistakes.md)
+</details>
+
+---
+
+## 🩹 Something does not work?
+
+<details>
+<summary><b>The AI does not use the skills</b></summary>
+
+<br>
+
+1. Start a **new session**; skills are read at the start.
+2. `node ~/frontend-skills/install.mjs --list` shows the folders. Is your tool there?
+3. Name it: *"Use the frontend-core skill."*
+4. In a project, `AGENTS.md` tells every tool to use the scripts. Missing?
+   Run `add-to-project.mjs`.
+</details>
+
+<details>
+<summary><b>It uses too many tokens</b></summary>
+
+<br>
+
+Is it opening files in `assets/` or long component files? Say: *"Use the scripts, do not
+open assets."* Start a new session for each feature. Remove other skills you do not need;
+every installed skill costs a little in every session.
+</details>
+
+<details>
+<summary><b>The skills appear twice</b></summary>
+
+<br>
+
+Your tool reads two folders, or you installed the Claude plugin as well. Keep one:
+`node install.mjs --tool claude --uninstall`, or remove the plugin.
+</details>
+
+<details>
+<summary><b>A check fails</b></summary>
+
+<br>
+
+Paste the output of `npm run verify` and say *"fix this"*. `node scripts/verify.mjs --all`
+shows everything.
+</details>
+
+<details>
+<summary><b>Install fails, or a package is not the newest</b></summary>
+
+<br>
+
+`node -v` must be 20.19 or newer. Packages are chosen for your Node, so some are older on
+purpose; the output says which and why. On Windows, close tools that use the folder.
+</details>
+
+<details>
+<summary><b>My server has other names or paths</b></summary>
+
+<br>
+
+Change only `services/*.service.ts`. Pages and forms stay as they are.
+</details>
+
+<details>
+<summary><b>Next.js or another framework</b></summary>
+
+<br>
+
+Create the project with its own command, then use `add-to-project.mjs --components`. The
+router parts need changes; see
+[new-project.md](skills/frontend-core/references/new-project.md).
+</details>
+
+### 🔄 Update and uninstall
 
 ```bash
-node frontend-review/scripts/scan.mjs <your-project>          # rules, speed, AI mistakes
-node frontend-performance/scripts/check-size.mjs <your-project>   # after a build
+cd ~/frontend-skills && git pull && node install.mjs    # update
+node ~/frontend-skills/install.mjs --uninstall          # remove
 ```
 
-## Update
+Projects keep their own copy of the code.
 
-```bash
-git pull
-node install.mjs
-```
+### 🚧 Good to know
 
-Projects you already created keep their own copy of the code.
+- The server addresses in generated code are assumptions. Check each `*.service.ts`.
+- The Arabic texts are an example; let a native speaker check them.
+- Not included: calendar with hours, map charts, Excel files, rich text and code editor.
+- Tested in Chrome on Windows with Node 20. Found by Claude Code and opencode; the other
+  tools are set up as their documentation says, but not tried.
 
-## Change a skill
+### 🛠️ Change a skill
 
-Edit the files in this repository, not the installed copies. Then run
-`node install.mjs`, commit and push.
+Edit the files in `skills/`, run `node install.mjs`, commit and push.
 
-## Uninstall
-
-Delete the `frontend-core`, `frontend-blocks`, `frontend-api`,
-`frontend-performance` and `frontend-review` folders in
-`~/.agents/skills` and `~/.claude/skills`.
-
-## Not included
-
-- Calendar with hours, map charts and Excel files.
-- The generator and blocks assume API paths; check each `*.service.ts`.
-- Rich text, code editor, captcha, maps and image crop need a library you choose.
-- Cities have no built-in list. Connect your own API with `loadCities`.
+<div align="center">
+<br>
+<sub>Made for people who want the AI to build, not to repeat itself. ⭐ if it helps.</sub>
+</div>

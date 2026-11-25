@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-label="Frontend Skills: finished React code for AI coding tools">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1023"/><stop offset="0.5" stop-color="#1b1a4b"/><stop offset="1" stop-color="#0a3d4a"/>
+    </linearGradient>
+    <linearGradient id="title" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7dd3fc"/><stop offset="0.5" stop-color="#c4b5fd"/><stop offset="1" stop-color="#6ee7b7"/>
+    </linearGradient>
+    <radialGradient id="g1"><stop offset="0" stop-color="#6366f1" stop-opacity="0.55"/><stop offset="1" stop-color="#6366f1" stop-opacity="0"/></radialGradient>
+    <radialGradient id="g2"><stop offset="0" stop-color="#14b8a6" stop-opacity="0.5"/><stop offset="1" stop-color="#14b8a6" stop-opacity="0"/></radialGradient>
+    <clipPath id="r"><rect width="1200" height="360" rx="20"/></clipPath>
+  </defs>
+  <g clip-path="url(#r)" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif">
+    <rect width="1200" height="360" fill="url(#bg)"/>
+    <circle cx="180" cy="40" r="260" fill="url(#g1)"/><circle cx="1040" cy="340" r="300" fill="url(#g2)"/>
+    <text x="64" y="122" font-size="64" font-weight="800" fill="url(#title)">Frontend Skills</text>
+    <text x="66" y="168" font-size="23" fill="#e2e8f0">Finished, tested React code for your AI coding tool.</text>
+    <text x="66" y="200" font-size="23" fill="#94a3b8">It copies and generates instead of retyping.</text>
+    <g font-size="15" font-weight="600">
+      <g transform="translate(66,236)"><rect width="122" height="34" rx="17" fill="#f97316" fill-opacity="0.2" stroke="#fb923c"/><text x="61" y="22" text-anchor="middle" fill="#fdba74">Claude Code</text></g>
+      <g transform="translate(198,236)"><rect width="78" height="34" rx="17" fill="#22c55e" fill-opacity="0.18" stroke="#4ade80"/><text x="39" y="22" text-anchor="middle" fill="#86efac">Codex</text></g>
+      <g transform="translate(286,236)"><rect width="82" height="34" rx="17" fill="#94a3b8" fill-opacity="0.2" stroke="#cbd5e1"/><text x="41" y="22" text-anchor="middle" fill="#e2e8f0">Cursor</text></g>
+      <g transform="translate(378,236)"><rect width="98" height="34" rx="17" fill="#eab308" fill-opacity="0.18" stroke="#facc15"/><text x="49" y="22" text-anchor="middle" fill="#fde047">opencode</text></g>
+      <g transform="translate(66,280)"><rect width="82" height="34" rx="17" fill="#3b82f6" fill-opacity="0.2" stroke="#60a5fa"/><text x="41" y="22" text-anchor="middle" fill="#93c5fd">Gemini</text></g>
+      <g transform="translate(158,280)"><rect width="84" height="34" rx="17" fill="#a855f7" fill-opacity="0.2" stroke="#c084fc"/><text x="42" y="22" text-anchor="middle" fill="#d8b4fe">Copilot</text></g>
+      <g transform="translate(252,280)"><rect width="102" height="34" rx="17" fill="#14b8a6" fill-opacity="0.2" stroke="#2dd4bf"/><text x="51" y="22" text-anchor="middle" fill="#99f6e4">Windsurf</text></g>
+      <g transform="translate(364,280)"><rect width="112" height="34" rx="17" fill="#ec4899" fill-opacity="0.18" stroke="#f472b6"/><text x="56" y="22" text-anchor="middle" fill="#f9a8d4">and others</text></g>
+    </g>
+    <g transform="translate(640,52)">
+      <rect width="500" height="256" rx="12" fill="#0f172a" stroke="#334155"/>
+      <circle cx="22" cy="20" r="5" fill="#f87171"/><circle cx="40" cy="20" r="5" fill="#fbbf24"/><circle cx="58" cy="20" r="5" fill="#4ade80"/>
+      <line x1="0" y1="38" x2="500" y2="38" stroke="#334155"/>
+      <g font-family="Consolas, Menlo, monospace" font-size="15">
+        <text x="22" y="70" fill="#94a3b8">You</text><text x="76" y="70" fill="#e2e8f0">start a shop admin, teal, with dashboard</text>
+        <text x="22" y="104" fill="#c4b5fd">AI</text><text x="76" y="104" fill="#7dd3fc">create.mjs shop --color "#0f766e" --dark</text>
+        <text x="76" y="130" fill="#6ee7b7">✓ project, theme, login, dashboard</text>
+        <text x="22" y="164" fill="#94a3b8">You</text><text x="76" y="164" fill="#e2e8f0">add orders: customer, total, status</text>
+        <text x="22" y="198" fill="#c4b5fd">AI</text><text x="76" y="198" fill="#7dd3fc">generate.mjs feature orders …</text>
+        <text x="76" y="224" fill="#6ee7b7">✓ list, details, form, routes, tests</text>
+      </g>
+    </g>
+  </g>
+</svg>

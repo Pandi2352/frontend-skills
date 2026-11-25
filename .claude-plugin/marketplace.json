@@ -1,0 +1,20 @@
+{
+  "name": "frontend-skills",
+  "owner": { "name": "Pandi2352" },
+  "metadata": { "description": "React + TypeScript + Tailwind skills with finished, tested code" },
+  "plugins": [
+    {
+      "name": "frontend-skills",
+      "source": "./",
+      "strict": false,
+      "description": "Create projects, generate features, ready-made components, API, performance and review for React frontends",
+      "skills": [
+        "./skills/frontend-core",
+        "./skills/frontend-blocks",
+        "./skills/frontend-api",
+        "./skills/frontend-performance",
+        "./skills/frontend-review"
+      ]
+    }
+  ]
+}
