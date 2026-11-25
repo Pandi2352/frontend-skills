@@ -14,6 +14,7 @@
 ![Blocks](https://img.shields.io/badge/ready_blocks-16-f97316?style=flat-square)
 ![Idle cost](https://img.shields.io/badge/idle_cost-~400_tokens-10b981?style=flat-square)
 ![Node](https://img.shields.io/badge/Node-20.19%2B-5fa04e?style=flat-square&logo=nodedotjs&logoColor=white)
+[![License](https://img.shields.io/badge/license-MIT-facc15?style=flat-square)](LICENSE)
 
 **[🚀 Quick start](#-quick-start)** ·
 **[🧰 Your tool](#-set-up-your-tool)** ·
@@ -561,6 +562,10 @@ Projects keep their own copy of the code.
 ### 🛠️ Change a skill
 
 Edit the files in `skills/`, run `node install.mjs`, commit and push.
+
+### 📄 License
+
+[MIT](LICENSE). Use it in private and commercial projects, and change it as you like.
 
 <div align="center">
 <br>

@@ -1,7 +1,11 @@
 {
   "name": "frontend-skills",
-  "owner": { "name": "Pandi2352" },
-  "metadata": { "description": "React + TypeScript + Tailwind skills with finished, tested code" },
+  "owner": {
+    "name": "Pandi2352"
+  },
+  "metadata": {
+    "description": "React + TypeScript + Tailwind skills with finished, tested code"
+  },
   "plugins": [
     {
       "name": "frontend-skills",
@@ -14,7 +18,8 @@
         "./skills/frontend-api",
         "./skills/frontend-performance",
         "./skills/frontend-review"
-      ]
+      ],
+      "license": "MIT"
     }
   ]
 }
