@@ -15,6 +15,7 @@
 ![Idle cost](https://img.shields.io/badge/idle_cost-~400_tokens-10b981?style=flat-square)
 ![Node](https://img.shields.io/badge/Node-20.19%2B-5fa04e?style=flat-square&logo=nodedotjs&logoColor=white)
 [![License](https://img.shields.io/badge/license-MIT-facc15?style=flat-square)](LICENSE)
+[![Check skills](https://github.com/Pandi2352/frontend-skills/actions/workflows/check-skills.yml/badge.svg)](https://github.com/Pandi2352/frontend-skills/actions/workflows/check-skills.yml)
 
 **[🚀 Quick start](#-quick-start)** ·
 **[🧰 Your tool](#-set-up-your-tool)** ·
@@ -22,6 +23,8 @@
 **[💬 What to say](#-what-to-say)** ·
 **[🪙 Tokens](#-tokens-how-it-stays-small)** ·
 **[🩹 Help](#-something-does-not-work)**
+
+<sub>⭐ If it saves you time, a star helps other developers find it.</sub>
 
 </div>
 
