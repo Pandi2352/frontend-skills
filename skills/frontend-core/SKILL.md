@@ -40,7 +40,8 @@ After each thing:
    of your own only if their project clearly needs it.
 4. Ask "OK? What next?" and stop. Never build an idea without a yes.
 
-A change: do only that, verify, ask again. Feature without fields: ask for them first.
+A change: do only that, verify, ask again. A new feature: plan it first and show the plan
+(`references/feature-planning.md`); build after OK.
 "Everything at once": `create.mjs … --ask … --all`. Special cases:
 `references/new-project.md`.
 
@@ -94,6 +95,7 @@ Existing project without these scripts: `node <skill>/scripts/add-to-project.mjs
 | effects, async state, unusual code | `ai-mistakes.md` |
 | types, tests, security | `engineering.md` |
 | what a complete app needs | `must-have.md` |
+| plan a feature: fields, pages, menu, permissions | `feature-planning.md` |
 
 Other skills: `frontend-blocks` (charts, dashboard, kanban, calendar, import, auth,
 dark mode, languages), `frontend-api`, `frontend-performance`, `frontend-review`,

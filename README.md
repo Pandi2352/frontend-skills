@@ -541,7 +541,10 @@ Guides: [fields and forms](skills/frontend-core/references/fields-and-forms.md) 
 [AI mistakes](skills/frontend-core/references/ai-mistakes.md) ·
 [WCAG checklist](skills/frontend-accessibility/references/wcag-checklist.md) ·
 [security headers](skills/frontend-security/references/headers-and-build.md) ·
-[AI look checklist](skills/frontend-design/references/anti-ai-look.md)
+[AI look checklist](skills/frontend-design/references/anti-ai-look.md) ·
+[feature planning](skills/frontend-core/references/feature-planning.md) ·
+[page recipes](skills/frontend-blocks/references/page-recipes.md) ·
+[review fixes](skills/frontend-review/references/fixes.md)
 </details>
 
 ---

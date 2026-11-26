@@ -46,7 +46,8 @@ of `frontend-core`: `scripts/generate.mjs feature orders --fields "…"`.
    printed next steps.
 3. Adapt only services (`*.service.ts`), texts (`…Text` objects) and config. If the
    real API differs, translate in the service, not in the pages.
-4. Read the part you need: `references/data.md` (charts, kanban, calendar, import,
+4. Read the part you need: `references/page-recipes.md` (list, detail, form, wizard,
+   settings, report, inbox, approval queue), `references/data.md` (charts, kanban, calendar, import,
    lists) or `references/features.md` (everything else).
 5. `node scripts/verify.mjs`. Say which endpoints are assumed.
 

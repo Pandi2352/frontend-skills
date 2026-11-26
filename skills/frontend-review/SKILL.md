@@ -23,6 +23,12 @@ Report first. Change code only when the user asks to fix.
 4. Read only the files in scope for what a scan cannot see (below).
 5. Confirm each finding in the code. Drop what you cannot show.
 
+| Need | Read |
+| --- | --- |
+| What a scan finding means and how to fix it | `references/fixes.md` |
+| How to check what a scan cannot see | `references/manual-checks.md` |
+| The report and level rules | `references/report.md` |
+
 Project decisions in `AGENTS.md` win over these standards. If
 `docs/standards/` exists, use it when a rule is unclear.
 
