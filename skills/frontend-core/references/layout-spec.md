@@ -14,7 +14,7 @@ icons, logo, texts) you write for that project.
 | Collapse button sat inside the sidebar header | It is the first thing at the left end of the navbar |
 | Submenus were missing or did not open and close | Parents with children open and close, animated, state remembered |
 | Icons looked like every AI-made app (default Lucide outline) | Menu icons from Phosphor, duotone (section 5) |
-| UI looked AI-made: plain, same grey everywhere | Section 6: logo, hierarchy, active states, spacing, one accent |
+| UI looked AI-made: plain, same grey everywhere | Section 6: logo, hierarchy, active states, spacing, one accent; full guide in the `frontend-design` skill |
 | Empty space left and right of the page | Page area uses the full width; only forms and long text are narrow |
 | Error pages were a small text on the left | Centered, with an illustration (SVG in theme colors), code, title, text, actions |
 | `No QueryClient set` at start | Provider order in `App.tsx` (section 8); `App.test.tsx` checks it |

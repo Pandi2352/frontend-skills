@@ -97,7 +97,7 @@ Existing project without these scripts: `node <skill>/scripts/add-to-project.mjs
 
 Other skills: `frontend-blocks` (charts, dashboard, kanban, calendar, import, auth,
 dark mode, languages), `frontend-api`, `frontend-performance`, `frontend-review`,
-`frontend-accessibility`, `frontend-security`.
+`frontend-accessibility`, `frontend-security`, `frontend-design` (look and style).
 
 Answer short: what changed, result of `verify`, open questions. Do not repeat rules
 or print whole files.

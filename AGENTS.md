@@ -55,6 +55,7 @@ and follow it. Never read `assets/`.
 | Check code | `frontend-review/SKILL.md` |
 | Accessibility, keyboard, screen readers, WCAG | `frontend-accessibility/SKILL.md` |
 | Security, XSS, tokens, CSP, packages | `frontend-security/SKILL.md` |
+| Look, style, theme, "looks AI-made" | `frontend-design/SKILL.md` |
 
 If they only gave the link, say the skills are ready and ask one question: start a new
 project, add to the current project, or review the current project? Do not create or

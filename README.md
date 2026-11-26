@@ -129,7 +129,7 @@ session in your tool.**
 npx skills add Pandi2352/frontend-skills --all
 ```
 
-Install **all seven**: `frontend-core` uses the others. To choose tools, use
+Install **all eight**: `frontend-core` uses the others. To choose tools, use
 `--skill '*' -a claude-code -a cursor` instead of `--all`.
 
 > **🤖 AI assistants:** if a user gave you this link, read
@@ -402,7 +402,7 @@ influence shrank even more. The result with skills came with 329 tests, the othe
 
 | When | What the AI reads | Tokens, about |
 | --- | --- | --- |
-| Always, unused | name and description of 7 skills | **560** |
+| Always, unused | name and description of 8 skills | **640** |
 | In a project made with it | `AGENTS.md` | **480** |
 | You ask for frontend work | one skill file | **500 to 1,200** |
 | To see what exists | `docs/COMPONENTS.md` | **1,100** |
@@ -540,7 +540,8 @@ Guides: [fields and forms](skills/frontend-core/references/fields-and-forms.md) 
 [rendering](skills/frontend-performance/references/rendering.md) ·
 [AI mistakes](skills/frontend-core/references/ai-mistakes.md) ·
 [WCAG checklist](skills/frontend-accessibility/references/wcag-checklist.md) ·
-[security headers](skills/frontend-security/references/headers-and-build.md)
+[security headers](skills/frontend-security/references/headers-and-build.md) ·
+[AI look checklist](skills/frontend-design/references/anti-ai-look.md)
 </details>
 
 ---
