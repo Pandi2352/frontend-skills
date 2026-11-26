@@ -129,7 +129,7 @@ session in your tool.**
 npx skills add Pandi2352/frontend-skills --all
 ```
 
-Install **all five**: `frontend-core` uses the other four. To choose tools, use
+Install **all seven**: `frontend-core` uses the others. To choose tools, use
 `--skill '*' -a claude-code -a cursor` instead of `--all`.
 
 > **🤖 AI assistants:** if a user gave you this link, read
@@ -402,7 +402,7 @@ influence shrank even more. The result with skills came with 329 tests, the othe
 
 | When | What the AI reads | Tokens, about |
 | --- | --- | --- |
-| Always, unused | name and description of 5 skills | **400** |
+| Always, unused | name and description of 7 skills | **560** |
 | In a project made with it | `AGENTS.md` | **480** |
 | You ask for frontend work | one skill file | **500 to 1,200** |
 | To see what exists | `docs/COMPONENTS.md` | **1,100** |
@@ -436,6 +436,8 @@ influence shrank even more. The result with skills came with 329 tests, the othe
 | 🔌 **[frontend-api](skills/frontend-api/SKILL.md)** | API client, login, token refresh, permissions, upload |
 | ⚡ **[frontend-performance](skills/frontend-performance/SKILL.md)** | size limits, lazy loading, long lists, images, leak and Lighthouse checks |
 | 🔍 **[frontend-review](skills/frontend-review/SKILL.md)** | finds rule breaks, slow code and AI mistakes |
+| ♿ **[frontend-accessibility](skills/frontend-accessibility/SKILL.md)** | WCAG 2.2 AA rules for every page, widget patterns, axe and keyboard checks (guides only, no code) |
+| 🔒 **[frontend-security](skills/frontend-security/SKILL.md)** | XSS, tokens, CSRF, redirects, CSP and headers, secrets, packages (guides only, no code) |
 
 <details>
 <summary><b>🧱 Components</b></summary>
@@ -536,7 +538,9 @@ Guides: [fields and forms](skills/frontend-core/references/fields-and-forms.md) 
 [auth](skills/frontend-api/references/auth.md) ·
 [loading](skills/frontend-performance/references/loading.md) ·
 [rendering](skills/frontend-performance/references/rendering.md) ·
-[AI mistakes](skills/frontend-core/references/ai-mistakes.md)
+[AI mistakes](skills/frontend-core/references/ai-mistakes.md) ·
+[WCAG checklist](skills/frontend-accessibility/references/wcag-checklist.md) ·
+[security headers](skills/frontend-security/references/headers-and-build.md)
 </details>
 
 ---

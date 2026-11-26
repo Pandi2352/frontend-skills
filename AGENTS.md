@@ -53,6 +53,8 @@ and follow it. Never read `assets/`.
 | API, login, permissions | `frontend-api/SKILL.md` |
 | Speed, bundle size, long lists, leaks | `frontend-performance/SKILL.md` |
 | Check code | `frontend-review/SKILL.md` |
+| Accessibility, keyboard, screen readers, WCAG | `frontend-accessibility/SKILL.md` |
+| Security, XSS, tokens, CSP, packages | `frontend-security/SKILL.md` |
 
 If they only gave the link, say the skills are ready and ask one question: start a new
 project, add to the current project, or review the current project? Do not create or

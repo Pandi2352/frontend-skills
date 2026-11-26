@@ -11,13 +11,15 @@
       "name": "frontend-skills",
       "source": "./",
       "strict": false,
-      "description": "Create projects, generate features, ready-made components, API, performance and review for React frontends",
+      "description": "Create projects, generate features, ready-made components, API, performance, accessibility, security and review for React frontends",
       "skills": [
         "./skills/frontend-core",
         "./skills/frontend-blocks",
         "./skills/frontend-api",
         "./skills/frontend-performance",
-        "./skills/frontend-review"
+        "./skills/frontend-review",
+        "./skills/frontend-accessibility",
+        "./skills/frontend-security"
       ],
       "license": "MIT"
     }

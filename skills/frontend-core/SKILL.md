@@ -96,7 +96,8 @@ Existing project without these scripts: `node <skill>/scripts/add-to-project.mjs
 | what a complete app needs | `must-have.md` |
 
 Other skills: `frontend-blocks` (charts, dashboard, kanban, calendar, import, auth,
-dark mode, languages), `frontend-api`, `frontend-performance`, `frontend-review`.
+dark mode, languages), `frontend-api`, `frontend-performance`, `frontend-review`,
+`frontend-accessibility`, `frontend-security`.
 
 Answer short: what changed, result of `verify`, open questions. Do not repeat rules
 or print whole files.
