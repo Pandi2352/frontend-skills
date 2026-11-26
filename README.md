@@ -253,7 +253,7 @@ The ideas come from **your** project: its fields, what it has and what is missin
 
 | | Examples |
 | --- | --- |
-| 🖼️ Frame | sidebar or navbar |
+| 🖼️ Frame | sidebar or navbar, with a menu planned from your project |
 | 🧱 Components | all common ones, or one: toast, modal, tabs, card, stepper |
 | 📝 Forms | all fields, or one: date picker, phone, upload |
 | 📊 Data | table, charts, kanban, calendar, CSV import |
@@ -263,7 +263,24 @@ The ideas come from **your** project: its fields, what it has and what is missin
 
 `docs/PROGRESS.md` in your project shows what is done.
 
-**4. Connect your server.** Set `VITE_API_URL` in `.env`, then:
+**The frame you get.** The AI plans the sidebar menu from what you describe (groups,
+submenus, two-tone Phosphor icons) and shows it to you first. Then it builds the layout
+against a full checklist, [`layout-spec.md`](skills/frontend-core/references/layout-spec.md):
+
+- 🧭 collapse button at the navbar's left end, Ctrl/Cmd+B, remembered
+- 📂 submenus that open smoothly and stay as you left them, fly-out when collapsed
+- 📍 where you are in the navbar (Listings › Properties › All)
+- 🔎 menu filter for long menus, badges, user menu with name and role
+- 📱 drawer on phones; pages use the full width
+- 🚧 404, 403 and error pages centered, with drawings in your colors
+- 🛣️ routes with `react-router-dom` in `src/app/router/`
+
+**4. No server yet?** Say so. The AI makes sample data that fits **your** project (real-looking
+records, all statuses, matching ids) in `src/mocks/`, with a README, as
+[`mock-data.md`](skills/frontend-api/references/mock-data.md) describes. The skills ship no
+sample data of their own.
+
+**5. Connect your server.** Set `VITE_API_URL` in `.env`, then delete `src/mocks/` and say:
 
 ```text
 Connect the API. Here is the OpenAPI file: ./openapi.json
@@ -499,6 +516,8 @@ select(a|b)`. `!` means required.
 Guides: [fields and forms](skills/frontend-core/references/fields-and-forms.md) ·
 [components](skills/frontend-core/references/components.md) ·
 [app shell](skills/frontend-core/references/app-shell.md) ·
+[layout checklist](skills/frontend-core/references/layout-spec.md) ·
+[sample data](skills/frontend-api/references/mock-data.md) ·
 [data blocks](skills/frontend-blocks/references/data.md) ·
 [pages and features](skills/frontend-blocks/references/features.md) ·
 [auth](skills/frontend-api/references/auth.md) ·
