@@ -115,6 +115,52 @@ describe('app shell', () => {
     expect(signOut).toHaveBeenCalled();
   });
 
+  it('shows where the page is in the menu', () => {
+    start('/users');
+    const trail = within(screen.getByRole('navigation', { name: 'Current location' }));
+    expect(trail.getByText('Users')).toBeInTheDocument();
+    expect(trail.getByText('All users')).toHaveAttribute('aria-current', 'page');
+  });
+
+  it('remembers a submenu the person closed', async () => {
+    const user = userEvent.setup();
+    const { unmount } = render(
+      <ConfirmProvider>
+        <MemoryRouter initialEntries={['/users']}>
+          <AppLayout nav={nav}>
+            <p>Page</p>
+          </AppLayout>
+        </MemoryRouter>
+      </ConfirmProvider>,
+    );
+    await user.click(menu().getByRole('button', { name: 'Users' }));
+    expect(menu().getByRole('button', { name: 'Users' })).toHaveAttribute('aria-expanded', 'false');
+    expect(JSON.parse(localStorage.getItem('sidebar-open') ?? '{}')).toEqual({ users: false });
+    unmount();
+    start('/users');
+    expect(menu().getByRole('button', { name: 'Users' })).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('filters the menu and opens matching parents', async () => {
+    const user = userEvent.setup();
+    render(
+      <ConfirmProvider>
+        <MemoryRouter initialEntries={['/']}>
+          <AppLayout nav={nav} filterable>
+            <p>Page</p>
+          </AppLayout>
+        </MemoryRouter>
+      </ConfirmProvider>,
+    );
+    await user.type(menu().getByRole('searchbox', { name: 'Filter the menu' }), 'new');
+    expect(menu().getByRole('button', { name: 'Users' })).toHaveAttribute('aria-expanded', 'true');
+    expect(menu().getByRole('link', { name: 'New user' })).toBeVisible();
+    expect(menu().queryByRole('link', { name: 'Dashboard' })).toBeNull();
+    await user.clear(menu().getByRole('searchbox', { name: 'Filter the menu' }));
+    await user.type(menu().getByRole('searchbox', { name: 'Filter the menu' }), 'zzz');
+    expect(menu().getByText('No page matches')).toBeVisible();
+  });
+
   it('NotificationMenu lists, opens and shows empty', async () => {
     const user = userEvent.setup();
     const onOpenItem = vi.fn();
