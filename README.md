@@ -15,6 +15,7 @@
 ![Idle cost](https://img.shields.io/badge/idle_cost-~400_tokens-10b981?style=flat-square)
 ![Node](https://img.shields.io/badge/Node-20.19%2B-5fa04e?style=flat-square&logo=nodedotjs&logoColor=white)
 [![License](https://img.shields.io/badge/license-MIT-facc15?style=flat-square)](LICENSE)
+[![skills.sh](https://skills.sh/b/Pandi2352/frontend-skills)](https://skills.sh/Pandi2352/frontend-skills)
 [![Check skills](https://github.com/Pandi2352/frontend-skills/actions/workflows/check-skills.yml/badge.svg)](https://github.com/Pandi2352/frontend-skills/actions/workflows/check-skills.yml)
 
 **[🚀 Quick start](#-quick-start)** ·
@@ -121,6 +122,15 @@ node ~/frontend-skills/install.mjs
 
 It finds the tools on your computer and installs for all of them. **Then start a new
 session in your tool.**
+
+### Or with the skills.sh installer
+
+```bash
+npx skills add Pandi2352/frontend-skills --all
+```
+
+Install **all five**: `frontend-core` uses the other four. To choose tools, use
+`--skill '*' -a claude-code -a cursor` instead of `--all`.
 
 > **🤖 AI assistants:** if a user gave you this link, read
 > [AGENTS.md](https://raw.githubusercontent.com/Pandi2352/frontend-skills/main/AGENTS.md)
