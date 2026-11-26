@@ -1,6 +1,6 @@
 import {
   autoUpdate, flip, offset, shift, size, useDismiss, useFloating, useFloatingNodeId,
-  useInteractions,
+  useInteractions, type Placement,
 } from '@floating-ui/react';
 import { useState } from 'react';
 
@@ -10,8 +10,9 @@ export function usePopup(options: {
   onOpenChange: (open: boolean) => void;
   matchWidth?: boolean;
   maxHeight?: number;
+  placement?: Placement;
 }) {
-  const { open, onOpenChange, matchWidth = false, maxHeight = 320 } = options;
+  const { open, onOpenChange, matchWidth = false, maxHeight = 320, placement = 'bottom-start' } = options;
   const [reference, setReference] = useState<HTMLElement | null>(null);
   const [floating, setFloating] = useState<HTMLElement | null>(null);
   // Part of the tree of a surrounding Modal, so the Modal does not close with it.
@@ -21,7 +22,7 @@ export function usePopup(options: {
     elements: { reference, floating },
     open,
     onOpenChange,
-    placement: 'bottom-start',
+    placement,
     whileElementsMounted: autoUpdate,
     middleware: [
       offset(4),

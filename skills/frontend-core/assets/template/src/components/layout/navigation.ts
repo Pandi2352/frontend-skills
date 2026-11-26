@@ -1,11 +1,14 @@
-import type { LucideIcon } from 'lucide-react';
+import type { ComponentType, SVGProps } from 'react';
+
+/** Any icon component: Phosphor (menu default), Lucide, Tabler, your own SVG. */
+export type NavIcon = ComponentType<SVGProps<SVGSVGElement>>;
 
 export interface NavItem {
   id: string;
   label: string;
   /** From ROUTES. Leave out for a parent that only opens its children. */
   to?: string;
-  icon?: LucideIcon;
+  icon?: NavIcon;
   children?: NavItem[];
   badge?: string | number;
   permission?: string;

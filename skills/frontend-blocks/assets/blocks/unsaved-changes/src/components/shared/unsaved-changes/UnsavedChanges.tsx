@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useFormContext, useFormState } from 'react-hook-form';
-import { useBlocker } from 'react-router';
+import { useBlocker } from 'react-router-dom';
 import { useConfirm } from '@/components/shared/confirm';
 import { useStableCallback } from '@/hooks/useStableCallback';
 

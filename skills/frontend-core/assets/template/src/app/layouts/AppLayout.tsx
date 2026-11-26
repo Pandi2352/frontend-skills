@@ -1,6 +1,7 @@
 import { Suspense, useEffect, useMemo, useRef, type ReactNode } from 'react';
-import { Outlet, useLocation, useNavigationType } from 'react-router';
-import { Navbar, MobileMenuButton, type NavbarProps } from '@/components/layout/navbar';
+import { Outlet, useLocation, useNavigationType } from 'react-router-dom';
+import { AppLogo } from '@/components/layout/logo';
+import { Navbar, NavTrail, SidebarToggle, type NavbarProps } from '@/components/layout/navbar';
 import { filterNav, type CanSee, type NavGroup } from '@/components/layout/navigation';
 import { MobileSidebar, Sidebar, SidebarProvider, type SidebarProps } from '@/components/layout/sidebar';
 import { ErrorBoundary } from '@/components/shared/error-boundary';
@@ -8,11 +9,12 @@ import { OfflineBanner } from '@/components/shared/states';
 import { PageSkeleton } from '@/components/ui/skeleton';
 import { uiText } from '@/constants/ui-text';
 
-export interface AppLayoutProps extends Pick<SidebarProps, 'header' | 'footer' | 'loading'> {
+export interface AppLayoutProps extends Pick<SidebarProps, 'header' | 'footer' | 'loading' | 'filterable'> {
   nav: NavGroup[];
   /** Hides menu items. Routes and the server must check too. */
   can?: CanSee;
-  navbar?: Pick<NavbarProps, 'center' | 'right'> & { left?: ReactNode };
+  /** `left` comes after the sidebar button and the location; `trail: false` hides the location. */
+  navbar?: Pick<NavbarProps, 'center' | 'right'> & { left?: ReactNode; trail?: boolean };
   /** Instead of the routed page. */
   children?: ReactNode;
 }
@@ -20,7 +22,7 @@ export interface AppLayoutProps extends Pick<SidebarProps, 'header' | 'footer' |
 const everything: CanSee = () => true;
 
 /** Sidebar, navbar and the page. Only the main area scrolls. */
-export function AppLayout({ nav, can = everything, navbar, children, ...sidebar }: AppLayoutProps) {
+export function AppLayout({ nav, can = everything, navbar, children, header = (collapsed: boolean) => <AppLogo compact={collapsed} />, ...sidebar }: AppLayoutProps) {
   const groups = useMemo(() => filterNav(nav, can), [nav, can]);
   const { pathname, key } = useLocation();
   const type = useNavigationType();
@@ -49,14 +51,15 @@ export function AppLayout({ nav, can = everything, navbar, children, ...sidebar 
         {uiText.skip}
       </a>
       <div className="flex h-dvh overflow-hidden">
-        <Sidebar groups={groups} {...sidebar} />
+        <Sidebar groups={groups} header={header} {...sidebar} />
         <MobileSidebar groups={groups} {...sidebar} />
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex min-w-0 flex-1 flex-col bg-page">
           <OfflineBanner />
           <Navbar
             left={
               <>
-                <MobileMenuButton />
+                <SidebarToggle />
+                {navbar?.trail !== false && <NavTrail groups={groups} />}
                 {navbar?.left}
               </>
             }

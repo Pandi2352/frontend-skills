@@ -14,7 +14,9 @@ Scripts copy and generate finished code. You choose, connect and adapt. Never op
 Build exactly what the developer asked for, one thing at a time. Nothing extra, also not
 "while I am here". Then suggest, ask and **stop**. They check before the next thing.
 
-New project: ask in one message only what is missing (folder, title, color).
+New project: ask in one message only what is missing (folder, title, color). With the
+layout, plan the menu from their project and check it against `references/layout-spec.md`. No backend given:
+sample data for their project (`frontend-api/references/mock-data.md`).
 
 ```
 node <skill>/scripts/create.mjs my-app --title "My app" --color "#2563eb" --ask sidebar,login,feature:orders
@@ -74,7 +76,8 @@ Existing project without these scripts: `node <skill>/scripts/add-to-project.mjs
 - Loading, empty and error with retry in every view. Keyboard, WCAG AA, 360 px.
 - Strict types, no `any`. Pages → hooks → services → `api`. Lazy pages.
 - Paths, menu and permissions in `src/config`. No effect for computed values.
-- No invented packages, props or endpoints; no fake data or empty handlers.
+- No invented packages, props or endpoints, no empty handlers. Sample data only in
+  `src/mocks/`, as `mock-data.md` says.
 - Packages: `scripts/resolve-versions.mjs --project <name>`. Never change Node.
 
 ## Read only when needed
@@ -83,7 +86,8 @@ Existing project without these scripts: `node <skill>/scripts/add-to-project.mjs
 | --- | --- |
 | special form or field behaviour, validation | `fields-and-forms.md` |
 | table, modal, menu, tabs, states | `components.md` |
-| sidebar, navbar, router | `app-shell.md` |
+| layout: sidebar, navbar, page area, routes, error pages (full list) | `layout-spec.md` |
+| sidebar, navbar, menu from the project, router (how to use) | `app-shell.md` |
 | colors, sizes | `design-tokens.md` |
 | where a file goes, naming | `structure.md` |
 | which hook or util | `hooks-and-utils.md` |

@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
 import { defaultTableState, type TableState } from './types';
 
 const whole = (text: string | null, fallback: number, max: number) => {

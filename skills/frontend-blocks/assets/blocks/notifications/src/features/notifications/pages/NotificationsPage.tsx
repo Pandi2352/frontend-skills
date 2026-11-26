@@ -1,5 +1,5 @@
 import { Bell, CheckCheck } from 'lucide-react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { PageContainer, PageHeader } from '@/components/layout/page';
 import { InfiniteList } from '@/components/shared/infinite-list';
 import { EmptyState } from '@/components/shared/states';

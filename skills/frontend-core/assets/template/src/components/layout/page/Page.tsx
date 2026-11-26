@@ -1,12 +1,13 @@
 import { ArrowLeft } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { appConfig } from '@/config/app.config';
 import { uiText } from '@/constants/ui-text';
 import { cn } from '@/lib/cn';
 
-export function PageContainer({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={cn('mx-auto flex w-full max-w-7xl flex-col gap-6 p-4 md:p-6', className)}>{children}</div>;
+/** Uses the whole width next to the sidebar. `narrow` for forms and text. */
+export function PageContainer({ children, className, narrow = false }: { children: ReactNode; className?: string; narrow?: boolean }) {
+  return <div className={cn('flex w-full flex-col gap-6 p-4 md:p-6 xl:px-8', narrow && 'max-w-3xl', className)}>{children}</div>;
 }
 
 export interface Crumb {

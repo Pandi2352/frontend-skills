@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createMemoryRouter, RouterProvider, useLocation } from 'react-router';
+import { createMemoryRouter, RouterProvider, useLocation } from 'react-router-dom';
 import { beforeEach, expect, it, vi } from 'vitest';
 import { ApiError } from '@/services/api-error';
 import { AuthContext, type Auth } from './hooks/auth-context';

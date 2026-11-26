@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import type { RouteObject } from 'react-router';
+import type { RouteObject } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { LazySection } from '@/components/shared/lazy-section';
 import { VirtualList } from '@/components/shared/virtual-list';

@@ -65,7 +65,7 @@ export const STEPS = {
   forms: { title: 'Form fields and forms', check: ['/playground/fields : all fields have the same height', 'Save with empty fields: errors below the fields, focus on the first', 'dropdown, date, phone, upload'] },
   helpers: { title: 'Hooks, utils and helpers', check: ['docs/COMPONENTS.md lists them'] },
   table: { title: 'Data table, filters and command menu', check: ['/playground/table : search, sort, pages, columns, selection, export', 'narrow window: rows become cards', 'Open commands: search, arrow keys, Enter'] },
-  api: { title: 'API client and login state', check: ['VITE_API_URL in .env', 'real addresses in src/features/auth/services/auth.service.ts', 'roles in src/config/permissions.ts'] },
+  api: { title: 'API client and login state', check: ['VITE_API_URL in .env (no backend yet: sample data, frontend-api/references/mock-data.md)', 'real addresses in src/features/auth/services/auth.service.ts', 'roles in src/config/permissions.ts'] },
   speed: { title: 'Speed: limits, images, long lists, preloading', check: ['npm run build, then npm run size'] },
 };
 const BLOCK_CHECKS = {
@@ -363,7 +363,7 @@ function applyDarkColor(project, primary) {
 const FEATURE_LINE = /^\s*\.\.\.\w+Routes,$/;
 const FEATURE_IMPORT = /^import \{ \w+Routes \} from '@\/features\/[^']+';$/;
 const MENU_LINE = /^\s*\{ id: .*to: ROUTES\.\w+\.list\b.*\},$/;
-const ICONS = /^import \{ ([^}]*) \} from 'lucide-react';$/;
+const ICONS = /^import \{ ([^}]*) \} from '@phosphor-icons\/react';$/;
 const own = (line) => !FEATURE_LINE.test(line) && !FEATURE_IMPORT.test(line) && !MENU_LINE.test(line) && !ICONS.test(line);
 const hash = (content) => createHash('sha1').update(content.split('\n').filter(own).join('\n').trim()).digest('hex').slice(0, 12);
 
@@ -374,7 +374,8 @@ function keepFeatures(next, before) {
   const marker = lines.findIndex((l) => l.trim() === '// features');
   const indent = /^\s*/.exec(lines[marker] ?? '')[0];
   if (marker >= 0) lines.splice(marker, 0, ...inside.map((l) => indent + l.trim()));
-  const imports = old.filter((l) => FEATURE_IMPORT.test(l) && !lines.includes(l));
+  // Imports only where the features are listed.
+  const imports = marker < 0 ? [] : old.filter((l) => FEATURE_IMPORT.test(l) && !lines.includes(l));
   const last = lines.findLastIndex((l) => /^import .*;$/.test(l));
   lines.splice(last + 1, 0, ...imports);
   // Icons chosen for menu items stay imported.
@@ -383,7 +384,7 @@ function keepFeatures(next, before) {
     const now = ICONS.exec(l)?.[1].split(', ');
     if (!now) return l;
     const body = lines.join('\n');
-    return `import { ${[...new Set([...now, ...names.filter((n) => new RegExp(`icon: ${n}\\b`).test(body))])].sort().join(', ')} } from 'lucide-react';`;
+    return `import { ${[...new Set([...now, ...names.filter((n) => new RegExp(`icon: ${n}\\b`).test(body))])].sort().join(', ')} } from '@phosphor-icons/react';`;
   });
   return lines.join('\n');
 }
@@ -413,7 +414,8 @@ function writeApp(project, state, todo) {
   const has = (file) => existsSync(path.join(project, 'src', file));
   const put = (file, content) => managed(project, state, todo, file, content);
   const layout = has('app/layouts/AppLayout.tsx');
-  const api = has('lib/query-client.ts');
+  // Every component that uses queries must be inside the query provider.
+  const api = has('lib/query-client.ts') || listFiles(path.join(project, 'src')).some((f) => /\.tsx?$/.test(f) && !/\.test\./.test(f) && importsOf(path.join(project, 'src', f)).includes('@tanstack/react-query'));
   const authPages = has('features/auth/pages/LoginPage.tsx');
   const account = has('features/account/pages/ProfilePage.tsx');
   const dashboard = has('features/dashboard/pages/DashboardPage.tsx');
@@ -429,6 +431,8 @@ function writeApp(project, state, todo) {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="${o.title.replace(/[<&"]/g, '')}" />
+    <meta name="theme-color" content="${o.color}" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>${o.title.replace(/[<&]/g, '')}</title>${dark ? `
     <script>
@@ -440,6 +444,7 @@ function writeApp(project, state, todo) {
     </script>` : ''}
   </head>
   <body>
+    <noscript>This app needs JavaScript. Turn it on and reload the page.</noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
@@ -447,7 +452,7 @@ function writeApp(project, state, todo) {
 `);
   put('src/styles/index.css', `@import 'tailwindcss';\n@import './fonts.css';\n@import './theme.css';\n${dark ? "@import './dark.css';\n" : ''}${has('styles/charts.css') ? "@import './charts.css';\n" : ''}@import './base.css';`);
   if (layout) put('src/config/navigation.ts', `
-import { ${['LayoutDashboard', ...(account ? ['Settings'] : [])].join(', ')} } from 'lucide-react';
+import { ${[...(account ? ['GearSixIcon'] : []), 'SquaresFourIcon'].join(', ')} } from '@phosphor-icons/react';
 import type { NavGroup } from '@/components/layout/navigation';
 import { ROUTES } from './routes';
 
@@ -456,14 +461,14 @@ export const APP_NAV: NavGroup[] = [
   {
     id: 'main',
     items: [
-      { id: 'home', label: 'Dashboard', to: ROUTES.home, icon: LayoutDashboard, exact: true },
+      { id: 'home', label: 'Dashboard', to: ROUTES.home, icon: SquaresFourIcon, exact: true },
       // features
     ],
   },${account ? `
   {
     id: 'system',
     label: 'System',
-    items: [{ id: 'settings', label: 'Settings', to: ROUTES.settings, icon: Settings }],
+    items: [{ id: 'settings', label: 'Settings', to: ROUTES.settings, icon: GearSixIcon }],
   },` : ''}
 ];
 `);
@@ -502,18 +507,17 @@ export function HomePage() {
                 onSignOut={() => void signOut().catch(() => undefined)}
               />
             )}`);
-    const header = '<span className="truncate font-semibold">{appConfig.name}</span>';
+    const header = '<AppLogo />';
     const routerNames = [...(navbarOnly ? ['NavLink', 'Outlet'] : []), ...(authPages && account ? ['useNavigate'] : [])];
     put('src/app/layouts/AppShell.tsx', [
       ...(authPages && account ? ["import { User } from 'lucide-react';"] : []),
       ...(navbarOnly ? ["import { Suspense } from 'react';"] : []),
-      ...(routerNames.length ? [`import { ${routerNames.join(', ')} } from 'react-router';`] : []),
+      ...(routerNames.length ? [`import { ${routerNames.join(', ')} } from 'react-router-dom';`] : []),
       ...(navbarOnly
-        ? [`import { Navbar${authPages ? ', UserMenu' : ''} } from '@/components/layout/navbar';`, "import { SidebarProvider } from '@/components/layout/sidebar';", "import { ErrorBoundary } from '@/components/shared/error-boundary';", "import { OfflineBanner } from '@/components/shared/states';", "import { SectionLoader } from '@/components/ui/loader';"]
+        ? ["import { AppLogo } from '@/components/layout/logo';", `import { Navbar${authPages ? ', UserMenu' : ''} } from '@/components/layout/navbar';`, "import { SidebarProvider } from '@/components/layout/sidebar';", "import { ErrorBoundary } from '@/components/shared/error-boundary';", "import { OfflineBanner } from '@/components/shared/states';", "import { SectionLoader } from '@/components/ui/loader';"]
         : authPages ? ["import { UserMenu } from '@/components/layout/navbar';"] : []),
       ...(i18n ? ["import { LanguageMenu } from '@/components/shared/language';"] : []),
       ...(dark ? ["import { ThemeMenu } from '@/components/shared/theme';"] : []),
-      "import { appConfig } from '@/config/app.config';",
       "import { APP_NAV } from '@/config/navigation';",
       ...(authPages ? ["import type { Permission } from '@/config/permissions';"] : []),
       ...(authPages && account ? ["import { ROUTES } from '@/config/routes';"] : []),
@@ -577,8 +581,7 @@ export function HomePage() {
   );`]
         : [`  return (
     <AppLayout
-      nav={APP_NAV}${authPages ? '\n      can={(permission) => can(permission as Permission)}' : ''}
-      header={${header}}${right.length ? `
+      nav={APP_NAV}${authPages ? '\n      can={(permission) => can(permission as Permission)}' : ''}${right.length ? `
       navbar={{
         right: (
           <>
@@ -605,57 +608,79 @@ export function HomePage() {
   const guests = [['login', 'LoginPage'], ['register', 'RegisterPage'], ['verifyEmail', 'VerifyEmailPage'], ['forgotPassword', 'ForgotPasswordPage'], ['resetPassword', 'ResetPasswordPage']]
     .map(([key, name]) => page(key, `@/features/auth/pages/${name}`, name));
   const loader = has('components/ui/loader/Loaders.tsx');
-  // A single route level keeps "// features" at the same place in every version.
-  const shell = layout ? `{
-          element: <AppShell />,
-          children: [
-${inside.map((l) => `            ${l}`).join('\n')}
-          ],
-        },` : inside.map((l) => `        ${l}`).join('\n').trimStart();
-  put('src/app/router/router.tsx', [
-    "import { createBrowserRouter, type RouteObject } from 'react-router';",
+  const status = has('app/pages/StatusPages.tsx');
+  const featureLines = (content) => content.split('\n').filter((l) => FEATURE_LINE.test(l) || FEATURE_IMPORT.test(l));
+
+  // Pages inside the frame. generate.mjs adds features above "// features".
+  let appRoutes = [
+    "import type { RouteObject } from 'react-router-dom';",
+    ...(layout ? ["import { NotFoundPage } from '@/app/pages/StatusPages';"] : []),
+    "import { ROUTES } from '@/config/routes';",
+    '',
+    '/** Pages inside the sidebar and navbar. Every page is loaded on demand. */',
+    'export const appRoutes: RouteObject[] = [',
+    ...inside.map((l) => `  ${l}`),
+    '];',
+  ].join('\n');
+  // Projects from before the router folder: their features move here.
+  const oldRouter = path.join(project, 'src/app/router/router.tsx');
+  if (!has('app/router/app.routes.tsx') && existsSync(oldRouter) && featureLines(text(oldRouter)).length) appRoutes = keepFeatures(appRoutes, text(oldRouter));
+  put('src/app/router/app.routes.tsx', appRoutes);
+  if (authPages) put('src/app/router/auth.routes.tsx', [
+    "import type { RouteObject } from 'react-router-dom';",
+    "import { ROUTES } from '@/config/routes';",
+    '',
+    '/** Login and the other pages for people who are not signed in. */',
+    'export const authRoutes: RouteObject[] = [',
+    ...guests.map((l) => `  ${l}`),
+    '];',
+  ].join('\n'));
+
+  const frame = layout ? ['{', '  element: <AppShell />,', '  children: appRoutes,', '},'] : ['...appRoutes,'];
+  put('src/app/router/routes.tsx', [
+    "import type { RouteObject } from 'react-router-dom';",
     ...(layout ? ["import { AppShell } from '@/app/layouts/AppShell';"] : []),
     ...(authPages ? ["import { AuthLayout } from '@/app/layouts/AuthLayout';"] : []),
-    ...(layout ? ["import { NotFoundPage } from '@/app/pages/StatusPages';"] : []),
+    ...(status ? ["import { RouteErrorPage } from '@/app/pages/StatusPages';"] : []),
     ...(loader ? ["import { PageLoader } from '@/components/ui/loader';"] : []),
-    "import { ROUTES } from '@/config/routes';",
-    ...(authPages ? ["import { GuestRoute, ProtectedRoute } from '@/features/auth';"] : []),
+    ...(authPages ? ["import { ROUTES } from '@/config/routes';", "import { GuestRoute, ProtectedRoute } from '@/features/auth';"] : []),
+    "import { appRoutes } from './app.routes';",
+    ...(authPages ? ["import { authRoutes } from './auth.routes';"] : []),
     '',
-    '// Every page is loaded on demand. generate.mjs adds features above "features".',
+    '/** The whole tree: who may open what, and which frame is around it. */',
     'export const routes: RouteObject[] = [',
     '  {',
     `    HydrateFallback: ${loader ? 'PageLoader' : '() => null'},`,
+    ...(status ? ['    errorElement: <RouteErrorPage />,'] : []),
     '    children: [',
     ...(authPages ? [
       '      {',
       '        element: <GuestRoute loader={<PageLoader />} />,',
-      '        children: [',
-      '          {',
-      '            element: <AuthLayout />,',
-      '            children: [',
-      ...guests.map((l) => `              ${l}`),
-      '            ],',
-      '          },',
-      '        ],',
+      '        children: [{ element: <AuthLayout />, children: authRoutes }],',
       '      },',
       '      {',
       '        element: <ProtectedRoute loader={<PageLoader />} loginPath={ROUTES.login} />,',
       '        children: [',
-      `          ${shell.replace(/\n/g, '\n  ')}`,
+      ...frame.map((l) => `          ${l}`),
       '        ],',
       '      },',
-    ] : [`      ${shell.replace(/\n {2}/g, '\n')}`]),
+    ] : frame.map((l) => `      ${l}`)),
     '    ],',
     '  },',
     '];',
+  ].join('\n'));
+  put('src/app/router/router.tsx', [
+    "import { createBrowserRouter } from 'react-router-dom';",
+    "import { routes } from './routes';",
     '',
+    'export { routes };',
     'export const router = createBrowserRouter(routes);',
   ].join('\n'));
 
   const providers = has('app/providers/AppProviders.tsx');
   put('src/app/App.tsx', [
     ...(api ? ["import { QueryClientProvider } from '@tanstack/react-query';"] : []),
-    "import { RouterProvider } from 'react-router';",
+    "import { RouterProvider } from 'react-router-dom';",
     ...(providers ? ["import { AppProviders } from '@/app/providers/AppProviders';"] : []),
     "import { router } from '@/app/router/router';",
     ...(authPages ? ["import { AuthProvider } from '@/features/auth';"] : []),
@@ -679,6 +704,23 @@ ${inside.map((l) => `            ${l}`).join('\n')}
     '  );',
     '}',
   ].join('\n'));
+
+  // Catches a missing provider ("No QueryClient set") before the browser does.
+  put('src/app/App.test.tsx', `
+import { render, screen } from '@testing-library/react';
+import { expect, it, vi } from 'vitest';
+import { App } from './App';
+
+it('starts without an error', async () => {
+  window.matchMedia ??= vi.fn().mockReturnValue({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() });
+  const errors = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+  render(<App />);
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  expect(screen.queryByText(/Unexpected Application Error|Something went wrong/)).toBeNull();
+  expect(errors.mock.calls.flat().join(' ')).not.toMatch(/No QueryClient|must be used within|needs \\w+Provider/i);
+  errors.mockRestore();
+});
+`);
 
   const late = speed && layout;
   const modules = [["{ App }", '@/app/App'], ...(late ? [['{ router, routes }', '@/app/router/router'], ['{ toast }', '@/components/ui/toast'], ['{ preloadOnIntent }', '@/lib/preload-routes'], ['{ recoverFromStaleDeploy }', '@/lib/stale-deploy']] : [])];
@@ -747,12 +789,17 @@ export function buildStep(project, state, id, { installPackages = true, fields, 
     pullFiles(project, ['services/api.ts', 'types/api.types.ts']);
     run(path.join(core, 'scripts/generate.mjs'), ['feature', name, '--project', project, '--fields', fields, ...(singular ? ['--singular', singular] : [])], project);
   }
+  // What depends on the project is written by the AI, as the references say.
+  if (id === 'layout') todo.push('menu: plan it from their project and write src/config/navigation.ts and check the layout against references/layout-spec.md');
+  if (kind === 'feature' && !existsSync(path.join(project, 'src/mocks'))) todo.push('no backend given? sample data for this feature as frontend-api/references/mock-data.md says');
   // Twice: the connecting files can need more, and more can need a provider.
   complete(project);
   complete(project);
   writeApp(project, state, todo);
   complete(project);
   const { unknown } = complete(project);
+  // Again, so files copied last are connected too.
+  writeApp(project, state, todo);
   todo.push(...unknown);
   if (!wasDark && existsSync(path.join(project, 'src/styles/dark.css'))) applyDarkColor(project, o.primary);
   copyTests(project);
@@ -769,6 +816,7 @@ export function finish(project, state, { installPackages = true } = {}) {
   complete(project);
   writeApp(project, state, todo);
   todo.push(...complete(project).unknown);
+  writeApp(project, state, todo);
   copyTests(project);
   if (installPackages) install(project, notes);
   run(path.join(core, 'scripts/index-components.mjs'), [project], project);

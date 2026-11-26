@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useForm } from 'react-hook-form';
-import { createMemoryRouter, Link, RouterProvider, useNavigate } from 'react-router';
+import { createMemoryRouter, Link, RouterProvider, useNavigate } from 'react-router-dom';
 import { expect, it, vi } from 'vitest';
 import { Form, FormActions, FormField } from '@/components/form';
 import { ConfirmProvider } from '@/components/shared/confirm';

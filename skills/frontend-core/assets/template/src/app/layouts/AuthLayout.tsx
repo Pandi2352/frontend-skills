@@ -1,5 +1,5 @@
 import { Suspense, type ReactNode } from 'react';
-import { Outlet } from 'react-router';
+import { Outlet } from 'react-router-dom';
 import { SectionLoader } from '@/components/ui/loader';
 
 /** Login, register and reset pages. */

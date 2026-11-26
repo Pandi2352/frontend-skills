@@ -112,7 +112,7 @@ export function FieldsPlayground() {
   };
 
   return (
-    <main className="mx-auto flex max-w-5xl flex-col gap-8 p-4 md:p-6">
+    <main className="flex w-full flex-col gap-8 p-4 md:p-6 xl:px-8">
       <h1 className="text-2xl font-semibold">{title}</h1>
 
       <Form form={form} onSubmit={save}>

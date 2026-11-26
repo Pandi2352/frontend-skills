@@ -14,7 +14,7 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 
 const STACK = [
-  'react', 'react-dom', 'react-router', 'react-hook-form', 'lucide-react',
+  'react', 'react-dom', 'react-router-dom', 'react-hook-form', 'lucide-react',
   'clsx', 'tailwind-merge', '@floating-ui/react', 'libphonenumber-js',
   'country-region-data', '@tanstack/react-virtual',
 ];

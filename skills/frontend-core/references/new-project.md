@@ -29,7 +29,7 @@ The folder must be empty. Afterwards: `.env`, the real endpoints in `*.service.t
 ## Other frameworks
 
 Next.js, Remix, TanStack Start: create them with their official command. Then
-`add-to-project.mjs <project> --components`. Replace `react-router` in `components/layout`,
+`add-to-project.mjs <project> --components`. Replace `react-router-dom` in `components/layout`,
 `useTableState`, `useUrlState`. Mark interactive files with `'use client'`.
 
 ## By hand

@@ -1,5 +1,6 @@
-import { Bell, LogOut, Menu, Search } from 'lucide-react';
+import { Bell, ChevronDown, ChevronRight, LogOut, Menu, PanelLeftClose, PanelLeftOpen, Search } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Avatar } from '@/components/ui/avatar';
 import { Button, IconButton } from '@/components/ui/button';
 import { DropdownMenu, type MenuItem } from '@/components/ui/dropdown-menu';
@@ -8,6 +9,7 @@ import { uiText } from '@/constants/ui-text';
 import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 import { cn } from '@/lib/cn';
 import { AsyncView, EmptyState } from '@/components/shared/states';
+import { isActive, type NavGroup, type NavItem } from '../navigation';
 import { useSidebar } from '../sidebar';
 
 export interface NavbarProps {
@@ -26,17 +28,75 @@ export function Navbar({ left, center, right, className }: NavbarProps) {
         className,
       )}
     >
-      <div className="flex items-center gap-2">{left}</div>
+      <div className="flex min-w-0 items-center gap-2">{left}</div>
       <div className="flex min-w-0 flex-1 items-center justify-center">{center}</div>
       <div className="flex items-center gap-1">{right}</div>
     </header>
   );
 }
 
-export function MobileMenuButton() {
-  const { openMobile, isMobileOpen } = useSidebar();
+/** At the left end of the navbar: collapses the sidebar, or opens it as a drawer on phones. Ctrl/Cmd+B. */
+export function SidebarToggle() {
+  const { openMobile, isMobileOpen, isCollapsed, toggleCollapsed } = useSidebar();
   return (
-    <IconButton icon={Menu} label={uiText.openMenu} aria-expanded={isMobileOpen} aria-haspopup="dialog" className="lg:hidden" onClick={openMobile} />
+    <>
+      <IconButton icon={Menu} label={uiText.openMenu} aria-expanded={isMobileOpen} aria-haspopup="dialog" className="lg:hidden" onClick={openMobile} />
+      <IconButton
+        icon={isCollapsed ? PanelLeftOpen : PanelLeftClose}
+        label={isCollapsed ? uiText.expand : uiText.collapse}
+        aria-expanded={!isCollapsed}
+        className="hidden text-muted lg:inline-flex"
+        onClick={toggleCollapsed}
+      />
+    </>
+  );
+}
+/** @deprecated SidebarToggle does both. */
+export const MobileMenuButton = SidebarToggle;
+
+/** Where the current page is in the menu: group, parent, page. From md up. */
+export function NavTrail({ groups }: { groups: NavGroup[] }) {
+  const { pathname } = useLocation();
+  let trail: { label: string; to?: string | undefined }[] = [];
+  for (const group of groups) {
+    const find = (items: NavItem[], above: NavItem[]): NavItem[] | null => {
+      for (const item of items) {
+        if (item.children) {
+          const found = find(item.children, [...above, item]);
+          if (found) return found;
+        } else if (isActive(item, pathname)) return [...above, item];
+      }
+      return null;
+    };
+    const found = find(group.items, []);
+    if (found) {
+      trail = [...(group.label ? [{ label: group.label }] : []), ...found.map((i) => ({ label: i.label, to: i.children ? undefined : i.to }))];
+      break;
+    }
+  }
+  if (!trail.length) return null;
+  return (
+    <nav aria-label={uiText.location} className="hidden min-w-0 md:block">
+      <ol className="flex min-w-0 items-center gap-1.5 text-sm">
+        {trail.map((step, i) => {
+          const last = i === trail.length - 1;
+          return (
+            <li key={step.label + String(i)} className={cn('flex min-w-0 items-center gap-1.5', last ? 'font-medium text-foreground' : 'text-muted')}>
+              {i > 0 && <ChevronRight aria-hidden className="size-3.5 shrink-0 text-placeholder" />}
+              {step.to && !last ? (
+                <Link to={step.to} className="truncate rounded-md hover:text-foreground focus-visible:outline-2 focus-visible:outline-focus">
+                  {step.label}
+                </Link>
+              ) : (
+                <span className="truncate" aria-current={last ? 'page' : undefined}>
+                  {step.label}
+                </span>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
   );
 }
 
@@ -62,7 +122,7 @@ export function NavbarSearch({ onOpen, label = uiText.search }: { onOpen: () => 
 }
 
 export interface UserMenuProps {
-  user: { name: string; email: string; avatarUrl?: string };
+  user: { name: string; email: string; avatarUrl?: string | undefined; role?: string | undefined };
   /** Profile, settings and so on. */
   items?: MenuItem[];
   signOutLabel?: string;
@@ -84,9 +144,14 @@ export function UserMenu({ user, items = [], signOutLabel = 'Sign out', onSignOu
           type="button"
           {...props}
           aria-label={uiText.account(user.name)}
-          className="rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+          className="flex items-center gap-2 rounded-md p-1 hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus md:pe-2"
         >
           <Avatar decorative size="sm" name={user.name} src={user.avatarUrl} />
+          <span aria-hidden className="hidden max-w-40 text-start leading-tight md:block">
+            <span className="block truncate text-sm font-medium">{user.name}</span>
+            {user.role && <span className="block truncate text-xs text-muted capitalize">{user.role}</span>}
+          </span>
+          <ChevronDown aria-hidden className="hidden size-4 text-muted md:block" />
         </button>
       )}
     />

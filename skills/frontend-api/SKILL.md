@@ -20,6 +20,8 @@ Only `services/api-client.ts` calls `fetch`. Write features with
 
 1. OpenAPI file or backend code in reach: read that. Otherwise ask for base URL,
    login/refresh/logout/me endpoints, session type, roles. Do not invent them.
+   No backend yet: build sample data for this project as `references/mock-data.md` says.
+   No backend yet: build sample data for this project as  says.
 2. Set `VITE_API_URL`. Adapt `features/auth/services/auth.service.ts` and each
    `*.service.ts`; different names are translated there and nowhere else.
 3. Real roles in `config/permissions.ts`.

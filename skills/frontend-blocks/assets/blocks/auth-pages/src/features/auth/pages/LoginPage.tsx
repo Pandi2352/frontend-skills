@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useLocation } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import { Form, FormActions, FormField } from '@/components/form';
 import { Alert } from '@/components/ui/alert';
 import { Input, PasswordInput } from '@/components/ui/fields';

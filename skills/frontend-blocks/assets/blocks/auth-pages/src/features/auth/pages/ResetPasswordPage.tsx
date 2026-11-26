@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Form, FormActions, FormField } from '@/components/form';
 import { PasswordInput } from '@/components/ui/fields';
 import { ROUTES } from '@/config/routes';

@@ -1,6 +1,6 @@
 import { act, render, renderHook, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter, useLocation } from 'react-router';
+import { MemoryRouter, useLocation } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CommandMenu, type Command } from '@/components/shared/command-menu';
 import { useStepper } from '@/hooks/useStepper';

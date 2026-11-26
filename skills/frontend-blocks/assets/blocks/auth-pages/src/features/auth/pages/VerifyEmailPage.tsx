@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Navigate, useLocation, useNavigate } from 'react-router';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Form, FormActions, FormField } from '@/components/form';
 import { Button } from '@/components/ui/button';
 import { OtpInput } from '@/components/ui/fields';

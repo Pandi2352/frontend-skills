@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Link, type LinkProps } from 'react-router';
+import { Link, type LinkProps } from 'react-router-dom';
 import { appConfig } from '@/config/app.config';
 
 /** Heading, form and links of every page in AuthLayout. */

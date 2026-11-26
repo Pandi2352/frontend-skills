@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { NotificationMenu } from '@/components/layout/navbar';
 import { toast } from '@/components/ui/toast';
 import { ROUTES } from '@/config/routes';

@@ -1,7 +1,7 @@
 import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
-import { MemoryRouter, useLocation } from 'react-router';
+import { MemoryRouter, useLocation } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
 import { LoadingOverlay, Progress } from '@/components/ui/loader';
 import { Pagination, pageList } from '@/components/ui/pagination';

@@ -1,4 +1,4 @@
-import type { createBrowserRouter } from 'react-router';
+import type { createBrowserRouter } from 'react-router-dom';
 import { isPreloading } from './preload-routes';
 
 const KEY = 'stale-deploy';

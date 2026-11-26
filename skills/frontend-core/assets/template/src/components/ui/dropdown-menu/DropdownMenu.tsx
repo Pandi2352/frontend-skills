@@ -1,5 +1,6 @@
-import { Check, type LucideIcon } from 'lucide-react';
-import { useEffect, useId, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
+import { Check } from 'lucide-react';
+import type { Placement } from '@floating-ui/react';
+import { useEffect, useId, useState, type ComponentType, type KeyboardEvent, type MouseEvent, type ReactNode, type SVGProps } from 'react';
 import { cn } from '@/lib/cn';
 import { PopupPanel, usePopup } from '../fields/base';
 
@@ -7,7 +8,7 @@ export interface MenuAction {
   kind?: 'item';
   label: string;
   description?: string;
-  icon?: LucideIcon;
+  icon?: ComponentType<SVGProps<SVGSVGElement>>;
   onSelect?: () => void;
   /** Makes it a real link. Add onSelect to navigate without reloading. */
   href?: string;
@@ -37,17 +38,19 @@ export interface DropdownMenuProps {
   /** Above the items, e.g. name and email. */
   header?: ReactNode;
   className?: string;
+  /** Where it opens; the sidebar opens to the right. */
+  placement?: Placement;
 }
 
 const isAction = (item: MenuItem): item is MenuAction => item.kind === undefined || item.kind === 'item';
 
-export function DropdownMenu({ items, trigger, header, className }: DropdownMenuProps) {
+export function DropdownMenu({ items, trigger, header, className, placement = 'bottom-start' }: DropdownMenuProps) {
   const id = useId();
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   // Known only once the popup is really on the page.
   const [menu, setMenu] = useState<HTMLElement | null>(null);
-  const popup = usePopup({ open, onOpenChange: setOpen, maxHeight: 420 });
+  const popup = usePopup({ open, onOpenChange: setOpen, maxHeight: 420, placement });
   const { setReference } = popup;
   const enabled = items.flatMap((item, i) => (isAction(item) && !item.disabled ? [i] : []));
 

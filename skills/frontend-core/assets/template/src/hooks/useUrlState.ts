@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
 
 /**
  * One value kept in the address, so links, reload and Back work. For tabs,

@@ -1,4 +1,4 @@
-import { matchRoutes, type RouteObject } from 'react-router';
+import { matchRoutes, type RouteObject } from 'react-router-dom';
 
 let running = 0;
 /** True while a page is loading in the background, before anyone asked for it. */

@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { Form, FormActions, FormField } from '@/components/form';
 import { Checkbox, Input, PasswordInput } from '@/components/ui/fields';
 import { ROUTES } from '@/config/routes';

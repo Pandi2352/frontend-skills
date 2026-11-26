@@ -345,7 +345,7 @@ ${fields.map(fieldJsx).join('\n')}
   write(`${dir}/pages/${Plural}Page.tsx`, `
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { useCallback } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router-dom';
 import { PageContainer, PageHeader } from '@/components/layout/page';
 import { DataTable, ${filter ? 'FilterBar, ' : ''}useTableState, type Column } from '@/components/shared/data-table';
 import { EmptyState } from '@/components/shared/states';
@@ -447,7 +447,7 @@ export function useDelete${One}() {
   write(`${dir}/pages/${One}DetailsPage.tsx`, `
 import { useQuery } from '@tanstack/react-query';
 import { Pencil, Trash2 } from 'lucide-react';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import { PageContainer, PageHeader } from '@/components/layout/page';
 import { AsyncView } from '@/components/shared/states';
 import { Button } from '@/components/ui/button';
@@ -504,7 +504,7 @@ ${fields.map((f) => `                { label: '${f.label}', value: ${shown(f, `d
 
   write(`${dir}/pages/${One}FormPages.tsx`, `
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import { PageContainer, PageHeader } from '@/components/layout/page';
 import { AsyncView } from '@/components/shared/states';
 import { Card } from '@/components/ui/card';
@@ -572,7 +572,7 @@ export function Edit${One}Page() {
 `);
 
   write(`${dir}/${plural}.routes.ts`, `
-import type { RouteObject } from 'react-router';
+import type { RouteObject } from 'react-router-dom';
 import { ROUTES } from '@/config/routes';
 
 const { list, create } = ROUTES.${many};
@@ -599,7 +599,7 @@ export type * from './types/${singular}.types';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createMemoryRouter, RouterProvider } from 'react-router';
+import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { beforeAll, beforeEach, expect, it, vi } from 'vitest';
 import { ConfirmProvider } from '@/components/shared/confirm';
 import { ROUTES } from '@/config/routes';
@@ -708,15 +708,16 @@ it('saves a change', async () => {
     if (!opt.dry) writeFileSync(full, content);
     return true;
   };
-  if (!insert('app/router/router.tsx', `import { ${many}Routes } from '@/features/${plural}';`, 'features', `...${many}Routes,`)) {
+  const routeImport = `import { ${many}Routes } from '@/features/${plural}';`;
+  if (!insert('app/router/app.routes.tsx', routeImport, 'features', `...${many}Routes,`) && !insert('app/router/router.tsx', routeImport, 'features', `...${many}Routes,`)) {
     todo.push(`router: add ...${many}Routes from '@/features/${plural}' inside the app layout`);
   }
-  const item = `{ id: '${plural}', label: '${text}', to: ROUTES.${many}.list, icon: Folder },`;
+  const item = `{ id: '${plural}', label: '${text}', to: ROUTES.${many}.list, icon: FolderSimpleIcon },`;
   if (insert('config/navigation.ts', null, 'features', item)) {
     const full = path.join(src, 'config/navigation.ts');
     const content = readFileSync(full, 'utf8');
-    if (!opt.dry && !/\bFolder\b[^;]*from 'lucide-react'/.test(content)) {
-      writeFileSync(full, content.replace(/import \{ ([^}]*) \} from 'lucide-react';/, (_, names) => `import { ${[...names.split(', '), 'Folder'].sort().join(', ')} } from 'lucide-react';`));
+    if (!opt.dry && !/\bFolderSimpleIcon\b[^;]*from '@phosphor-icons\/react'/.test(content)) {
+      writeFileSync(full, content.replace(/import \{ ([^}]*) \} from '@phosphor-icons\/react';/, (_, names) => `import { ${[...names.split(', '), 'FolderSimpleIcon'].sort().join(', ')} } from '@phosphor-icons/react';`));
     }
   } else todo.push(`menu: add ${item} to config/navigation.ts`);
 

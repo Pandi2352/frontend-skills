@@ -13,12 +13,15 @@ project-root/
 │   │   ├── providers/
 │   │   │   └── AppProviders.tsx    # confirm, toaster, error boundary
 │   │   ├── router/
-│   │   │   └── router.tsx          # lazy routes
+│   │   │   ├── router.tsx          # createBrowserRouter
+│   │   │   ├── routes.tsx          # tree: guards, layouts, error page
+│   │   │   ├── app.routes.tsx      # pages in the frame, features
+│   │   │   └── auth.routes.tsx     # login, register, reset
 │   │   ├── layouts/
 │   │   │   ├── AppLayout.tsx       # sidebar + navbar + page
 │   │   │   └── AuthLayout.tsx      # login, register, reset
 │   │   └── pages/                  # app-level pages only
-│   │       ├── StatusPages.tsx     # 403, 404
+│   │       ├── StatusPages.tsx     # 403, 404, route error, offline
 │   │       ├── FieldsPlayground.tsx      # dev only
 │   │       ├── BasicsPlayground.tsx      # dev only
 │   │       └── TablePlayground.tsx       # dev only

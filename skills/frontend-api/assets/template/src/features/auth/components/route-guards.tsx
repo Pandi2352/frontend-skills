@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import type { Permission } from '@/config/permissions';
 import { useAuth, usePermission } from '../hooks/auth-context';
