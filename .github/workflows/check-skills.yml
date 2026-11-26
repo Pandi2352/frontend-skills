@@ -1,0 +1,57 @@
+# Builds a real project from the skills and runs every check, on each push and pull request.
+# Catches a broken template, a missing file or a package that no longer fits.
+name: Check skills
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scripts:
+    name: Scripts load
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.19
+      - name: Syntax of every script
+        run: for f in install.mjs skills/*/scripts/*.mjs skills/*/scripts/lib/*.mjs; do node --check "$f"; done
+      - name: Installer lists the tools
+        run: node install.mjs --list
+
+  project:
+    name: Project on Node ${{ matrix.node }}
+    needs: scripts
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20.19', '22']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Setup and sidebar
+        run: node skills/frontend-core/scripts/create.mjs ../app --title "Check app" --color "#0f766e" --ask sidebar,login
+      - name: Login pages
+        run: |
+          node skills/frontend-core/scripts/steps.mjs ../app ok
+          node skills/frontend-core/scripts/steps.mjs ../app next
+          node skills/frontend-core/scripts/steps.mjs ../app ok
+      - name: A feature
+        run: node skills/frontend-core/scripts/steps.mjs ../app build feature:orders --fields "customer:text!, total:currency!, status:select(open|paid), dueOn:date"
+      - name: Types, lint, tests, build, scan
+        working-directory: ../app
+        run: node scripts/verify.mjs
